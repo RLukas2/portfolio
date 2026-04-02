@@ -1,6 +1,8 @@
 import { siteConfig } from '@xbrk/config';
 import { getBaseUrl } from './utils';
 
+const OG_LOCALE = 'en_US';
+
 export function seo({
   title,
   description,
@@ -43,7 +45,7 @@ export function seo({
     { name: 'og:site_name', content: siteConfig.title },
     { name: 'og:title', content: title },
     ...(description ? [{ name: 'og:description', content: description }] : []),
-    { name: 'og:locale', content: 'en_US' },
+    { name: 'og:locale', content: OG_LOCALE },
     { name: 'og:url', content: url },
 
     // Image tags (if image is provided)
@@ -57,8 +59,8 @@ export function seo({
           { name: 'twitter:card', content: 'summary_large_image' },
           { name: 'og:image', content: image },
           { name: 'og:image:alt', content: `${title} - ${siteConfig.title}` },
-          { name: 'og:image:width', content: '1200' },
-          { name: 'og:image:height', content: '630' },
+          { name: 'og:image:width', content: 1200 },
+          { name: 'og:image:height', content: 630 },
         ]
       : []),
   ];
