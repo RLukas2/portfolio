@@ -24,6 +24,10 @@ type LazyImageProps = HTMLAttributes<HTMLDivElement> & {
   onError?: () => void;
 };
 
+const SCALE_HALF = 0.5;
+const SCALE_HIGH = 1.5;
+const SCALE_RETINA = 2;
+
 export function LazyImage({
   src,
   alt,
@@ -56,10 +60,6 @@ export function LazyImage({
     },
   });
   const [currentSrc, setCurrentSrc] = useState(priority ? src : placeholder);
-
-  const SCALE_HALF = 0.5;
-  const SCALE_HIGH = 1.5;
-  const SCALE_RETINA = 2;
 
   const loadingStrategy = (() => {
     if (priority) {
