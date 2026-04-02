@@ -188,7 +188,7 @@ export async function like(
     // get a unique id we can refer to, but we won't know what their ip
     // address was.
     createHash('sha512')
-      .update(ipAddress + (env.IP_ADDRESS_SALT || 'fallback-salt'), 'utf8')
+      .update(ipAddress + env.IP_ADDRESS_SALT, 'utf8')
       .digest('hex');
 
   const sessionId = `${input.slug}_${currentUserId}`;
