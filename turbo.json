@@ -9,8 +9,12 @@
       "cache": false,
       "persistent": true
     },
-    "lint": {},
-    "format": {},
+    "lint": {
+      "inputs": ["**/*.{ts,tsx,js,jsx,json,css}"]
+    },
+    "format": {
+      "inputs": ["**/*.{ts,tsx,js,jsx,json,css,md}"]
+    },
     "typecheck": {
       "dependsOn": ["^typecheck"]
     }
