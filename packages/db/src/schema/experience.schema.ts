@@ -2,6 +2,12 @@ import { pgEnum, pgTable } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import { z } from 'zod/v4';
 
+/**
+ * Standalone table — no foreign key relations.
+ * `type` is a pg enum (`experience_type`) with values: work, education, volunteer, certification.
+ * `isOnGoing` indicates the experience has no end date yet.
+ */
+
 // biome-ignore lint/style/noEnum: valid enum
 export enum ExperienceType {
   WORK = 'work',

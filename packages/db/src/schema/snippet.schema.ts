@@ -2,6 +2,11 @@ import { pgTable } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import { z } from 'zod/v4';
 
+/**
+ * Standalone table — no foreign key relations.
+ * `category` groups snippets for filtering (e.g. "React", "CSS").
+ * `code` stores raw source code as plain text.
+ */
 export const snippet = pgTable('snippet', (t) => ({
   id: t.uuid().notNull().primaryKey().defaultRandom(),
   title: t.varchar({ length: 255 }).notNull(),

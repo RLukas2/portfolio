@@ -2,6 +2,11 @@ import { pgTable } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import { z } from 'zod/v4';
 
+/**
+ * Standalone table — no foreign key relations.
+ * `isFeatured` controls display priority on the public portfolio page.
+ * `stacks` is a text array of technology names (e.g. ["React", "TypeScript"]).
+ */
 export const project = pgTable('project', (t) => ({
   id: t.uuid().notNull().primaryKey().defaultRandom(),
   title: t.varchar({ length: 255 }).notNull(),

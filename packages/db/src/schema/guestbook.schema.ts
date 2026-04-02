@@ -2,6 +2,14 @@ import { relations } from 'drizzle-orm';
 import { pgTable } from 'drizzle-orm/pg-core';
 import { user } from './auth.schema';
 
+/**
+ * Relationship map:
+ *
+ * user ──< guestbook
+ *
+ * guestbook → user: many-to-one (guestbook.userId → user.id)
+ */
+
 export const guestbook = pgTable('guestbook', (t) => ({
   id: t.uuid().notNull().primaryKey().defaultRandom(),
   userId: t

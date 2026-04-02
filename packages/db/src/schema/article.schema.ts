@@ -4,6 +4,22 @@ import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import { z } from 'zod/v4';
 import { user } from './auth.schema';
 
+/**
+ * Relationship map:
+ *
+ * user ──< articles ──< comments ──< commentReactions
+ *                  │         └──< comments (self-ref, replies)
+ *                  └──< articleLikes
+ *                  └──< articleViews
+ *
+ * articles   → author  : many-to-one  (articles.authorId → user.id)
+ * articles   → comments: one-to-many
+ * articles   → views   : one-to-many  (articleViews, one row per visit)
+ * articles   → likes   : one-to-many  (articleLikes, keyed by hashed IP)
+ * comments   → parent  : self-ref     (comments.parentId → comments.id)
+ * comments   → reactions: one-to-many (commentReactions)
+ */
+
 export const articles = pgTable('articles', (t) => ({
   id: t.uuid().notNull().primaryKey().defaultRandom(),
   title: t.varchar({ length: 255 }).notNull(),

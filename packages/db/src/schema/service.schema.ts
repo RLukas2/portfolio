@@ -2,6 +2,10 @@ import { pgTable } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import { z } from 'zod/v4';
 
+/**
+ * Standalone table — no foreign key relations.
+ * `stacks` is a text array of technology names associated with the service offering.
+ */
 export const service = pgTable('service', (t) => ({
   id: t.uuid().notNull().primaryKey().defaultRandom(),
   title: t.varchar({ length: 255 }).notNull(),
