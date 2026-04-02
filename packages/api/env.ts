@@ -11,6 +11,6 @@ export const env = createEnv({
   emptyStringAsUndefined: true,
 });
 
-export function getEnv() {
+export function apiEnv() {
   return env;
 }
