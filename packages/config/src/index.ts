@@ -7,17 +7,19 @@ export const siteConfig: SiteConfig = {
   description: 'None',
   keywords: 'None',
   url: '',
-  links: {
-    mail: 'nhtuan314@gmail.com',
-    twitter: 'https://twitter.com/rickielukas',
-    github: 'https://github.com/rlukas2',
-    githubRepo: 'https://github.com/rlukas2/portfolio-dev',
-  },
   author: {
     name: 'Tuan Ngo-Hoang',
     email: 'nhtuan314@gmail.com',
     url: '',
     handle: '@rickielukas',
+    jobTitle: '',
+    knowsAbout: [],
+  },
+  links: {
+    mail: 'nhtuan314@gmail.com',
+    twitter: 'https://twitter.com/rickielukas',
+    github: 'https://github.com/rlukas2',
+    githubRepo: 'https://github.com/rlukas2/portfolio-dev',
   },
 };
 

@@ -18,6 +18,8 @@ export interface SiteConfig {
     email: string;
     url: string;
     handle: string;
+    jobTitle?: string;
+    knowsAbout?: string[];
   };
   description: string;
   keywords: string;
