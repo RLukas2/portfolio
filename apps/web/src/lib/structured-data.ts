@@ -1,6 +1,9 @@
 import { siteConfig, socialConfig } from '@xbrk/config';
 import { getBaseUrl } from './utils';
 
+// Cached once at module load — avoids repeated env lookups per SSR request
+const BASE_URL = getBaseUrl();
+
 const DEFAULT_LANGUAGE = 'en-US';
 
 // =============================================================================
@@ -127,10 +130,10 @@ type SoftwareSourceCode = WithId & {
 // =============================================================================
 
 const schemaIds = {
-  person: () => `${getBaseUrl()}/#person`,
-  organization: () => `${getBaseUrl()}/#organization`,
-  website: () => `${getBaseUrl()}/#website`,
-  webpage: (path: string) => `${getBaseUrl()}${path}#webpage`,
+  person: () => `${BASE_URL}/#person`,
+  organization: () => `${BASE_URL}/#organization`,
+  website: () => `${BASE_URL}/#website`,
+  webpage: (path: string) => `${BASE_URL}${path}#webpage`,
 } as const;
 
 // =============================================================================
@@ -144,22 +147,22 @@ function normalizeImageUrl(image: string | undefined): string | undefined {
   if (image.startsWith('http')) {
     return image;
   }
-  return `${getBaseUrl()}${image}`;
+  return `${BASE_URL}${image}`;
 }
 
 function createPersonSchema(options?: { includeId?: boolean }): Person {
   const schema: Person = {
     '@type': 'Person',
     name: siteConfig.author.name,
-    url: getBaseUrl(),
+    url: BASE_URL,
     sameAs: socialConfig.map((social) => social.url),
-    image: `${getBaseUrl()}/images/avatar.avif`,
+    image: `${BASE_URL}/images/avatar.avif`,
     jobTitle: siteConfig.author.jobTitle,
     email: siteConfig.author.email,
     worksFor: {
       '@type': 'Organization',
       name: 'Freelance',
-      url: getBaseUrl(),
+      url: BASE_URL,
     },
     knowsAbout: siteConfig.author.knowsAbout,
   };
@@ -175,8 +178,8 @@ function createOrganizationSchema(options?: { includeId?: boolean }): Organizati
   const schema: Organization = {
     '@type': 'Organization',
     name: siteConfig.title,
-    url: getBaseUrl(),
-    logo: `${getBaseUrl()}/images/icon.svg`,
+    url: BASE_URL,
+    logo: `${BASE_URL}/images/icon.svg`,
   };
 
   if (options?.includeId) {
@@ -190,7 +193,7 @@ function createWebSiteSchema(options?: { includeId?: boolean; useRefs?: boolean 
   const schema: WebSite = {
     '@type': 'WebSite',
     name: siteConfig.title,
-    url: getBaseUrl(),
+    url: BASE_URL,
     description: siteConfig.description,
     author: options?.useRefs ? { '@id': schemaIds.person() } : createPersonSchema(),
     publisher: options?.useRefs ? { '@id': schemaIds.organization() } : createOrganizationSchema(),
@@ -201,7 +204,7 @@ function createWebSiteSchema(options?: { includeId?: boolean; useRefs?: boolean 
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${getBaseUrl()}/blog?q={search_term_string}`,
+        urlTemplate: `${BASE_URL}/blog?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
@@ -217,9 +220,9 @@ function createWebSiteSchema(options?: { includeId?: boolean; useRefs?: boolean 
 function createProfilePageSchema(title: string, description: string, path: string): ProfilePage {
   return {
     '@type': 'ProfilePage',
-    '@id': `${getBaseUrl()}${path}#profilepage`,
+    '@id': `${BASE_URL}${path}#profilepage`,
     name: title,
-    url: `${getBaseUrl()}${path}`,
+    url: `${BASE_URL}${path}`,
     description,
     mainEntity: { '@id': schemaIds.person() },
     isPartOf: { '@id': schemaIds.website() },
@@ -230,9 +233,9 @@ function createProfilePageSchema(title: string, description: string, path: strin
 function createCollectionPageSchema(title: string, description: string, path: string): CollectionPage {
   return {
     '@type': 'CollectionPage',
-    '@id': `${getBaseUrl()}${path}#collectionpage`,
+    '@id': `${BASE_URL}${path}#collectionpage`,
     name: title,
-    url: `${getBaseUrl()}${path}`,
+    url: `${BASE_URL}${path}`,
     description,
     isPartOf: { '@id': schemaIds.website() },
     inLanguage: DEFAULT_LANGUAGE,
@@ -246,7 +249,7 @@ function createBreadcrumbSchema(items: { name: string; path: string }[]): Breadc
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: `${getBaseUrl()}${item.path}`,
+      item: `${BASE_URL}${item.path}`,
     })),
   };
 }
@@ -270,14 +273,14 @@ function createBlogPostingSchema({
   keywords?: string;
   wordCount?: number;
 }): BlogPosting {
-  const url = `${getBaseUrl()}${path}`;
+  const url = `${BASE_URL}${path}`;
   return {
     '@type': 'BlogPosting',
     '@id': `${url}#blogposting`,
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     headline: title,
     description,
-    image: image.startsWith('http') ? image : `${getBaseUrl()}${image}`,
+    image: image.startsWith('http') ? image : `${BASE_URL}${image}`,
     author: { '@id': schemaIds.person() },
     publisher: { '@id': schemaIds.organization() },
     datePublished,
@@ -308,7 +311,7 @@ function createSoftwareProjectSchema({
   dateCreated?: string;
   dateModified?: string;
 }): SoftwareSourceCode {
-  const url = `${getBaseUrl()}${path}`;
+  const url = `${BASE_URL}${path}`;
   return {
     '@type': 'SoftwareSourceCode',
     '@id': `${url}#software`,
