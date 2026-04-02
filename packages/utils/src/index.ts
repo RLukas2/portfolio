@@ -1,4 +1,4 @@
-import { TOC } from '@xbrk/types';
+import { type TOC } from '@xbrk/types';
 import { marked, type Tokens } from 'marked';
 
 export function formatDate(input: string | number | Date): string {

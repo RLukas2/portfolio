@@ -2,11 +2,11 @@ import {
   type articles,
   type commentReactions,
   type comments,
-  type Experience,
+  type experience,
   type guestbook,
-  type Project,
-  Service,
-  type Snippet,
+  type project,
+  type service,
+  type snippet,
   type user,
 } from '@xbrk/db/schema';
 import type { SimpleIcon } from 'simple-icons';
@@ -64,15 +64,15 @@ export interface AuthProvider {
 
 /// === Schemas from DB ===
 
-export type ProjectType = typeof Project.$inferSelect;
-export type ExperienceType = typeof Experience.$inferSelect;
-export type SnippetType = typeof Snippet.$inferSelect;
+export type ProjectType = typeof project.$inferSelect;
+export type ExperienceType = typeof experience.$inferSelect;
+export type SnippetType = typeof snippet.$inferSelect;
 export type ArticleType = typeof articles.$inferSelect;
 export type CommentType = typeof comments.$inferSelect;
 export type UserType = typeof user.$inferSelect;
 export type CommentReactionType = typeof commentReactions.$inferSelect;
 export type GuestbookType = typeof guestbook.$inferSelect;
-export type ServiceType = typeof Service.$inferSelect;
+export type ServiceType = typeof service.$inferSelect;
 
 /// === Articles ===
 
