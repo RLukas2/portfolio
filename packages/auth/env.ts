@@ -6,7 +6,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
     BETTER_AUTH_SECRET: process.env.NODE_ENV === 'production' ? z.string().min(1) : z.string().min(1).optional(),
-    BETER_AUTH_URL: z.url().optional(),
+    BETTER_AUTH_URL: z.url().optional(),
 
     GITHUB_CLIENT_ID: z.string().min(1).optional(),
     GITHUB_CLIENT_SECRET: z.string().min(1).optional(),
