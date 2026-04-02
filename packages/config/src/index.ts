@@ -4,8 +4,8 @@ import { siGithub, siLinkedin, siX } from 'simple-icons';
 export const siteConfig: SiteConfig = {
   title: 'Tuan Ngo-Hoang',
   name: 'rickielukas',
-  description: 'None',
-  keywords: 'None',
+  description: '',
+  keywords: '',
   url: '',
   author: {
     name: 'Tuan Ngo-Hoang',
