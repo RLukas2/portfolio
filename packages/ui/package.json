@@ -59,7 +59,6 @@
     "./tag-list": "./src/tag-list.tsx",
     "./textarea": "./src/textarea.tsx",
     "./theme": "./src/theme.tsx",
-    "./toast": "./src/toast.tsx",
     "./tooltip": "./src/tooltip.tsx",
     "./youtube": "./src/youtube.tsx",
     "./zoom-image": "./src/zoom-image.tsx"
