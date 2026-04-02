@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "clean": "git clean -xdf .cache dist node_modules",
-    "tsc": "tsc --noEmit --emitDeclarationOnly false",
+    "tsc": "tsc --noEmit",
     "ui-add": "pnpm dlx shadcn@latest add"
   },
   "exports": {

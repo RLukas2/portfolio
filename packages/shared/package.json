@@ -12,13 +12,14 @@
     "build": "tsc",
     "clean": "git clean -xdf .cache dist node_modules",
     "dev": "tsc",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@tanstack/react-query": "catalog:",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-router-ssr-query": "catalog:",
     "@tanstack/react-start": "catalog:",
+    "@xbrk/config": "workspace:*",
     "@xbrk/ui": "workspace:*",
     "zod": "catalog:"
   },

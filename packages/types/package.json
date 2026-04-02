@@ -12,10 +12,11 @@
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache dist node_modules",
-    "dev": "tsc",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@xbrk/db": "workspace:*",
     "simple-icons": "catalog:"
   },
   "devDependencies": {

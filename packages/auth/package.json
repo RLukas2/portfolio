@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "clean": "git clean -xdf .cache dist node_modules",
-    "generate": "",
+    "generate": "dotenv -e ../../.env -- pnpm dlx @better-auth/cli generate --config script/auth-cli.ts --output ../db/src/auth-schema.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

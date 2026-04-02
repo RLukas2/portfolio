@@ -13,7 +13,7 @@
     "build": "tsc",
     "clean": "git clean -xdf .cache dist node_modules",
     "dev": "tsc",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@xbrk/types": "workspace:*",
