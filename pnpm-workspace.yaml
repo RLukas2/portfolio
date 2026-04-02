@@ -39,10 +39,10 @@ catalog:
   "@types/react": "^19.2.14"
   "@types/react-dom": "^19.2.3"
   "autoprefixer": "^10.4.27"
-  "better-auth": "1.5.5"
+  "better-auth": "1.5.6"
   "react": "^19.2.4"
   "react-dom": "^19.2.4"
-  "simple-icons": "^13.21.0"
+  "simple-icons": "^16.14.0"
 
   # Tailwind CSS + UI
   "tailwindcss": "^4.2.1"
@@ -50,6 +50,6 @@ catalog:
   # Testing (Vitest + Testing Library)
 
   # Utilities (Zod, Prettier,...)
-  "typescript": "^5.9.3"
+  "typescript": "^6.0.2"
   "vite": "^8.0.3"
   "zod": "^4.3.6"

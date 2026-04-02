@@ -94,7 +94,7 @@
     "radix-ui": "^1.4.3",
     "react-day-picker": "^9.14.0",
     "react-intersection-observer": "^10.0.3",
-    "react-medium-image-zoom": "^5.4.1",
+    "react-medium-image-zoom": "^5.4.2",
     "react-use": "^17.6.0",
     "recharts": "^3.8.0",
     "simple-icons": "catalog:",
