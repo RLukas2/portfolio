@@ -4,6 +4,10 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin, oAuthProxy } from 'better-auth/plugins';
 import { tanstackStartCookies } from 'better-auth/tanstack-start';
+import { handleAuthError } from './lib/error-handler';
+import { buildSocialProviders, getEnabledProviders } from './lib/providers';
+import type { InitAuthOptions } from './lib/validation';
+import { validateAuthOptions } from './lib/validation';
 
 /**
  * Initializes a Better Auth instance with Drizzle adapter and optional social providers.
@@ -14,76 +18,59 @@ import { tanstackStartCookies } from 'better-auth/tanstack-start';
  *
  * Includes the `admin` plugin for user management and `oAuthProxy` for redirect handling
  * in non-production environments.
+ *
+ * @param options - Configuration options for Better Auth
+ * @returns Configured Better Auth instance
+ * @throws {Error} If options validation fails
+ *
+ * @example
+ * ```typescript
+ * import { initAuth } from '@xbrk/auth';
+ *
+ * export const auth = initAuth({
+ *   baseUrl: 'http://localhost:3000',
+ *   productionUrl: 'https://example.com',
+ *   secret: process.env.BETTER_AUTH_SECRET,
+ *   githubClientId: process.env.GITHUB_CLIENT_ID,
+ *   githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
+ * });
+ * ```
  */
-export function initAuth(options: {
-  baseUrl: string;
-  productionUrl: string;
-  secret: string | undefined;
+export function initAuth(options: InitAuthOptions) {
+  // Validate options
+  const validatedOptions = validateAuthOptions(options);
 
-  githubClientId?: string;
-  githubClientSecret?: string;
-  twitterClientId?: string;
-  twitterClientSecret?: string;
-  googleClientId?: string;
-  googleClientSecret?: string;
-  facebookClientId?: string;
-  facebookClientSecret?: string;
-}) {
+  // Build social providers configuration
+  const socialProviders = buildSocialProviders(validatedOptions, validatedOptions.productionUrl);
+
+  // Log enabled providers in development
+  if (process.env.NODE_ENV === 'development') {
+    const enabledProviders = getEnabledProviders(validatedOptions);
+    console.log(
+      '[Better Auth] Enabled social providers:',
+      enabledProviders.length > 0 ? enabledProviders.join(', ') : 'none',
+    );
+  }
+
   const config = {
     database: drizzleAdapter(db, {
       provider: 'pg',
     }),
-    baseURL: options.baseUrl,
-    secret: options.secret,
+    baseURL: validatedOptions.baseUrl,
+    secret: validatedOptions.secret,
     telemetry: {
       enabled: false,
     },
     plugins: [
       oAuthProxy({
-        productionURL: options.productionUrl,
+        productionURL: validatedOptions.productionUrl,
       }),
       admin(),
       tanstackStartCookies(),
     ],
-    socialProviders: {
-      ...(options.githubClientId &&
-        options.githubClientSecret && {
-          github: {
-            clientId: options.githubClientId,
-            clientSecret: options.githubClientSecret,
-            redirectURI: `${options.productionUrl}/api/auth/callback/github`,
-          },
-        }),
-      ...(options.twitterClientId &&
-        options.twitterClientSecret && {
-          twitter: {
-            clientId: options.twitterClientId,
-            clientSecret: options.twitterClientSecret,
-            redirectURI: `${options.productionUrl}/api/auth/callback/twitter`,
-          },
-        }),
-      ...(options.googleClientId &&
-        options.googleClientSecret && {
-          google: {
-            clientId: options.googleClientId,
-            clientSecret: options.googleClientSecret,
-            prompt: 'select_account consent' as const,
-            redirectURI: `${options.productionUrl}/api/auth/callback/google`,
-          },
-        }),
-      ...(options.facebookClientId &&
-        options.facebookClientSecret && {
-          facebook: {
-            clientId: options.facebookClientId,
-            clientSecret: options.facebookClientSecret,
-            redirectURI: `${options.productionUrl}/api/auth/callback/facebook`,
-          },
-        }),
-    },
+    socialProviders,
     onAPIError: {
-      onError(error: unknown, ctx: unknown) {
-        console.error('Better Auth API Error:', error, ctx);
-      },
+      onError: handleAuthError,
     },
     user: {
       deleteUser: {
@@ -103,3 +90,9 @@ export function initAuth(options: {
 
 export type Auth = ReturnType<typeof initAuth>;
 export type Session = Auth['$Infer']['Session'];
+
+export { getSafeErrorMessage, handleAuthError } from './lib/error-handler';
+export { buildSocialProviders, getEnabledProviders } from './lib/providers';
+export type { InitAuthOptions } from './lib/validation';
+// Re-export utilities
+export { validateAuthOptions } from './lib/validation';
