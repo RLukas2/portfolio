@@ -23,6 +23,7 @@
     "@tanstack/react-start": "catalog:",
     "@xbrk/config": "workspace:*",
     "@xbrk/ui": "workspace:*",
+    "simple-icons": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
