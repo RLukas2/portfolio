@@ -1,5 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
+import ConnectSection from '@/components/home/connect-section';
+import FeaturedProjects from '@/components/home/featured-projects';
+import PersonalHero from '@/components/home/personal-hero';
+import RecentPosts from '@/components/home/recent-posts';
 import { seo } from '@/lib/seo';
 import { generateStructuredDataGraph, getHomepageSchemas } from '@/lib/structured-data';
 
@@ -29,8 +33,13 @@ export const Route = createFileRoute('/(public)/')({
 function Home() {
   return (
     <>
-      <h1 className="font-bold text-4xl">Welcome to my personal website!</h1>
-      <p className="mt-4 text-gray-600 text-lg">This is the homepage. Check out my projects and blog posts!</p>
+      <PersonalHero />
+
+      <div className="flex flex-col items-center space-y-16 pb-16 sm:space-y-24 sm:pb-24">
+        <RecentPosts />
+        <FeaturedProjects />
+        <ConnectSection />
+      </div>
     </>
   );
 }

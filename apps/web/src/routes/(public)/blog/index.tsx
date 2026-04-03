@@ -1,0 +1,75 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
+import { siteConfig } from '@xbrk/config';
+import { Skeleton } from '@xbrk/ui/skeleton';
+import FilteredArticles from '@/components/blog/filtered-articles';
+import PageHeading from '@/components/shared/page-heading';
+import { pagesData } from '@/lib/data/pages-data';
+import { seoData as seoMetadata } from '@/lib/data/seo-data';
+import { queryKeys } from '@/lib/query-keys';
+import { seo } from '@/lib/seo';
+import { $getAllPublicArticles } from '@/lib/server';
+import { generateStructuredDataGraph, getBlogListSchemas } from '@/lib/structured-data';
+import { getBaseUrl } from '@/lib/utils';
+
+export const Route = createFileRoute('/(public)/blog/')({
+  component: RouteComponent,
+  loader: async ({ context: { queryClient } }) =>
+    await queryClient.prefetchQuery({
+      queryKey: queryKeys.blog.listPublic(),
+      queryFn: () => $getAllPublicArticles(),
+    }),
+  head: () => {
+    const seoData = seo({
+      title: `Blog | ${siteConfig.title}`,
+      description: seoMetadata.blog.description,
+      keywords: seoMetadata.blog.keywords,
+      url: `${getBaseUrl()}/blog`,
+      canonical: `${getBaseUrl()}/blog`,
+    });
+    const structuredData = generateStructuredDataGraph(getBlogListSchemas());
+
+    return {
+      meta: seoData.meta,
+      links: seoData.links,
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: structuredData,
+        },
+      ],
+    };
+  },
+});
+
+function BlogSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+      <Skeleton className="h-[400px] w-full rounded-md" />
+      <Skeleton className="h-[400px] w-full rounded-md" />
+      <Skeleton className="h-[400px] w-full rounded-md" />
+      <Skeleton className="h-[400px] w-full rounded-md" />
+    </div>
+  );
+}
+
+function RouteComponent() {
+  const {
+    data: articles,
+    isLoading,
+    isFetching,
+  } = useSuspenseQuery({
+    queryKey: queryKeys.blog.listPublic(),
+    queryFn: () => $getAllPublicArticles(),
+  });
+
+  const description = pagesData.blog.description.replace('{count}', articles.length.toString());
+
+  return (
+    <>
+      <PageHeading description={description} title={pagesData.blog.title} />
+
+      {isLoading || isFetching ? <BlogSkeleton /> : <FilteredArticles articles={articles} />}
+    </>
+  );
+}

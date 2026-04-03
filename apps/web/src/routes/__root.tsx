@@ -1,17 +1,32 @@
 import { PostHogProvider } from '@posthog/react';
 import { type QueryClient } from '@tanstack/react-query';
-import { createRootRouteWithContext, HeadContent, Scripts } from '@tanstack/react-router';
+import { ClientOnly, createRootRouteWithContext, HeadContent, Scripts } from '@tanstack/react-router';
 import { createIsomorphicFn } from '@tanstack/react-start';
 import { DevtoolsComponent } from '@xbrk/shared/dev-tools';
 import { ThemeProvider, useTheme } from '@xbrk/shared/theme-provider';
 import { Toaster } from '@xbrk/ui/sonner';
 import posthog from 'posthog-js';
+import { CookieBanner } from '@/components/analytics/cookie-banner';
+import { type AuthQueryResult, authQueryOptions } from '@/lib/auth/queries';
 import { env } from '@/lib/env/client';
 import appCss from '@/style.css?url';
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
+  user: AuthQueryResult;
 }>()({
+  beforeLoad: async ({ context }) => {
+    try {
+      const user = await context.queryClient.ensureQueryData({
+        ...authQueryOptions(),
+        revalidateIfStale: true,
+      });
+      return { user };
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      return { user: null };
+    }
+  },
   head: () => ({
     meta: [
       {
@@ -82,11 +97,9 @@ function ShellComponent({ children }: { children: React.ReactNode }) {
 
           {import.meta.env.DEV && <DevtoolsComponent />}
 
-          {/* 
           <ClientOnly>
-            Add a cookie banner here to comply with GDPR and other privacy regulations. This will only be rendered on the client side since it relies on browser APIs.
-          </ClientOnly> 
-          */}
+            <CookieBanner />
+          </ClientOnly>
 
           <Scripts />
         </PostHogProvider>
