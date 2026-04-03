@@ -1,4 +1,3 @@
-// biome-ignore lint/performance/noBarrelFile: central re-export for server functions
 export * from './blog';
 export * from './comment';
 export * from './experience';
