@@ -1,6 +1,7 @@
 import { pgTable } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import { z } from 'zod/v4';
+import { validators } from '../lib/validation';
 
 /**
  * Standalone table — no foreign key relations.
@@ -19,19 +20,13 @@ export const snippet = pgTable('snippet', (t) => ({
   updatedAt: t.timestamp({ mode: 'date', withTimezone: true }).$onUpdate(() => new Date()),
 }));
 
-const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
 export const SnippetBaseSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(255, 'Title cannot exceed 255 characters'),
-  slug: z
-    .string()
-    .min(1, 'Slug is required')
-    .max(255, 'Slug cannot exceed 255 characters')
-    .regex(slugRegex, 'Slug must contain only lowercase letters, numbers, and hyphens'),
-  description: z.string().max(255, 'Description cannot exceed 255 characters').or(z.literal('')),
-  category: z.string().min(1, 'Category is required').max(255, 'Category cannot exceed 255 characters'),
-  code: z.string().or(z.literal('')),
-  isDraft: z.boolean().or(z.literal(false)),
+  title: validators.title,
+  slug: validators.slug,
+  description: validators.description,
+  category: validators.category,
+  code: validators.content,
+  isDraft: validators.isDraft,
 });
 
 export const CreateSnippetSchema = createInsertSchema(snippet, {

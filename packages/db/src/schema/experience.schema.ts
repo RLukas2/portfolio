@@ -1,6 +1,7 @@
 import { pgEnum, pgTable } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import { z } from 'zod/v4';
+import { validators } from '../lib/validation';
 
 /**
  * Standalone table — no foreign key relations.
@@ -8,15 +9,16 @@ import { z } from 'zod/v4';
  * `isOnGoing` indicates the experience has no end date yet.
  */
 
-// biome-ignore lint/style/noEnum: valid enum
-export enum ExperienceType {
-  WORK = 'work',
-  EDUCATION = 'education',
-  VOLUNTEER = 'volunteer',
-  CERTIFICATION = 'certification',
-}
+export const ExperienceType = {
+  WORK: 'work',
+  EDUCATION: 'education',
+  VOLUNTEER: 'volunteer',
+  CERTIFICATION: 'certification',
+} as const;
 
-export const experienceTypeEnum = pgEnum('experience_type', ExperienceType);
+export type ExperienceTypeValue = (typeof ExperienceType)[keyof typeof ExperienceType];
+
+export const experienceTypeEnum = pgEnum('experience_type', ['work', 'education', 'volunteer', 'certification']);
 
 export const experience = pgTable('experience', (t) => ({
   id: t.uuid().notNull().primaryKey().defaultRandom(),
@@ -35,16 +37,16 @@ export const experience = pgTable('experience', (t) => ({
 }));
 
 export const ExperienceBaseSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(255, 'Title cannot exceed 255 characters'),
-  description: z.string().max(255, 'Description cannot exceed 255 characters').or(z.literal('')),
-  startDate: z.string().or(z.literal('')),
-  endDate: z.string().or(z.literal('')),
-  institution: z.string().max(255, 'Institution cannot exceed 255 characters').or(z.literal('')),
-  url: z.string().url().or(z.literal('')),
-  type: z.nativeEnum(ExperienceType),
-  isDraft: z.boolean().or(z.literal(false)),
-  isOnGoing: z.boolean().or(z.literal(false)),
-  thumbnail: z.string().describe('File upload for experience thumbnail'),
+  title: validators.title,
+  description: validators.description,
+  startDate: validators.date,
+  endDate: validators.date,
+  institution: validators.institution,
+  url: validators.url,
+  type: z.enum([ExperienceType.WORK, ExperienceType.EDUCATION, ExperienceType.VOLUNTEER, ExperienceType.CERTIFICATION]),
+  isDraft: validators.isDraft,
+  isOnGoing: validators.boolean,
+  thumbnail: validators.thumbnail,
 });
 
 export const CreateExperienceSchema = createInsertSchema(experience, {

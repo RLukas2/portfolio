@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm';
 import { type AnyPgColumn, pgTable } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import { z } from 'zod/v4';
+import { validators } from '../lib/validation';
 import { user } from './auth.schema';
 
 /**
@@ -126,20 +127,14 @@ export const articleViewRelations = relations(articleViews, (t) => ({
   }),
 }));
 
-const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
 export const ArticleBaseSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(255, 'Title cannot exceed 255 characters'),
-  slug: z
-    .string()
-    .min(1, 'Slug is required')
-    .max(255, 'Slug cannot exceed 255 characters')
-    .regex(slugRegex, 'Slug must contain only lowercase letters, numbers, and hyphens'),
-  description: z.string().max(255, 'Description cannot exceed 255 characters').or(z.literal('')),
-  content: z.string().or(z.literal('')),
-  thumbnail: z.string().describe('File upload for project thumbnail'),
-  isDraft: z.boolean().or(z.literal(false)),
-  tags: z.array(z.string()),
+  title: validators.title,
+  slug: validators.slug,
+  description: validators.description,
+  content: validators.content,
+  thumbnail: validators.thumbnail,
+  isDraft: validators.isDraft,
+  tags: validators.tags,
 });
 
 export const CreateArticleSchema = createInsertSchema(articles, {
