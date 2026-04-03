@@ -1,5 +1,5 @@
-import type { SiteConfig, Social } from '@xbrk/types';
-import { siGithub, siLinkedin, siX } from 'simple-icons';
+import type { AuthProvider, SiteConfig, Social } from '@xbrk/types';
+import { siFacebook, siGithub, siGoogle, siLinkedin, siX } from 'simple-icons';
 
 export const siteConfig: SiteConfig = {
   title: 'Tuan Ngo-Hoang',
@@ -13,6 +13,7 @@ export const siteConfig: SiteConfig = {
     url: '',
     handle: '@rickielukas',
     jobTitle: '',
+    location: '',
     knowsAbout: [],
   },
   links: {
@@ -41,5 +42,28 @@ export const socialConfig: Social[] = [
     url: 'https://www.linkedin.com/in/xbrk',
     username: 'xbrk',
     icon: siLinkedin,
+  },
+];
+
+export const authProviders: AuthProvider[] = [
+  {
+    provider: 'github',
+    label: 'GitHub',
+    icon: siGithub,
+  },
+  {
+    label: 'Twitter',
+    provider: 'twitter',
+    icon: siX,
+  },
+  {
+    label: 'Google',
+    provider: 'google',
+    icon: siGoogle,
+  },
+  {
+    label: 'Facebook',
+    provider: 'facebook',
+    icon: siFacebook,
   },
 ];

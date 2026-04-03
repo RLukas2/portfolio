@@ -19,6 +19,7 @@ export interface SiteConfig {
     url: string;
     handle: string;
     jobTitle?: string;
+    location?: string;
     knowsAbout?: string[];
   };
   description: string;
