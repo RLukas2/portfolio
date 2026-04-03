@@ -17,10 +17,15 @@ export function getAll(db: DbClient) {
 
 /** Returns only published (non-draft) experiences. */
 export function getAllPublic(db: DbClient) {
-  return db.query.experience.findMany({
-    orderBy: desc(experience.id),
-    where: eq(experience.isDraft, false),
-  });
+  return db.query.experience
+    .findMany({
+      orderBy: desc(experience.id),
+      where: eq(experience.isDraft, false),
+    })
+    .catch((error) => {
+      Sentry.captureException(error);
+      return [];
+    });
 }
 
 /** Returns a single experience by ID. Returns `undefined` if not found. */

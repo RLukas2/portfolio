@@ -18,10 +18,15 @@ export function getAll(db: DbClient) {
 
 /** Returns only published projects, ordered by featured status. */
 export function getAllPublic(db: DbClient) {
-  return db.query.project.findMany({
-    orderBy: desc(project.isFeatured),
-    where: eq(project.isDraft, false),
-  });
+  return db.query.project
+    .findMany({
+      orderBy: desc(project.isFeatured),
+      where: eq(project.isDraft, false),
+    })
+    .catch((error) => {
+      Sentry.captureException(error);
+      return [];
+    });
 }
 
 /**

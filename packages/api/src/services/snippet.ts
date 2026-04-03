@@ -1,3 +1,5 @@
+// biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
+import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateSnippetSchema, snippet, UpdateSnippetSchema } from '@xbrk/db/schema';
 import { desc, eq } from 'drizzle-orm';
@@ -14,10 +16,15 @@ export function getAll(db: DbClient) {
 
 /** Returns only published (non-draft) snippets. */
 export function getAllPublic(db: DbClient) {
-  return db.query.snippet.findMany({
-    orderBy: desc(snippet.id),
-    where: eq(snippet.isDraft, false),
-  });
+  return db.query.snippet
+    .findMany({
+      orderBy: desc(snippet.id),
+      where: eq(snippet.isDraft, false),
+    })
+    .catch((error) => {
+      Sentry.captureException(error);
+      return [];
+    });
 }
 
 /** Returns a single snippet by ID. Returns `undefined` if not found. */

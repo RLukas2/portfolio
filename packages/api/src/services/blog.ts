@@ -37,30 +37,40 @@ export function getAll(db: DbClient) {
   });
 }
 
-/** Returns all published articles with aggregated view count via LEFT JOIN on `article_views`. */
+/** Returns all published articles with aggregated likes and view counts. */
 export async function getAllPublic(db: DbClient) {
-  const result = await db
-    .select({
-      id: articles.id,
-      title: articles.title,
-      slug: articles.slug,
-      description: articles.description,
-      imageUrl: articles.imageUrl,
-      createdAt: articles.createdAt,
-      updatedAt: articles.updatedAt,
-      isDraft: articles.isDraft,
-      authorId: articles.authorId,
-      content: articles.content,
-      tags: articles.tags,
-      viewCount: sql<number>`count(${articleViews.id})`.as('view_count'),
-    })
-    .from(articles)
-    .leftJoin(articleViews, eq(articles.id, articleViews.articleId))
-    .where(eq(articles.isDraft, false))
-    .groupBy(articles.id)
-    .orderBy(desc(articles.createdAt));
+  try {
+    const result = await db
+      .select({
+        id: articles.id,
+        title: articles.title,
+        slug: articles.slug,
+        description: articles.description,
+        imageUrl: articles.imageUrl,
+        createdAt: articles.createdAt,
+        updatedAt: articles.updatedAt,
+        isDraft: articles.isDraft,
+        authorId: articles.authorId,
+        content: articles.content,
+        tags: articles.tags,
+        likesCount:
+          sql<number>`(SELECT COUNT(*) FROM ${articleLikes} WHERE ${articleLikes.articleId} = ${articles.id})`.as(
+            'likes_count',
+          ),
+        viewCount:
+          sql<number>`(SELECT COUNT(*) FROM ${articleViews} WHERE ${articleViews.articleId} = ${articles.id})`.as(
+            'view_count',
+          ),
+      })
+      .from(articles)
+      .where(eq(articles.isDraft, false))
+      .orderBy(desc(articles.createdAt));
 
-  return result;
+    return result;
+  } catch (error) {
+    Sentry.captureException(error);
+    return [];
+  }
 }
 
 /**
@@ -92,9 +102,20 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
     .from(articleViews)
     .where(eq(articleViews.articleId, article.id));
 
+  // Get like count separately
+  const likeCount = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(articleLikes)
+    .where(eq(articleLikes.articleId, article.id));
+
   const toc = getTOC(article.content ?? '');
 
-  return { ...article, toc, viewCount: viewCount[0]?.count ?? 0 };
+  return {
+    ...article,
+    toc,
+    viewCount: viewCount[0]?.count ?? 0,
+    likesCount: likeCount[0]?.count ?? 0,
+  };
 }
 
 /** Returns a single article by ID. Returns `undefined` if not found. */
