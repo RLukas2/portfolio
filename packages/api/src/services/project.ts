@@ -1,3 +1,5 @@
+// biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
+import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateProjectSchema, project, UpdateProjectSchema } from '@xbrk/db/schema';
 import { getTOC } from '@xbrk/utils';
@@ -64,7 +66,7 @@ export async function create(db: DbClient, input: z.infer<typeof CreateProjectSc
       const imageUrl = await uploadImage('projects', thumbnail, input.slug);
       projectData.imageUrl = imageUrl;
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   }
 
@@ -92,7 +94,7 @@ export async function update(db: DbClient, input: z.infer<typeof UpdateProjectSc
         await deleteFile(oldImageUrl);
       }
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   }
 

@@ -1,4 +1,6 @@
 import { createHash } from 'node:crypto';
+// biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
+import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import {
   articleLikes,
@@ -12,6 +14,19 @@ import { and, desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 import { env } from '../../env';
 import { deleteFile, uploadImage } from '../storage';
+
+/** Extracts and hashes the requester's IP address for anonymous identity tracking. */
+function hashIpAddress(headers: Headers): string {
+  const ipAddress =
+    headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    headers.get('x-real-ip') ||
+    headers.get('cf-connecting-ip') ||
+    '0.0.0.0';
+
+  return createHash('sha512')
+    .update(ipAddress + env.IP_ADDRESS_SALT, 'utf8')
+    .digest('hex');
+}
 
 type DbClient = typeof DB;
 
@@ -101,7 +116,7 @@ export async function create(db: DbClient, input: z.infer<typeof CreateArticleSc
       const imageUrl = await uploadImage('articles', thumbnail, input.slug);
       articleData.imageUrl = imageUrl;
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   }
 
@@ -129,7 +144,7 @@ export async function update(db: DbClient, input: z.infer<typeof UpdateArticleSc
         await deleteFile(oldImageUrl);
       }
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   }
 
@@ -175,21 +190,7 @@ export async function like(
   }
 
   // Extract IP address from headers
-  const ipAddress =
-    headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    headers.get('x-real-ip') ||
-    headers.get('cf-connecting-ip') ||
-    // Fallback for localhost or non Vercel deployments
-    '0.0.0.0';
-
-  const currentUserId =
-    // Since a users IP address is part of the sessionId in our database, we
-    // hash it to protect their privacy. By combining it with a salt, we get
-    // get a unique id we can refer to, but we won't know what their ip
-    // address was.
-    createHash('sha512')
-      .update(ipAddress + env.IP_ADDRESS_SALT, 'utf8')
-      .digest('hex');
+  const currentUserId = hashIpAddress(headers);
 
   const existingLike = await db.query.articleLikes.findFirst({
     where: and(eq(articleLikes.articleId, article.id), eq(articleLikes.visitorId, currentUserId)),
@@ -223,16 +224,7 @@ export async function isLiked(db: DbClient, input: { slug: string }, headers: He
     return false;
   }
 
-  // Extract IP address from headers (same logic as in like mutation)
-  const ipAddress =
-    headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    headers.get('x-real-ip') ||
-    headers.get('cf-connecting-ip') ||
-    '0.0.0.0';
-
-  const currentUserId = createHash('sha512')
-    .update(ipAddress + env.IP_ADDRESS_SALT, 'utf8')
-    .digest('hex');
+  const currentUserId = hashIpAddress(headers);
 
   const existingLike = await db.query.articleLikes.findFirst({
     where: and(eq(articleLikes.articleId, article.id), eq(articleLikes.visitorId, currentUserId)),

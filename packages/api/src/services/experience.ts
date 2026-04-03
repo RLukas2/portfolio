@@ -1,3 +1,5 @@
+// biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
+import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateExperienceSchema, experience, UpdateExperienceSchema } from '@xbrk/db/schema';
 import { desc, eq } from 'drizzle-orm';
@@ -46,7 +48,7 @@ export async function create(db: DbClient, input: z.infer<typeof CreateExperienc
       const imageUrl = await uploadImage('experiences', thumbnail, input.title);
       dataToInsert.imageUrl = imageUrl;
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   }
 
@@ -80,7 +82,7 @@ export async function update(db: DbClient, input: z.infer<typeof UpdateExperienc
         await deleteFile(oldImageUrl);
       }
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   }
 

@@ -1,3 +1,5 @@
+// biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
+import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateServiceSchema, service, UpdateServiceSchema } from '@xbrk/db/schema';
 import { desc, eq } from 'drizzle-orm';
@@ -61,7 +63,7 @@ export async function create(db: DbClient, input: z.infer<typeof CreateServiceSc
       const imageUrl = await uploadImage('projects', thumbnail, input.slug);
       serviceData.imageUrl = imageUrl;
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   }
 
@@ -89,7 +91,7 @@ export async function update(db: DbClient, input: z.infer<typeof UpdateServiceSc
         await deleteFile(oldImageUrl);
       }
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     }
   }
 

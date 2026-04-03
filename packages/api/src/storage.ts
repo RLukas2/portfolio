@@ -1,3 +1,5 @@
+// biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
+import * as Sentry from '@sentry/node';
 import { del, put } from '@vercel/blob';
 
 export const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -28,6 +30,7 @@ export async function uploadImage(folder: string, image: string, slug: string) {
     });
     return url;
   } catch (_error) {
+    Sentry.captureException(_error);
     throw new Error('Failed to upload image', { cause: _error as Error });
   }
 }
@@ -45,6 +48,7 @@ export async function deleteFile(url: string) {
 
     await del(url);
   } catch (_error) {
+    Sentry.captureException(_error);
     throw new Error('Failed to delete file', { cause: _error as Error });
   }
 }

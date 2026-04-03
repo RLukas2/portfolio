@@ -5,7 +5,7 @@ import { and, eq, ilike, or } from 'drizzle-orm';
 type DbClient = typeof DB;
 
 function escapeSearchTerm(term: string): string {
-  return term.replace(/[%_\\]/g, '\\$&');
+  return term.replace(/[%_\\]/g, (char) => `\\${char}`);
 }
 
 /**

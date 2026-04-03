@@ -17,6 +17,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@sentry/node": "catalog:",
     "@t3-oss/env-core": "catalog:",
     "@vercel/blob": "^2.3.2",
     "@xbrk/auth": "workspace:*",
