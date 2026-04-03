@@ -9,11 +9,47 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./routes/__root";
+import { Route as SitemapDotxmlRouteImport } from "./routes/sitemap[.]xml";
+import { Route as LlmsDottxtRouteImport } from "./routes/llms[.]txt";
 import { Route as publicLayoutRouteImport } from "./routes/(public)/layout";
+import { Route as authLayoutRouteImport } from "./routes/(auth)/layout";
 import { Route as publicIndexRouteImport } from "./routes/(public)/index";
+import { Route as authSigninRouteImport } from "./routes/(auth)/signin";
+import { Route as ApiContactIndexRouteImport } from "./routes/api/contact/index";
+import { Route as ApiChatIndexRouteImport } from "./routes/api/chat/index";
+import { Route as ApiChangelogIndexRouteImport } from "./routes/api/changelog/index";
+import { Route as publicUsesIndexRouteImport } from "./routes/(public)/uses/index";
+import { Route as publicStatsIndexRouteImport } from "./routes/(public)/stats/index";
+import { Route as publicSnippetsIndexRouteImport } from "./routes/(public)/snippets/index";
+import { Route as publicProjectsIndexRouteImport } from "./routes/(public)/projects/index";
+import { Route as publicProfileIndexRouteImport } from "./routes/(public)/profile/index";
+import { Route as publicGuestbookIndexRouteImport } from "./routes/(public)/guestbook/index";
+import { Route as publicBlogIndexRouteImport } from "./routes/(public)/blog/index";
+import { Route as publicAboutIndexRouteImport } from "./routes/(public)/about/index";
+import { Route as ApiAuthSplatRouteImport } from "./routes/api/auth/$";
+import { Route as publicSnippetsSnippetIdRouteImport } from "./routes/(public)/snippets/$snippetId";
+import { Route as publicServicesServiceIdRouteImport } from "./routes/(public)/services/$serviceId";
+import { Route as publicProjectsProjectIdRouteImport } from "./routes/(public)/projects/$projectId";
+import { Route as publicBlogArticleIdRouteImport } from "./routes/(public)/blog/$articleId";
+import { Route as ApiStatsGithubIndexRouteImport } from "./routes/api/stats/github/index";
+import { Route as ApiStatsGithubActivityRouteImport } from "./routes/api/stats/github/activity";
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: "/sitemap.xml",
+  path: "/sitemap.xml",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: "/llms.txt",
+  path: "/llms.txt",
+  getParentRoute: () => rootRouteImport,
+} as any);
 const publicLayoutRoute = publicLayoutRouteImport.update({
   id: "/(public)",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const authLayoutRoute = authLayoutRouteImport.update({
+  id: "/(auth)",
   getParentRoute: () => rootRouteImport,
 } as any);
 const publicIndexRoute = publicIndexRouteImport.update({
@@ -21,37 +57,295 @@ const publicIndexRoute = publicIndexRouteImport.update({
   path: "/",
   getParentRoute: () => publicLayoutRoute,
 } as any);
+const authSigninRoute = authSigninRouteImport.update({
+  id: "/signin",
+  path: "/signin",
+  getParentRoute: () => authLayoutRoute,
+} as any);
+const ApiContactIndexRoute = ApiContactIndexRouteImport.update({
+  id: "/api/contact/",
+  path: "/api/contact/",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const ApiChatIndexRoute = ApiChatIndexRouteImport.update({
+  id: "/api/chat/",
+  path: "/api/chat/",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const ApiChangelogIndexRoute = ApiChangelogIndexRouteImport.update({
+  id: "/api/changelog/",
+  path: "/api/changelog/",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const publicUsesIndexRoute = publicUsesIndexRouteImport.update({
+  id: "/uses/",
+  path: "/uses/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicStatsIndexRoute = publicStatsIndexRouteImport.update({
+  id: "/stats/",
+  path: "/stats/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicSnippetsIndexRoute = publicSnippetsIndexRouteImport.update({
+  id: "/snippets/",
+  path: "/snippets/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicProjectsIndexRoute = publicProjectsIndexRouteImport.update({
+  id: "/projects/",
+  path: "/projects/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicProfileIndexRoute = publicProfileIndexRouteImport.update({
+  id: "/profile/",
+  path: "/profile/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicGuestbookIndexRoute = publicGuestbookIndexRouteImport.update({
+  id: "/guestbook/",
+  path: "/guestbook/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicBlogIndexRoute = publicBlogIndexRouteImport.update({
+  id: "/blog/",
+  path: "/blog/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicAboutIndexRoute = publicAboutIndexRouteImport.update({
+  id: "/about/",
+  path: "/about/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: "/api/auth/$",
+  path: "/api/auth/$",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const publicSnippetsSnippetIdRoute = publicSnippetsSnippetIdRouteImport.update({
+  id: "/snippets/$snippetId",
+  path: "/snippets/$snippetId",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicServicesServiceIdRoute = publicServicesServiceIdRouteImport.update({
+  id: "/services/$serviceId",
+  path: "/services/$serviceId",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicProjectsProjectIdRoute = publicProjectsProjectIdRouteImport.update({
+  id: "/projects/$projectId",
+  path: "/projects/$projectId",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicBlogArticleIdRoute = publicBlogArticleIdRouteImport.update({
+  id: "/blog/$articleId",
+  path: "/blog/$articleId",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const ApiStatsGithubIndexRoute = ApiStatsGithubIndexRouteImport.update({
+  id: "/api/stats/github/",
+  path: "/api/stats/github/",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const ApiStatsGithubActivityRoute = ApiStatsGithubActivityRouteImport.update({
+  id: "/api/stats/github/activity",
+  path: "/api/stats/github/activity",
+  getParentRoute: () => rootRouteImport,
+} as any);
 
 export interface FileRoutesByFullPath {
+  "/llms.txt": typeof LlmsDottxtRoute;
+  "/sitemap.xml": typeof SitemapDotxmlRoute;
+  "/signin": typeof authSigninRoute;
   "/": typeof publicIndexRoute;
+  "/blog/$articleId": typeof publicBlogArticleIdRoute;
+  "/projects/$projectId": typeof publicProjectsProjectIdRoute;
+  "/services/$serviceId": typeof publicServicesServiceIdRoute;
+  "/snippets/$snippetId": typeof publicSnippetsSnippetIdRoute;
+  "/api/auth/$": typeof ApiAuthSplatRoute;
+  "/about/": typeof publicAboutIndexRoute;
+  "/blog/": typeof publicBlogIndexRoute;
+  "/guestbook/": typeof publicGuestbookIndexRoute;
+  "/profile/": typeof publicProfileIndexRoute;
+  "/projects/": typeof publicProjectsIndexRoute;
+  "/snippets/": typeof publicSnippetsIndexRoute;
+  "/stats/": typeof publicStatsIndexRoute;
+  "/uses/": typeof publicUsesIndexRoute;
+  "/api/changelog/": typeof ApiChangelogIndexRoute;
+  "/api/chat/": typeof ApiChatIndexRoute;
+  "/api/contact/": typeof ApiContactIndexRoute;
+  "/api/stats/github/activity": typeof ApiStatsGithubActivityRoute;
+  "/api/stats/github/": typeof ApiStatsGithubIndexRoute;
 }
 export interface FileRoutesByTo {
+  "/llms.txt": typeof LlmsDottxtRoute;
+  "/sitemap.xml": typeof SitemapDotxmlRoute;
+  "/signin": typeof authSigninRoute;
   "/": typeof publicIndexRoute;
+  "/blog/$articleId": typeof publicBlogArticleIdRoute;
+  "/projects/$projectId": typeof publicProjectsProjectIdRoute;
+  "/services/$serviceId": typeof publicServicesServiceIdRoute;
+  "/snippets/$snippetId": typeof publicSnippetsSnippetIdRoute;
+  "/api/auth/$": typeof ApiAuthSplatRoute;
+  "/about": typeof publicAboutIndexRoute;
+  "/blog": typeof publicBlogIndexRoute;
+  "/guestbook": typeof publicGuestbookIndexRoute;
+  "/profile": typeof publicProfileIndexRoute;
+  "/projects": typeof publicProjectsIndexRoute;
+  "/snippets": typeof publicSnippetsIndexRoute;
+  "/stats": typeof publicStatsIndexRoute;
+  "/uses": typeof publicUsesIndexRoute;
+  "/api/changelog": typeof ApiChangelogIndexRoute;
+  "/api/chat": typeof ApiChatIndexRoute;
+  "/api/contact": typeof ApiContactIndexRoute;
+  "/api/stats/github/activity": typeof ApiStatsGithubActivityRoute;
+  "/api/stats/github": typeof ApiStatsGithubIndexRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
+  "/(auth)": typeof authLayoutRouteWithChildren;
   "/(public)": typeof publicLayoutRouteWithChildren;
+  "/llms.txt": typeof LlmsDottxtRoute;
+  "/sitemap.xml": typeof SitemapDotxmlRoute;
+  "/(auth)/signin": typeof authSigninRoute;
   "/(public)/": typeof publicIndexRoute;
+  "/(public)/blog/$articleId": typeof publicBlogArticleIdRoute;
+  "/(public)/projects/$projectId": typeof publicProjectsProjectIdRoute;
+  "/(public)/services/$serviceId": typeof publicServicesServiceIdRoute;
+  "/(public)/snippets/$snippetId": typeof publicSnippetsSnippetIdRoute;
+  "/api/auth/$": typeof ApiAuthSplatRoute;
+  "/(public)/about/": typeof publicAboutIndexRoute;
+  "/(public)/blog/": typeof publicBlogIndexRoute;
+  "/(public)/guestbook/": typeof publicGuestbookIndexRoute;
+  "/(public)/profile/": typeof publicProfileIndexRoute;
+  "/(public)/projects/": typeof publicProjectsIndexRoute;
+  "/(public)/snippets/": typeof publicSnippetsIndexRoute;
+  "/(public)/stats/": typeof publicStatsIndexRoute;
+  "/(public)/uses/": typeof publicUsesIndexRoute;
+  "/api/changelog/": typeof ApiChangelogIndexRoute;
+  "/api/chat/": typeof ApiChatIndexRoute;
+  "/api/contact/": typeof ApiContactIndexRoute;
+  "/api/stats/github/activity": typeof ApiStatsGithubActivityRoute;
+  "/api/stats/github/": typeof ApiStatsGithubIndexRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/";
+  fullPaths:
+    | "/llms.txt"
+    | "/sitemap.xml"
+    | "/signin"
+    | "/"
+    | "/blog/$articleId"
+    | "/projects/$projectId"
+    | "/services/$serviceId"
+    | "/snippets/$snippetId"
+    | "/api/auth/$"
+    | "/about/"
+    | "/blog/"
+    | "/guestbook/"
+    | "/profile/"
+    | "/projects/"
+    | "/snippets/"
+    | "/stats/"
+    | "/uses/"
+    | "/api/changelog/"
+    | "/api/chat/"
+    | "/api/contact/"
+    | "/api/stats/github/activity"
+    | "/api/stats/github/";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/";
-  id: "__root__" | "/(public)" | "/(public)/";
+  to:
+    | "/llms.txt"
+    | "/sitemap.xml"
+    | "/signin"
+    | "/"
+    | "/blog/$articleId"
+    | "/projects/$projectId"
+    | "/services/$serviceId"
+    | "/snippets/$snippetId"
+    | "/api/auth/$"
+    | "/about"
+    | "/blog"
+    | "/guestbook"
+    | "/profile"
+    | "/projects"
+    | "/snippets"
+    | "/stats"
+    | "/uses"
+    | "/api/changelog"
+    | "/api/chat"
+    | "/api/contact"
+    | "/api/stats/github/activity"
+    | "/api/stats/github";
+  id:
+    | "__root__"
+    | "/(auth)"
+    | "/(public)"
+    | "/llms.txt"
+    | "/sitemap.xml"
+    | "/(auth)/signin"
+    | "/(public)/"
+    | "/(public)/blog/$articleId"
+    | "/(public)/projects/$projectId"
+    | "/(public)/services/$serviceId"
+    | "/(public)/snippets/$snippetId"
+    | "/api/auth/$"
+    | "/(public)/about/"
+    | "/(public)/blog/"
+    | "/(public)/guestbook/"
+    | "/(public)/profile/"
+    | "/(public)/projects/"
+    | "/(public)/snippets/"
+    | "/(public)/stats/"
+    | "/(public)/uses/"
+    | "/api/changelog/"
+    | "/api/chat/"
+    | "/api/contact/"
+    | "/api/stats/github/activity"
+    | "/api/stats/github/";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
+  authLayoutRoute: typeof authLayoutRouteWithChildren;
   publicLayoutRoute: typeof publicLayoutRouteWithChildren;
+  LlmsDottxtRoute: typeof LlmsDottxtRoute;
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute;
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute;
+  ApiChangelogIndexRoute: typeof ApiChangelogIndexRoute;
+  ApiChatIndexRoute: typeof ApiChatIndexRoute;
+  ApiContactIndexRoute: typeof ApiContactIndexRoute;
+  ApiStatsGithubActivityRoute: typeof ApiStatsGithubActivityRoute;
+  ApiStatsGithubIndexRoute: typeof ApiStatsGithubIndexRoute;
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/sitemap.xml": {
+      id: "/sitemap.xml";
+      path: "/sitemap.xml";
+      fullPath: "/sitemap.xml";
+      preLoaderRoute: typeof SitemapDotxmlRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/llms.txt": {
+      id: "/llms.txt";
+      path: "/llms.txt";
+      fullPath: "/llms.txt";
+      preLoaderRoute: typeof LlmsDottxtRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     "/(public)": {
       id: "/(public)";
       path: "";
       fullPath: "";
       preLoaderRoute: typeof publicLayoutRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/(auth)": {
+      id: "/(auth)";
+      path: "";
+      fullPath: "";
+      preLoaderRoute: typeof authLayoutRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/(public)/": {
@@ -61,15 +355,184 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof publicIndexRouteImport;
       parentRoute: typeof publicLayoutRoute;
     };
+    "/(auth)/signin": {
+      id: "/(auth)/signin";
+      path: "/signin";
+      fullPath: "/signin";
+      preLoaderRoute: typeof authSigninRouteImport;
+      parentRoute: typeof authLayoutRoute;
+    };
+    "/api/contact/": {
+      id: "/api/contact/";
+      path: "/api/contact";
+      fullPath: "/api/contact/";
+      preLoaderRoute: typeof ApiContactIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/api/chat/": {
+      id: "/api/chat/";
+      path: "/api/chat";
+      fullPath: "/api/chat/";
+      preLoaderRoute: typeof ApiChatIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/api/changelog/": {
+      id: "/api/changelog/";
+      path: "/api/changelog";
+      fullPath: "/api/changelog/";
+      preLoaderRoute: typeof ApiChangelogIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/(public)/uses/": {
+      id: "/(public)/uses/";
+      path: "/uses";
+      fullPath: "/uses/";
+      preLoaderRoute: typeof publicUsesIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/stats/": {
+      id: "/(public)/stats/";
+      path: "/stats";
+      fullPath: "/stats/";
+      preLoaderRoute: typeof publicStatsIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/snippets/": {
+      id: "/(public)/snippets/";
+      path: "/snippets";
+      fullPath: "/snippets/";
+      preLoaderRoute: typeof publicSnippetsIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/projects/": {
+      id: "/(public)/projects/";
+      path: "/projects";
+      fullPath: "/projects/";
+      preLoaderRoute: typeof publicProjectsIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/profile/": {
+      id: "/(public)/profile/";
+      path: "/profile";
+      fullPath: "/profile/";
+      preLoaderRoute: typeof publicProfileIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/guestbook/": {
+      id: "/(public)/guestbook/";
+      path: "/guestbook";
+      fullPath: "/guestbook/";
+      preLoaderRoute: typeof publicGuestbookIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/blog/": {
+      id: "/(public)/blog/";
+      path: "/blog";
+      fullPath: "/blog/";
+      preLoaderRoute: typeof publicBlogIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/about/": {
+      id: "/(public)/about/";
+      path: "/about";
+      fullPath: "/about/";
+      preLoaderRoute: typeof publicAboutIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/api/auth/$": {
+      id: "/api/auth/$";
+      path: "/api/auth/$";
+      fullPath: "/api/auth/$";
+      preLoaderRoute: typeof ApiAuthSplatRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/(public)/snippets/$snippetId": {
+      id: "/(public)/snippets/$snippetId";
+      path: "/snippets/$snippetId";
+      fullPath: "/snippets/$snippetId";
+      preLoaderRoute: typeof publicSnippetsSnippetIdRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/services/$serviceId": {
+      id: "/(public)/services/$serviceId";
+      path: "/services/$serviceId";
+      fullPath: "/services/$serviceId";
+      preLoaderRoute: typeof publicServicesServiceIdRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/projects/$projectId": {
+      id: "/(public)/projects/$projectId";
+      path: "/projects/$projectId";
+      fullPath: "/projects/$projectId";
+      preLoaderRoute: typeof publicProjectsProjectIdRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/blog/$articleId": {
+      id: "/(public)/blog/$articleId";
+      path: "/blog/$articleId";
+      fullPath: "/blog/$articleId";
+      preLoaderRoute: typeof publicBlogArticleIdRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/api/stats/github/": {
+      id: "/api/stats/github/";
+      path: "/api/stats/github";
+      fullPath: "/api/stats/github/";
+      preLoaderRoute: typeof ApiStatsGithubIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/api/stats/github/activity": {
+      id: "/api/stats/github/activity";
+      path: "/api/stats/github/activity";
+      fullPath: "/api/stats/github/activity";
+      preLoaderRoute: typeof ApiStatsGithubActivityRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
+interface authLayoutRouteChildren {
+  authSigninRoute: typeof authSigninRoute;
+}
+
+const authLayoutRouteChildren: authLayoutRouteChildren = {
+  authSigninRoute: authSigninRoute,
+};
+
+const authLayoutRouteWithChildren = authLayoutRoute._addFileChildren(
+  authLayoutRouteChildren,
+);
+
 interface publicLayoutRouteChildren {
   publicIndexRoute: typeof publicIndexRoute;
+  publicBlogArticleIdRoute: typeof publicBlogArticleIdRoute;
+  publicProjectsProjectIdRoute: typeof publicProjectsProjectIdRoute;
+  publicServicesServiceIdRoute: typeof publicServicesServiceIdRoute;
+  publicSnippetsSnippetIdRoute: typeof publicSnippetsSnippetIdRoute;
+  publicAboutIndexRoute: typeof publicAboutIndexRoute;
+  publicBlogIndexRoute: typeof publicBlogIndexRoute;
+  publicGuestbookIndexRoute: typeof publicGuestbookIndexRoute;
+  publicProfileIndexRoute: typeof publicProfileIndexRoute;
+  publicProjectsIndexRoute: typeof publicProjectsIndexRoute;
+  publicSnippetsIndexRoute: typeof publicSnippetsIndexRoute;
+  publicStatsIndexRoute: typeof publicStatsIndexRoute;
+  publicUsesIndexRoute: typeof publicUsesIndexRoute;
 }
 
 const publicLayoutRouteChildren: publicLayoutRouteChildren = {
   publicIndexRoute: publicIndexRoute,
+  publicBlogArticleIdRoute: publicBlogArticleIdRoute,
+  publicProjectsProjectIdRoute: publicProjectsProjectIdRoute,
+  publicServicesServiceIdRoute: publicServicesServiceIdRoute,
+  publicSnippetsSnippetIdRoute: publicSnippetsSnippetIdRoute,
+  publicAboutIndexRoute: publicAboutIndexRoute,
+  publicBlogIndexRoute: publicBlogIndexRoute,
+  publicGuestbookIndexRoute: publicGuestbookIndexRoute,
+  publicProfileIndexRoute: publicProfileIndexRoute,
+  publicProjectsIndexRoute: publicProjectsIndexRoute,
+  publicSnippetsIndexRoute: publicSnippetsIndexRoute,
+  publicStatsIndexRoute: publicStatsIndexRoute,
+  publicUsesIndexRoute: publicUsesIndexRoute,
 };
 
 const publicLayoutRouteWithChildren = publicLayoutRoute._addFileChildren(
@@ -77,7 +540,16 @@ const publicLayoutRouteWithChildren = publicLayoutRoute._addFileChildren(
 );
 
 const rootRouteChildren: RootRouteChildren = {
+  authLayoutRoute: authLayoutRouteWithChildren,
   publicLayoutRoute: publicLayoutRouteWithChildren,
+  LlmsDottxtRoute: LlmsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiChangelogIndexRoute: ApiChangelogIndexRoute,
+  ApiChatIndexRoute: ApiChatIndexRoute,
+  ApiContactIndexRoute: ApiContactIndexRoute,
+  ApiStatsGithubActivityRoute: ApiStatsGithubActivityRoute,
+  ApiStatsGithubIndexRoute: ApiStatsGithubIndexRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
