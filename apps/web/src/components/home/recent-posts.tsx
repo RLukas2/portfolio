@@ -1,0 +1,83 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { Link } from '@tanstack/react-router';
+import { cn } from '@xbrk/ui';
+import { buttonVariants } from '@xbrk/ui/button';
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import { containerVariantsFast, itemVariantsDown } from '@/lib/constants/framer-motion-variants';
+import { queryKeys } from '@/lib/query-keys';
+import { $getAllPublicArticles } from '@/lib/server';
+import ArticleCard from '../blog/article-card';
+
+const RecentPosts = () => {
+  const { data: articles } = useSuspenseQuery({
+    queryKey: queryKeys.blog.listPublic(),
+    queryFn: () => $getAllPublicArticles(),
+  });
+
+  const recentArticles = articles.slice(0, 3);
+
+  if (recentArticles.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="w-full">
+      <div className="mb-6 flex flex-col items-center px-1 text-center sm:mb-10">
+        <motion.span
+          animate={{ opacity: 1 }}
+          className="mb-3 font-medium text-primary text-sm uppercase tracking-widest"
+          initial={{ opacity: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          From the Blog
+        </motion.span>
+        <motion.h2
+          animate={{ opacity: 1, y: 0 }}
+          className="font-bold text-3xl tracking-tight sm:text-4xl"
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ delay: 0.2 }}
+        >
+          Latest Writing
+        </motion.h2>
+        <motion.p
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-3 max-w-2xl text-muted-foreground"
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ delay: 0.3 }}
+        >
+          Thoughts on tech, side projects, and things I find interesting.
+        </motion.p>
+      </div>
+
+      <motion.div
+        animate="visible"
+        className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+        initial="hidden"
+        variants={containerVariantsFast}
+        viewport={{ once: true }}
+        whileInView="visible"
+      >
+        {recentArticles.map((article) => (
+          <motion.div key={article.slug} variants={itemVariantsDown}>
+            <ArticleCard article={article} />
+          </motion.div>
+        ))}
+      </motion.div>
+
+      <motion.div
+        animate={{ opacity: 1, y: 0 }}
+        className="mt-10 flex justify-center"
+        initial={{ opacity: 0, y: 20 }}
+        transition={{ delay: 0.5 }}
+      >
+        <Link className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'group')} to="/blog">
+          View all posts
+          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </Link>
+      </motion.div>
+    </section>
+  );
+};
+
+export default RecentPosts;

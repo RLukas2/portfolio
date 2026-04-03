@@ -1,0 +1,43 @@
+import { Slot } from '@radix-ui/react-slot';
+import { cn } from '@xbrk/ui';
+import { motion } from 'framer-motion';
+import type { HTMLAttributes } from 'react';
+
+const MotionDiv = motion.create('div');
+const MotionSlot = motion.create(Slot);
+
+interface PageHeadingProps extends HTMLAttributes<HTMLHeadingElement> {
+  asChild?: boolean;
+  description?: string | null;
+  hasMotion?: boolean;
+  title: string;
+}
+
+const PageHeading = ({ title, description, asChild, className, hasMotion = true }: PageHeadingProps) => {
+  const Comp = (() => {
+    if (hasMotion) {
+      return asChild ? MotionSlot : MotionDiv;
+    }
+    return asChild ? Slot : 'div';
+  })();
+
+  const motionProps = hasMotion
+    ? { animate: { opacity: 1, y: 0 }, initial: { opacity: 0, y: 20 }, transition: { duration: 0.5 } }
+    : {};
+
+  return (
+    <Comp {...motionProps} className={cn('mb-10', className)}>
+      <div className="relative">
+        {/* Decorative gradient */}
+        <div className="pointer-events-none absolute -top-4 -left-4 h-24 w-24 rounded-full bg-gradient-to-br from-violet-500/20 to-pink-500/20 blur-2xl" />
+
+        <div className="relative space-y-3">
+          <h1 className="font-bold text-3xl tracking-tight md:text-4xl lg:text-5xl">{title}</h1>
+          {description && <p className="max-w-2xl text-muted-foreground leading-relaxed md:text-lg">{description}</p>}
+        </div>
+      </div>
+    </Comp>
+  );
+};
+
+export default PageHeading;

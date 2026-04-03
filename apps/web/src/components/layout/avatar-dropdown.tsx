@@ -1,0 +1,80 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { ClientOnly, useRouter } from '@tanstack/react-router';
+import { type UserType } from '@xbrk/types';
+import { Avatar, AvatarFallback, AvatarImage } from '@xbrk/ui/avatar';
+import { Button } from '@xbrk/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@xbrk/ui/dropdown-menu';
+import { Spinner } from '@xbrk/ui/spinner';
+import { Suspense } from 'react';
+import authClient from '@/lib/auth/client';
+import { env } from '@/lib/env/client';
+
+const getInitials = (name: string) =>
+  name
+    .split(' ')
+    .map((word) => word.charAt(0))
+    .join('')
+    .toUpperCase();
+
+export function AvatarDropdown({ user }: { user: UserType }) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const initials = getInitials(user?.name ?? '');
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className="relative h-8 w-8 rounded-full" variant="ghost">
+          <ClientOnly>
+            <Suspense fallback={<Spinner className="size-6" />}>
+              <Avatar className="h-8 w-8">
+                <AvatarImage alt={user?.name ?? ''} src={user?.image ?? ''} />
+                <AvatarFallback>{initials}</AvatarFallback>
+              </Avatar>
+            </Suspense>
+          </ClientOnly>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="font-medium text-sm leading-none">{user?.name}</p>
+            <p className="text-muted-foreground text-xs leading-none">{user?.email}</p>
+          </div>
+        </DropdownMenuLabel>
+        {user?.role === 'admin' && env.VITE_DASHBOARD_URL && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => router.navigate({ href: env.VITE_DASHBOARD_URL })}>
+              Dashboard
+            </DropdownMenuItem>
+          </>
+        )}
+        <DropdownMenuItem onClick={() => router.navigate({ to: '/profile' })}>Profile</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={async () => {
+            await authClient.signOut({
+              fetchOptions: {
+                onResponse: async () => {
+                  queryClient.setQueryData(['user'], null);
+                  await router.invalidate();
+                },
+              },
+            });
+          }}
+        >
+          Log out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

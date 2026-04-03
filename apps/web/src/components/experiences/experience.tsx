@@ -1,0 +1,76 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+import type { ExperienceType } from '@xbrk/types';
+import { LazyImage } from '@xbrk/ui/lazy-image';
+import { formatDate } from '@xbrk/utils';
+import { queryKeys } from '@/lib/query-keys';
+import { $getAllPublicExperiences } from '@/lib/server';
+
+interface ExperienceItemProps {
+  experience: ExperienceType;
+}
+
+function ExperienceImage({ title, imageUrl, url }: { title: string; imageUrl: string; url: string | null }) {
+  const image = (
+    <LazyImage alt={title} height={56} imageClassName="h-12 w-12 object-contain" src={imageUrl} width={56} />
+  );
+
+  if (url) {
+    return (
+      <a
+        className="relative shrink-0 overflow-hidden rounded-lg border bg-muted/50 p-2 transition-all hover:border-primary/30 hover:shadow-md"
+        href={url}
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        {image}
+      </a>
+    );
+  }
+
+  return <div className="relative shrink-0 overflow-hidden rounded-lg border bg-muted/50 p-2">{image}</div>;
+}
+
+function ExperienceItem({ experience }: Readonly<ExperienceItemProps>) {
+  const { title, institution, startDate, endDate, description, url, imageUrl } = experience;
+
+  return (
+    <div className="group relative flex items-start gap-4 rounded-xl border bg-card p-5 transition-all hover:border-foreground/20 hover:shadow-lg lg:gap-5">
+      {imageUrl && <ExperienceImage imageUrl={imageUrl} title={title} url={url} />}
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+          <h3 className="font-semibold text-lg leading-tight">{institution}</h3>
+          <time className="shrink-0 text-muted-foreground text-sm">
+            {startDate && formatDate(startDate)} –{' '}
+            {endDate ? (
+              formatDate(endDate)
+            ) : (
+              <span className="font-medium text-emerald-600 dark:text-emerald-400">Present</span>
+            )}
+          </time>
+        </div>
+
+        <p className="mt-0.5 font-medium text-muted-foreground text-sm">{title}</p>
+
+        {description && <p className="mt-3 text-muted-foreground text-sm leading-relaxed">{description}</p>}
+      </div>
+    </div>
+  );
+}
+
+const ExperienceSection = () => {
+  const { data: experiences } = useSuspenseQuery({
+    queryKey: queryKeys.experience.listPublic(),
+    queryFn: () => $getAllPublicExperiences(),
+  });
+
+  return (
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      {experiences.map((experience) => (
+        <ExperienceItem experience={experience} key={experience.id} />
+      ))}
+    </div>
+  );
+};
+
+export default ExperienceSection;
