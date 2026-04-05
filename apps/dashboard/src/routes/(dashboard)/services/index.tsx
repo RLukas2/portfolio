@@ -1,0 +1,102 @@
+import { ErrorBoundary } from '@sentry/tanstackstart-react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { cn } from '@xbrk/ui';
+import { buttonVariants } from '@xbrk/ui/button';
+import { Card } from '@xbrk/ui/card';
+import { Skeleton } from '@xbrk/ui/skeleton';
+import { Plus } from 'lucide-react';
+import { Suspense } from 'react';
+import { DataTable } from '@/components/data-table/data-table';
+import { serviceColumns } from '@/components/services/columns';
+import { queryKeys } from '@/lib/query-keys';
+import { $getAllServices } from '@/lib/server/service';
+
+export const Route = createFileRoute('/(dashboard)/services/')({
+  component: Services,
+  loader: async ({ context: { queryClient } }) =>
+    await queryClient.prefetchQuery({
+      queryKey: queryKeys.service.listAll(),
+      queryFn: () => $getAllServices(),
+    }),
+  head: () => ({
+    meta: [{ title: 'Services | Dashboard' }, { name: 'description', content: 'Manage your portfolio services' }],
+  }),
+});
+
+function ServicesLoading() {
+  return (
+    <div className="space-y-3">
+      <Skeleton className="h-8 w-[250px]" />
+      <Skeleton className="h-4 w-[350px]" />
+      <div className="mt-6">
+        <Skeleton className="h-[400px] w-full rounded-md" />
+      </div>
+    </div>
+  );
+}
+
+function ServicesError() {
+  return (
+    <Card className="p-6">
+      <div className="text-center">
+        <h3 className="font-medium text-destructive text-lg">Failed to load services</h3>
+        <p className="mt-1 text-muted-foreground text-sm">Please try again later.</p>
+      </div>
+    </Card>
+  );
+}
+
+function ServicesContent() {
+  const {
+    data: services,
+    error,
+    isLoading,
+    isFetching,
+  } = useSuspenseQuery({
+    queryKey: queryKeys.service.listAll(),
+    queryFn: () => $getAllServices(),
+  });
+
+  if (error) {
+    return (
+      <Card className="p-6">
+        <div className="text-center">
+          <h3 className="font-medium text-destructive text-lg">Failed to load services</h3>
+          <p className="mt-1 text-muted-foreground text-sm">{error.message ?? 'Please try again later.'}</p>
+        </div>
+      </Card>
+    );
+  }
+
+  if (isLoading || isFetching) {
+    return <ServicesLoading />;
+  }
+
+  return <DataTable columns={serviceColumns} data={services} entityName="services" />;
+}
+
+function Services() {
+  return (
+    <>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 className="font-bold text-2xl tracking-tight">Service List</h2>
+          <p className="text-muted-foreground">Manage your services here.</p>
+        </div>
+        <Link
+          aria-label="Add new service"
+          className={cn(buttonVariants({ variant: 'default' }), 'group')}
+          to="/services/create"
+        >
+          <span>Add Service</span> <Plus className="ml-1" size={18} />
+        </Link>
+      </div>
+      <ErrorBoundary fallback={<ServicesError />}>
+        <Suspense fallback={<ServicesLoading />}>
+          <ServicesContent />
+        </Suspense>
+      </ErrorBoundary>
+    </>
+  );
+}

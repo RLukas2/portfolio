@@ -1,0 +1,69 @@
+/// <reference types="vite/client" />
+
+import type { QueryClient } from '@tanstack/react-query';
+import { createRootRouteWithContext, HeadContent, Scripts } from '@tanstack/react-router';
+import { siteConfig } from '@xbrk/config';
+import { DevtoolsComponent } from '@xbrk/shared/dev-tools';
+import { ThemeProvider, useTheme } from '@xbrk/shared/theme-provider';
+import { Toaster } from '@xbrk/ui/sonner';
+import { type AuthQueryResult, authQueryOptions } from '@/lib/auth/queries';
+import appCss from '@/styles.css?url';
+
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+  user: AuthQueryResult;
+}>()({
+  beforeLoad: async ({ context }) => {
+    const user = await context.queryClient.ensureQueryData({
+      ...authQueryOptions(),
+      revalidateIfStale: true,
+    });
+    return { user };
+  },
+  head: () => ({
+    meta: [
+      {
+        charSet: 'utf-8',
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+      },
+      {
+        title: siteConfig.title,
+      },
+      {
+        name: 'description',
+        content: siteConfig.description,
+      },
+    ],
+    links: [{ rel: 'stylesheet', href: appCss, as: 'style', type: 'text/css' }],
+  }),
+  staleTime: Number.POSITIVE_INFINITY,
+  shellComponent: ({ children }) => {
+    return (
+      <ThemeProvider>
+        <ShellComponent>{children}</ShellComponent>
+      </ThemeProvider>
+    );
+  },
+});
+
+function ShellComponent({ children }: { readonly children: React.ReactNode }) {
+  const { resolvedTheme } = useTheme();
+  return (
+    // suppress since we're updating the "dark" class in a custom script below
+    <html className="scroll-smooth" lang="en" suppressHydrationWarning>
+      <head>
+        <HeadContent />
+      </head>
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        {children}
+        <Toaster resolvedTheme={resolvedTheme} />
+
+        {import.meta.env.DEV && <DevtoolsComponent />}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
