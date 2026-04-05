@@ -3,15 +3,55 @@ import { openaiText } from '@tanstack/ai-openai';
 import { createFileRoute } from '@tanstack/react-router';
 import getTools from '@/lib/ai';
 
+/**
+ * AI Chat API Route
+ *
+ * Provides an AI-powered chatbot that can answer questions about Nauris Linde's
+ * portfolio, services, projects, articles, and experience.
+ *
+ * Features:
+ * - Natural language conversation
+ * - Project search and recommendations
+ * - Article search and recommendations
+ * - Experience/work history queries
+ * - Service information and meeting booking
+ *
+ * The AI has access to tools for searching and retrieving portfolio content,
+ * allowing it to provide specific, accurate information about projects and articles.
+ *
+ * @example
+ * POST /api/chat
+ * {
+ *   "messages": [
+ *     { "role": "user", "content": "What projects use React?" }
+ *   ]
+ * }
+ *
+ * @returns Server-sent events stream with AI responses
+ */
 export const Route = createFileRoute('/api/chat/')({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const { messages } = await request.json();
+        try {
+          const { messages } = await request.json();
 
-        const calendlyUrl = process.env.CALENDLY_URL ?? 'https://calendly.com/naurislinde/30min';
+          // Validate messages
+          if (!(messages && Array.isArray(messages))) {
+            return new Response(
+              JSON.stringify({
+                error: 'Invalid request: messages array is required',
+              }),
+              {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+              },
+            );
+          }
 
-        const serviceKnowledge = `
+          const calendlyUrl = process.env.CALENDLY_URL ?? 'https://calendly.com/naurislinde/30min';
+
+          const serviceKnowledge = `
 You are Nauris Linde's AI assistant. Here's information about Nauris's services and background:
 
 **About Nauris Linde:**
@@ -66,7 +106,7 @@ When someone wants to schedule a meeting or consultation, use Calendly at ${cale
 
 Always be helpful, professional, and enthusiastic about Nauris's work. Provide specific examples from his projects and articles when relevant. Direct users to specific URLs for more detailed information.
 `;
-        try {
+
           const tools = getTools();
 
           const stream = chat({
@@ -78,9 +118,19 @@ Always be helpful, professional, and enthusiastic about Nauris's work. Provide s
 
           return toServerSentEventsResponse(stream);
         } catch (error) {
-          return new Response(`Error: ${error instanceof Error ? error.message : 'Internal server error'}`, {
-            status: 500,
-          });
+          console.error('[Chat API] Error:', error);
+
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          return new Response(
+            JSON.stringify({
+              error: 'Failed to process chat request',
+              details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
+            }),
+            {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            },
+          );
         }
       },
     },

@@ -4,14 +4,26 @@ import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 import { authMiddleware } from '@/lib/auth/middleware';
 
+/**
+ * AI assistance types for blog post creation
+ */
 type AssistType = 'title' | 'description' | 'tags' | 'content' | 'outline' | 'expand';
 
+/**
+ * Context information provided to the AI for generating content
+ */
 interface AssistContext {
+  /** Current blog post content (for context) */
   currentContent?: string;
+  /** Blog post description */
   description?: string;
+  /** Text selected by user for expansion */
   selectedText?: string;
+  /** Existing tags */
   tags?: string[];
+  /** Blog post title */
   title?: string;
+  /** Main topic or subject */
   topic?: string;
 }
 
@@ -29,11 +41,18 @@ const requestSchema = z.object({
   context: assistContextSchema,
 });
 
+// Content preview limits for context
 const CONTENT_PREVIEW_LENGTH = 500;
 const SHORT_CONTENT_PREVIEW_LENGTH = 300;
+
+// Token limits for AI responses
 const MAX_TOKENS_LONG = 2000;
 const MAX_TOKENS_SHORT = 500;
 
+/**
+ * System prompts for each assistance type
+ * These define the AI's role and output format for each task
+ */
 const SYSTEM_PROMPTS: Record<AssistType, string> = {
   title:
     'You are a creative blog title generator. Generate 5 compelling, SEO-friendly blog post titles based on the given topic. Make them engaging, clear, and attention-grabbing. Each title should be on a new line and numbered.',
@@ -48,6 +67,13 @@ const SYSTEM_PROMPTS: Record<AssistType, string> = {
     'You are a technical writer. Expand the selected text with more detail, examples, and explanations. Maintain the same tone and style. Write in MDX format with proper markdown formatting.',
 };
 
+/**
+ * Builds the user prompt based on assistance type and context
+ *
+ * @param type - The type of assistance requested
+ * @param context - Context information for generating the prompt
+ * @returns Formatted prompt string for the AI
+ */
 function buildUserPrompt(type: AssistType, context: AssistContext): string {
   switch (type) {
     case 'title':
@@ -81,6 +107,28 @@ function buildUserPrompt(type: AssistType, context: AssistContext): string {
   }
 }
 
+/**
+ * AI Blog Assist API Route
+ *
+ * Provides AI-powered assistance for blog post creation including:
+ * - Title generation
+ * - Description writing
+ * - Tag suggestions
+ * - Content generation
+ * - Outline creation
+ * - Text expansion
+ *
+ * Protected by authentication middleware - requires valid session.
+ *
+ * @example
+ * POST /api/ai/blog-assist
+ * {
+ *   "type": "title",
+ *   "context": { "topic": "React Server Components" }
+ * }
+ *
+ * @returns Server-sent events stream with AI-generated content
+ */
 export const Route = createFileRoute('/api/ai/blog-assist/')({
   server: {
     middleware: [authMiddleware],
