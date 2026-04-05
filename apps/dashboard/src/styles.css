@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@xbrk/tailwind-config/theme";
+@import "@xbrk/tailwind/theme";
 
 @import "tw-animate-css";
 
