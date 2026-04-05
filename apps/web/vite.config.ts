@@ -1,5 +1,6 @@
 import path from 'node:path';
 import babel from '@rolldown/plugin-babel';
+import { sentryTanstackStart } from '@sentry/tanstackstart-react/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
@@ -28,6 +29,15 @@ const config = defineConfig({
       },
       enhancedLogs: {
         enabled: true,
+      },
+    }),
+    sentryTanstackStart({
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      telemetry: false,
+      sourcemaps: {
+        disable: false,
       },
     }),
     tanstackStart({
