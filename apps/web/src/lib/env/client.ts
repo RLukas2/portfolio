@@ -24,6 +24,10 @@ export const env = createEnv({
     // URL of the admin dashboard app (shown in the avatar dropdown for admins).
     VITE_DASHBOARD_URL: z.url().optional(),
 
+    // --- GitHub integration ---
+    // Public GitHub username for displaying contribution calendar and stats
+    VITE_GITHUB_USERNAME: z.string().min(1).optional(),
+
     // --- Error tracking (Sentry) ---
     // https://docs.sentry.io
     VITE_SENTRY_DSN: z.string().min(1).optional(),

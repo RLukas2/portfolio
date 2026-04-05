@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noDescendingSpecificity: This file intentionally has more specific selectors for prose elements to ensure they override any default styles from the typography plugin. */
 @import "tailwindcss";
 @import "@xbrk/tailwind/theme";
 
@@ -7,23 +8,494 @@
 @import "@fontsource-variable/roboto-mono";
 @import "@fontsource/cal-sans";
 
+@plugin "@tailwindcss/typography";
+
 @source "../../../packages/ui/src/*.{ts,tsx}";
+@source "../../../packages/mdx/src/*.{ts,tsx}";
 @source "../../../packages/shared/src/*.{ts,tsx}";
 
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant light (&:where(.light, .light *));
 @custom-variant auto (&:where(.auto, .auto *));
 
+/* ========================================
+   BASE LAYER - Core Improvements
+   ======================================== */
 @layer base {
   :root {
     --font-sans: "Inter Variable", sans-serif;
     --font-mono: "Roboto Mono Variable", monospace;
     --font-heading: "Cal Sans", sans-serif;
   }
+
   * {
     @apply border-border;
   }
-  body {
-    letter-spacing: var(--tracking-normal);
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-tap-highlight-color: transparent;
   }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: var(--tracking-normal);
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Typography customization for prose */
+  .prose {
+    line-height: 1.8;
+    color: var(--foreground);
+  }
+
+  .prose p {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
+  .prose h1 {
+    margin-top: 0;
+    margin-bottom: 0.875em;
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--foreground);
+  }
+
+  .prose h2 {
+    margin-top: 2em;
+    margin-bottom: 1em;
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--foreground);
+  }
+
+  .prose h3 {
+    margin-top: 1.75em;
+    margin-bottom: 0.75em;
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--foreground);
+  }
+
+  .prose h4 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--foreground);
+  }
+
+  .prose h5,
+  .prose h6 {
+    margin-top: 1.25em;
+    margin-bottom: 0.5em;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  .prose a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .prose a:hover {
+    text-decoration: underline;
+  }
+
+  .prose ul,
+  .prose ol {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
+  .prose li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  .prose img {
+    margin: 0 auto;
+  }
+
+  .prose figcaption {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    text-align: center;
+  }
+
+  .prose code,
+  .prose pre code {
+    font-family: var(--font-mono);
+  }
+
+  /* More specific selector should come after less specific */
+  .prose a code {
+    color: var(--primary);
+  }
+
+  .prose blockquote {
+    color: var(--muted-foreground);
+    border-left-color: var(--primary);
+  }
+
+  .prose strong {
+    color: var(--foreground);
+  }
+}
+
+/* ========================================
+   CUSTOM SCROLLBAR
+   ======================================== */
+@layer base {
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted/30;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    transition: background 0.2s ease;
+    @apply bg-muted rounded-lg;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+/* ========================================
+   CONTAINER UTILITY
+   ======================================== */
+@utility container {
+  padding-inline: 2rem;
+  margin-inline: auto;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+  @media (width >= 1920px) {
+    max-width: 1800px;
+  }
+}
+
+/* ========================================
+   BORDER & BACKGROUND BASE
+   ======================================== */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: hsl(var(--border));
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ========================================
+   GRID BACKGROUND PATTERN
+   ======================================== */
+@layer components {
+  .bg-grid {
+    @apply relative z-0;
+
+    &::before {
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' fill='none' stroke='rgb(0 0 0 / 0.05)' stroke-dasharray='6 3' viewBox='0 0 32 32'%3E%3Cpath d='M36 .5H1.5V36'/%3E%3C/svg%3E");
+      -webkit-mask-image: linear-gradient(transparent, black, transparent);
+      mask-image: linear-gradient(transparent, black, transparent);
+      @apply absolute inset-0 z-[-1] content-[''];
+    }
+  }
+
+  .dark .bg-grid::before {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' fill='none' stroke='rgb(255 255 255 / 0.05)' stroke-dasharray='6 3' viewBox='0 0 32 32'%3E%3Cpath d='M36 .5H1.5V36'/%3E%3C/svg%3E");
+  }
+}
+
+/* ========================================
+   CUSTOM ANIMATIONS
+   ======================================== */
+@theme inline {
+  /* Marquee animations for scrolling content */
+  --animate-marquee-left: marquee-left var(--duration, 100s) linear infinite;
+  --animate-marquee-up: marquee-up var(--duration, 100s) linear infinite;
+
+  /* Float animation for subtle hover effects */
+  --animate-float: float 3s ease-in-out infinite;
+
+  /* Shine effect for buttons and cards */
+  --animate-shine: shine 3s infinite;
+
+  /* Pulse subtle for loading states */
+  --animate-pulse-subtle: pulse-subtle 2s ease-in-out infinite;
+
+  @keyframes marquee-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes marquee-up {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes shine {
+    from {
+      left: -150%;
+    }
+    to {
+      left: 150%;
+    }
+  }
+
+  @keyframes pulse-subtle {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+@layer utilities {
+  /* Shine effect wrapper */
+  .shine {
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      content: "";
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(30deg);
+      animation: shine 3s infinite;
+    }
+  }
+
+  /* Float animation utility */
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Pulse subtle utility */
+  .pulse-subtle {
+    animation: pulse-subtle 2s ease-in-out infinite;
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+  /* Hide non-essential elements */
+  header,
+  footer,
+  nav,
+  aside,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Reset colors for print */
+  * {
+    color: #000 !important;
+    text-shadow: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html,
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: 24pt !important;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 18pt !important;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 14pt !important;
+    page-break-after: avoid;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-size: 12pt !important;
+    page-break-after: avoid;
+  }
+
+  p {
+    widows: 3;
+    orphans: 3;
+  }
+
+  /* Links - show URL after link text */
+  a[href]::after {
+    font-size: 9pt;
+    color: #666 !important;
+    content: " (" attr(href) ")";
+  }
+
+  /* Don't show URL for internal anchor links */
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "" !important;
+  }
+
+  /* Images */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Code blocks */
+  pre,
+  code {
+    border: 1px solid #ddd !important;
+    background: #f5f5f5 !important;
+    font-size: 10pt !important;
+    page-break-inside: avoid;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+  }
+
+  pre {
+    padding: 0.5rem !important;
+    overflow-x: visible !important;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse !important;
+  }
+
+  table,
+  th,
+  td {
+    border: 1px solid #ddd !important;
+  }
+
+  th,
+  td {
+    padding: 0.5rem !important;
+  }
+
+  /* Blockquotes */
+  blockquote {
+    padding-left: 1rem !important;
+    margin-left: 0 !important;
+    font-style: italic;
+    border-left: 3px solid #000 !important;
+  }
+
+  /* Page setup */
+  @page {
+    margin-top: 2cm;
+    margin-right: 2cm;
+    margin-bottom: 2cm;
+    margin-left: 2cm;
+    size: A4;
+  }
+
+  @page :first {
+    margin-top: 1cm;
+  }
+}
+
+.rdp-vhidden {
+  @apply hidden;
+}
+
+/* React Calendar for GitHub Stats */
+.react-activity-calendar__calendar {
+  width: 100%;
+  height: 100%;
+}
+
+.react-activity-calendar {
+  width: 100% !important;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  float: left;
+  height: 0;
+  pointer-events: none;
+  content: attr(data-placeholder);
+  @apply text-muted-foreground;
+}
+
+/* Steps component styling for MDX */
+.steps {
+  counter-reset: step;
+}
+
+.step:before {
+  content: counter(step);
+  counter-increment: step;
+  @apply absolute -left-[50px] flex h-9 w-9 items-center justify-center rounded-full border-4 border-background bg-muted text-center text-base font-medium;
+}
+
+.step {
+  @apply relative;
 }

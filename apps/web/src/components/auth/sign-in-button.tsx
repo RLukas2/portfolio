@@ -13,7 +13,7 @@ export default function SignInButton() {
         <p className="font-medium">Sign in to leave a message</p>
         <p className="text-muted-foreground text-sm">Join the conversation and share your thoughts</p>
       </div>
-      <Button className="mt-2" onClick={() => setOpen(true)}>
+      <Button aria-label="Sign in button" className="mt-2" onClick={() => setOpen(true)}>
         Sign In
       </Button>
     </div>

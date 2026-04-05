@@ -1,6 +1,21 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/(auth)')({
+  beforeLoad: ({ context, location }) => {
+    // Allow access to signin page without authentication
+    if (location.pathname === '/signin') {
+      return;
+    }
+
+    if (!context.user) {
+      throw redirect({
+        to: '/signin',
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
   component: LayoutComponent,
 });
 

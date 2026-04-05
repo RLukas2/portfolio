@@ -42,7 +42,6 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import PageHeading from '@/components/shared/page-heading';
 import authClient from '@/lib/auth/client';
-import { pagesData } from '@/lib/data/pages-data';
 
 export const Route = createFileRoute('/(public)/profile/')({
   component: ProfilePage,
@@ -156,7 +155,7 @@ function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      <PageHeading description={pagesData.profile.description} title={pagesData.profile.title} />
+      <PageHeading description={'Manage your account settings and preferences'} title={'Profile'} />
 
       <div className="grid gap-6 md:grid-cols-2">
         <Card>

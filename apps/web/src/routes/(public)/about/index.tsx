@@ -1,13 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { siteConfig, socialConfig } from '@xbrk/config';
-import Icon from '@xbrk/ui/icon';
-import { LazyImage } from '@xbrk/ui/lazy-image';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { siteConfig } from '@xbrk/config';
+import { Button } from '@xbrk/ui/button';
 import { motion } from 'framer-motion';
-import { ArrowRight, Briefcase, Code2, Mail, MapPin, Sparkles, Wrench } from 'lucide-react';
-import ExperienceSection from '@/components/experiences/experience';
-import { containerVariants, itemVariants } from '@/lib/constants/framer-motion-variants';
-import { bio, categoryIcons, whatIDoItems } from '@/lib/data/about-data';
-import { skillCategories } from '@/lib/data/skills-data';
+import { DownloadIcon, FileTextIcon } from 'lucide-react';
+import Biography from '@/components/about/biography';
+import CareerJourney from '@/components/about/career-journey';
+import OpenForHire from '@/components/about/open-for-hire';
+import { TechStacks } from '@/components/about/tech-stacks';
+import PageHeading from '@/components/shared/page-heading';
 import { seo } from '@/lib/seo';
 import { generateStructuredDataGraph, getAboutPageSchemas } from '@/lib/structured-data';
 import { getBaseUrl } from '@/lib/utils';
@@ -17,8 +17,8 @@ export const Route = createFileRoute('/(public)/about/')({
   head: () => {
     const seoData = seo({
       title: `About | ${siteConfig.title}`,
-      description: '',
-      keywords: '',
+      description: 'Discover insights about me, my career journey, and more.',
+      keywords: ['bio', 'biography', 'information', 'about'].join(', '),
       url: `${getBaseUrl()}/about`,
       canonical: `${getBaseUrl()}/about`,
     });
@@ -32,185 +32,93 @@ export const Route = createFileRoute('/(public)/about/')({
   },
 });
 
+/**
+ * About page route component with sidebar layout displaying personal biography, career journey, and tech stack.
+ *
+ * Features staggered motion animations for each component:
+ * - Sidebar animates from left with fade-in
+ * - Each main content section animates individually with increasing delays
+ * - Creates a smooth, cascading entrance effect
+ *
+ * @returns About page with sidebar layout, biography, career timeline, and tech stack showcase
+ */
 function RouteComponent() {
   return (
-    <div className="space-y-16">
-      {/* Hero section */}
-      <motion.section
-        animate="visible"
-        className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left"
-        initial="hidden"
-        variants={containerVariants}
-      >
-        <motion.div className="relative shrink-0" variants={itemVariants}>
-          <div className="absolute -inset-4 rounded-3xl bg-linear-to-br from-violet-500/20 via-fuchsia-500/10 to-cyan-500/20 blur-2xl" />
-          <div className="relative rounded-3xl border border-black/10 bg-linear-to-br from-white/10 to-white/5 p-2 shadow-2xl backdrop-blur-sm dark:border-white/10 dark:from-white/5 dark:to-white/[0.02]">
-            <div className="overflow-hidden rounded-2xl">
-              <LazyImage
-                alt="Avatar"
-                height={160}
-                imageClassName="size-32 sm:size-40 object-cover"
-                src="/images/avatar.avif"
-                width={160}
-              />
-            </div>
+    <>
+      <PageHeading description="A short story of me." title="About" />
+
+      <div className="items-start space-y-2 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:space-y-0">
+        {/* Sidebar - Avatar, Name, Buttons with motion animation */}
+        <motion.div
+          animate={{ opacity: 1, x: 0 }}
+          className="group flex flex-col items-center xl:sticky xl:top-24"
+          initial={{ opacity: 0, x: -30 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <img
+            alt={siteConfig.author.name}
+            className="rounded-full object-cover transition-all duration-300 hover:scale-105 xl:rounded-lg"
+            height={256}
+            loading="eager"
+            src="/images/avatar.jpg"
+            width={256}
+          />
+          <div className="m-0 flex flex-col items-center py-2">
+            <h3 className="m-0 font-cal text-xl">{siteConfig.author.name}</h3>
+            <h4 className="m-0 text-muted-foreground">{siteConfig.author.jobTitle}</h4>
+          </div>
+          <OpenForHire status={siteConfig.hiringStatus ?? 'off'} />
+
+          <div className="my-4 flex flex-col gap-4">
+            <Button asChild className="gap-x-2 shadow-lg" variant="shadow">
+              <a href="/share/resume.pdf" rel="noopener noreferrer" target="_blank">
+                <DownloadIcon className="size-4" />
+                Download CV
+              </a>
+            </Button>
+
+            <Button asChild className="gap-x-1 shadow-lg" variant="shadow">
+              <Link to="/resume">
+                <FileTextIcon className="size-4" />
+                View Resume
+              </Link>
+            </Button>
           </div>
         </motion.div>
 
-        <motion.div className="space-y-3" variants={itemVariants}>
-          <div className="flex items-center justify-center gap-3 sm:justify-start">
-            <h1 className="font-bold text-3xl sm:text-4xl">{bio.name}</h1>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-3 text-muted-foreground sm:justify-start">
-            <span className="flex items-center gap-1.5 rounded-lg bg-muted/50 px-3 py-1.5 text-sm">
-              <Briefcase className="h-4 w-4" />
-              {bio.role}
-            </span>
-            <span className="flex items-center gap-1.5 rounded-lg bg-muted/50 px-3 py-1.5 text-sm">
-              <MapPin className="h-4 w-4" />
-              {bio.location}
-            </span>
-          </div>
-        </motion.div>
-      </motion.section>
-
-      {/* Story section */}
-      <motion.section animate="visible" className="space-y-6" initial="hidden" variants={containerVariants}>
-        <motion.div className="flex items-center gap-3" variants={itemVariants}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-violet-500/20 to-fuchsia-500/20">
-            <Sparkles className="h-5 w-5 text-violet-500" />
-          </div>
-          <h2 className="font-bold text-2xl">My Story</h2>
-        </motion.div>
-
-        <motion.div className="space-y-4 text-muted-foreground leading-relaxed" variants={itemVariants}>
-          {bio.story.map((paragraph, i) => (
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: We trust the content of bio.story as it's hardcoded and not user-generated.
-            // biome-ignore lint/suspicious/noArrayIndexKey: Using index as key is acceptable here since the content is static and won't change.
-            <p dangerouslySetInnerHTML={{ __html: paragraph }} key={i} />
-          ))}
-        </motion.div>
-      </motion.section>
-
-      {/* Experience section */}
-      <motion.section animate="visible" className="space-y-8" initial="hidden" variants={containerVariants}>
-        <motion.div className="flex items-center gap-3" variants={itemVariants}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500/20 to-teal-500/20">
-            <Briefcase className="h-5 w-5 text-emerald-500" />
-          </div>
-          <h2 className="font-bold text-2xl">Experience</h2>
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <ExperienceSection />
-        </motion.div>
-      </motion.section>
-
-      {/* Skills section */}
-      <motion.section animate="visible" className="space-y-8" initial="hidden" variants={containerVariants}>
-        <motion.div className="flex items-center gap-3" variants={itemVariants}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-amber-500/20 to-orange-500/20">
-            <Code2 className="h-5 w-5 text-amber-500" />
-          </div>
-          <h2 className="font-bold text-2xl">Skills & Technologies</h2>
-        </motion.div>
-
-        <motion.div className="space-y-6" variants={itemVariants}>
-          {skillCategories.map((category) => {
-            const CategoryIcon = categoryIcons[category.name] ?? Code2;
-            return (
-              <div key={category.name}>
-                <div className="mb-4 flex items-center gap-2">
-                  <CategoryIcon className="h-4 w-4 text-muted-foreground" />
-                  <h3 className="font-medium text-muted-foreground text-sm uppercase tracking-wider">
-                    {category.name}
-                  </h3>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  {category.skills.map((skill) => (
-                    <div
-                      className="group flex items-center gap-2.5 rounded-xl border bg-card px-4 py-2.5 transition-all hover:border-foreground/20 hover:shadow-md"
-                      key={skill.name}
-                    >
-                      <Icon
-                        className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-foreground"
-                        icon={skill.icon}
-                      />
-                      <span className="font-medium text-sm">{skill.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </motion.div>
-      </motion.section>
-
-      {/* What I Do section */}
-      <motion.section animate="visible" className="space-y-6" initial="hidden" variants={containerVariants}>
-        <motion.div className="flex items-center gap-3" variants={itemVariants}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-cyan-500/20 to-blue-500/20">
-            <Wrench className="h-5 w-5 text-cyan-500" />
-          </div>
-          <h2 className="font-bold text-2xl">What I Do</h2>
-        </motion.div>
-
-        <motion.div className="grid gap-4 sm:grid-cols-2" variants={itemVariants}>
-          {whatIDoItems.map((item) => (
-            <div
-              className="group relative overflow-hidden rounded-xl border bg-card p-5 transition-all hover:border-foreground/20 hover:shadow-lg"
-              key={item.title}
-            >
-              <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-violet-500/5 via-transparent to-pink-500/5 opacity-0 transition-opacity group-hover:opacity-100" />
-              <div className="relative flex items-start gap-3">
-                <ArrowRight className="mt-0.5 h-5 w-5 shrink-0 text-primary transition-transform group-hover:translate-x-1" />
-                <div>
-                  <p className="font-semibold">{item.title}</p>
-                  <p className="mt-1 text-muted-foreground text-sm">{item.desc}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </motion.div>
-      </motion.section>
-
-      {/* Contact section */}
-      <motion.section animate="visible" className="space-y-6" initial="hidden" variants={containerVariants}>
-        <motion.div className="flex items-center gap-3" variants={itemVariants}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-pink-500/20 to-rose-500/20">
-            <Mail className="h-5 w-5 text-pink-500" />
-          </div>
-          <h2 className="font-bold text-2xl">Get In Touch</h2>
-        </motion.div>
-
-        <motion.p className="text-muted-foreground" variants={itemVariants}>
-          Have a project in mind or just want to say hello? Feel free to reach out!
-        </motion.p>
-
-        <motion.div className="flex flex-wrap gap-3" variants={itemVariants}>
-          <a
-            className="group flex items-center gap-2 rounded-xl border bg-card px-4 py-2.5 font-medium transition-all hover:border-foreground/20 hover:shadow-md"
-            href={`mailto:${siteConfig.author.email}`}
-            rel="noreferrer"
-            target="_blank"
+        {/* Main Content - Each section animates individually */}
+        <div className="prose prose-neutral dark:prose-invert max-w-none xl:col-span-3">
+          {/* Biography section */}
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
           >
-            <Mail className="h-4 w-4 transition-colors group-hover:text-primary" />
-            <span>Email</span>
-          </a>
+            <Biography />
+          </motion.div>
 
-          {socialConfig.map((social) => (
-            <a
-              className="group flex items-center gap-2 rounded-xl border bg-card px-4 py-2.5 font-medium transition-all hover:border-foreground/20 hover:shadow-md"
-              href={social.url}
-              key={social.name}
-              rel="noreferrer"
-              target="_blank"
-            >
-              <Icon className="h-4 w-4 transition-colors group-hover:text-primary" icon={social.icon} />
-              <span>{social.name}</span>
-            </a>
-          ))}
-        </motion.div>
-      </motion.section>
-    </div>
+          {/* Tech Stack section */}
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
+          >
+            <h2 className="font-cal text-3xl">Tech Stack</h2>
+            <TechStacks />
+          </motion.div>
+
+          {/* Career Journey section */}
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, ease: 'easeOut', delay: 0.6 }}
+          >
+            <h2 className="font-cal text-3xl">Career Journey</h2>
+            <p className="m-0! text-muted-foreground">A timeline of my professional experience and education.</p>
+            <CareerJourney header={true} />
+          </motion.div>
+        </div>
+      </div>
+    </>
   );
 }

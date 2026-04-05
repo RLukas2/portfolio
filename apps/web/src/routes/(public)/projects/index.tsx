@@ -4,8 +4,6 @@ import { siteConfig } from '@xbrk/config';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import Projects from '@/components/projects/projects';
 import PageHeading from '@/components/shared/page-heading';
-import { pagesData } from '@/lib/data/pages-data';
-import { seoData as seoMetadata } from '@/lib/data/seo-data';
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
 import { $getAllPublicProjects } from '@/lib/server';
@@ -22,8 +20,10 @@ export const Route = createFileRoute('/(public)/projects/')({
   head: () => {
     const seoData = seo({
       title: `Projects | ${siteConfig.title}`,
-      description: seoMetadata.projects.description,
-      keywords: seoMetadata.projects.keywords,
+      description:
+        'Portfolio of custom websites, web applications, and business software solutions. See real examples of scalable, high-performance projects delivered for clients.',
+      keywords:
+        'Web Development Portfolio, Custom Website Examples, Business Software Projects, React Applications, Full-Stack Development Work, Client Projects',
       url: `${getBaseUrl()}/projects`,
       canonical: `${getBaseUrl()}/projects`,
     });
@@ -65,7 +65,10 @@ function RouteComponent() {
 
   return (
     <>
-      <PageHeading description={pagesData.projects.description} title={pagesData.projects.title} />
+      <PageHeading
+        description={'Several projects that I have worked on, both private and open source.'}
+        title={'Projects'}
+      />
       {isLoading || isFetching ? <ProjectsSkeleton /> : <Projects projects={projects} />}
     </>
   );

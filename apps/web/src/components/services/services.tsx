@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { containerVariantsFast, itemVariantsDown } from '@/lib/constants/framer-motion-variants';
 import { queryKeys } from '@/lib/query-keys';
 import { $getAllPublicServices } from '@/lib/server';
+import EmptyState from '../shared/empty-state';
 import ServiceCard from './service-card';
 
 export default function Services() {
@@ -10,10 +11,6 @@ export default function Services() {
     queryKey: queryKeys.service.listPublic(),
     queryFn: () => $getAllPublicServices(),
   });
-
-  if (services.length === 0) {
-    return null;
-  }
 
   return (
     <section className="w-full">
@@ -44,20 +41,24 @@ export default function Services() {
         </motion.p>
       </div>
 
-      <motion.div
-        animate="visible"
-        className="flex flex-col gap-4 sm:gap-8"
-        initial="hidden"
-        variants={containerVariantsFast}
-        viewport={{ once: true }}
-        whileInView="visible"
-      >
-        {services.map((service) => (
-          <motion.div key={service.slug} variants={itemVariantsDown}>
-            <ServiceCard service={service} />
-          </motion.div>
-        ))}
-      </motion.div>
+      {services.length > 0 ? (
+        <motion.div
+          animate="visible"
+          className="flex flex-col gap-4 sm:gap-8"
+          initial="hidden"
+          variants={containerVariantsFast}
+          viewport={{ once: true }}
+          whileInView="visible"
+        >
+          {services.map((service) => (
+            <motion.div key={service.slug} variants={itemVariantsDown}>
+              <ServiceCard service={service} />
+            </motion.div>
+          ))}
+        </motion.div>
+      ) : (
+        <EmptyState message="Services are currently being crafted with care – check back soon!" />
+      )}
     </section>
   );
 }

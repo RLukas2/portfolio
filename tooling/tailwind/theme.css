@@ -1,5 +1,6 @@
 :root {
   --radius: 0.625rem;
+
   --background: oklch(0.975 0.002 250);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
@@ -101,8 +102,9 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-sans: "Inter Variable", sans-serif;
-  --font-mono: "Roboto Mono Variable", monospace;
+  --font-sans: var(--font-sans), sans-serif;
+  --font-mono: var(--font-mono);
+  --font-cal: var(--font-cal);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -126,4 +128,10 @@
   --tracking-wide: 0.025em;
   --tracking-wider: 0.05em;
   --tracking-widest: 0.1em;
+}
+
+@theme {
+  --font-sans: "Inter Variable", sans-serif;
+  --font-mono: "Roboto Mono Variable", monospace;
+  --font-cal: "Cal Sans", sans-serif;
 }

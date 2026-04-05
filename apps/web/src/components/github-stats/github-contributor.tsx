@@ -4,10 +4,16 @@ import { motion } from 'framer-motion';
 import { Calendar, GitBranch } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';
 import GithubActivityGraph from '@/components/github-stats/github-activity-graph';
+import { env } from '@/lib/env/client';
 
 export default function GithubContributor() {
   const { resolvedTheme } = useTheme();
   const currentYear = new Date().getFullYear();
+  const githubUsername = env.VITE_GITHUB_USERNAME;
+
+  if (!githubUsername) {
+    return null;
+  }
 
   return (
     <motion.div
@@ -37,14 +43,14 @@ export default function GithubContributor() {
         </div>
         <div className="overflow-hidden rounded-2xl border bg-card p-6">
           <div className="w-full overflow-x-auto">
-            <ClientOnly>
+            <ClientOnly fallback={<div className="h-32 min-w-full animate-pulse rounded bg-muted" />}>
               <div className="min-w-full">
                 <GitHubCalendar
                   colorScheme={resolvedTheme === 'dark' ? 'dark' : 'light'}
                   style={{
                     width: '100%',
                   }}
-                  username="FaZeRs"
+                  username={githubUsername}
                   year={currentYear}
                 />
               </div>

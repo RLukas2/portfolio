@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     "./theme": "./theme.css",
-    "./postcss-config": "./postcss-config.js"
+    "./postcss-config": "./postcss.config.mjs",
+    "./tailwind-config": "./tailwind.config.ts"
   },
   "scripts": {
     "clean": "git clean -xdf .cache node_modules",

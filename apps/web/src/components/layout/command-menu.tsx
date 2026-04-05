@@ -1,8 +1,9 @@
 import type { DialogProps } from '@radix-ui/react-dialog';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
+import { useLocation, useNavigate } from '@tanstack/react-router';
 import { siteConfig, socialConfig } from '@xbrk/config';
 import { useTheme } from '@xbrk/shared/theme-provider';
+import { Badge } from '@xbrk/ui/badge';
 import { Button } from '@xbrk/ui/button';
 import {
   CommandDialog,
@@ -14,7 +15,18 @@ import {
   CommandSeparator,
 } from '@xbrk/ui/command';
 import Icon from '@xbrk/ui/icon';
-import { Code, CommandIcon, File, FileText, FolderKanban, Laptop, Loader2, Moon, Sun } from 'lucide-react';
+import {
+  Code,
+  CommandIcon,
+  File,
+  FileText,
+  FolderKanban,
+  Laptop,
+  Loader2,
+  type LucideIcon,
+  Moon,
+  Sun,
+} from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { navbarLinks } from '@/lib/constants/navbar';
 import { queryKeys } from '@/lib/query-keys';
@@ -22,11 +34,25 @@ import { $search } from '@/lib/server';
 
 const truncate = (text: string, max = 60) => (text.length > max ? `${text.slice(0, max)}...` : text);
 
+/**
+ * Array of rotating placeholder messages for the command menu input.
+ * Provides helpful tips and keyboard shortcuts to guide users.
+ */
+const PLACEHOLDER_MESSAGES = [
+  'Type a command or search...',
+  'Press Cmd/Ctrl + K anytime to access this menu',
+  'Use arrow keys to navigate',
+  'Press Enter to select an option',
+  'Search for articles, projects, or snippets',
+];
+
 export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const { setTheme } = useTheme();
 
   useEffect(() => {
@@ -35,6 +61,14 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
     }, 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
+
+  // Rotate placeholder text every 3 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPlaceholderIndex((prevIndex) => (prevIndex + 1) % PLACEHOLDER_MESSAGES.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (!open) {
@@ -77,7 +111,11 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
       </Button>
 
       <CommandDialog onOpenChange={setOpen} open={open}>
-        <CommandInput onValueChange={setSearchQuery} placeholder="Type a command or search..." value={searchQuery} />
+        <CommandInput
+          onValueChange={setSearchQuery}
+          placeholder={PLACEHOLDER_MESSAGES[placeholderIndex]}
+          value={searchQuery}
+        />
         <CommandList>
           <CommandEmpty>
             {isSearching ? (
@@ -96,6 +134,7 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
                 <CommandGroup heading="Articles">
                   {searchResults.articles.map((article) => (
                     <CommandItem
+                      className="group"
                       key={article.id}
                       onSelect={() => {
                         runCommand(() =>
@@ -107,7 +146,9 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
                       }}
                       value={`article-${article.slug}`}
                     >
-                      <FileText className="mr-2 h-4 w-4" />
+                      <div className="transition-transform duration-200 group-hover:-rotate-12">
+                        <FileText className="mr-2 h-4 w-4" />
+                      </div>
                       <div className="flex flex-col">
                         <span>{article.title}</span>
                         {article.description && (
@@ -123,6 +164,7 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
                 <CommandGroup heading="Projects">
                   {searchResults.projects.map((project) => (
                     <CommandItem
+                      className="group"
                       key={project.id}
                       onSelect={() => {
                         runCommand(() =>
@@ -134,7 +176,9 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
                       }}
                       value={`project-${project.slug}`}
                     >
-                      <FolderKanban className="mr-2 h-4 w-4" />
+                      <div className="transition-transform duration-200 group-hover:-rotate-12">
+                        <FolderKanban className="mr-2 h-4 w-4" />
+                      </div>
                       <div className="flex flex-col">
                         <span>{project.title}</span>
                         {project.description && (
@@ -150,6 +194,7 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
                 <CommandGroup heading="Snippets">
                   {searchResults.snippets.map((snippet) => (
                     <CommandItem
+                      className="group"
                       key={snippet.id}
                       onSelect={() => {
                         runCommand(() =>
@@ -161,7 +206,9 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
                       }}
                       value={`snippet-${snippet.slug}`}
                     >
-                      <Code className="mr-2 h-4 w-4" />
+                      <div className="transition-transform duration-200 group-hover:-rotate-12">
+                        <Code className="mr-2 h-4 w-4" />
+                      </div>
                       <div className="flex flex-col">
                         <span>{snippet.title}</span>
                         {snippet.description && (
@@ -178,8 +225,13 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
           )}
 
           <CommandGroup heading="General">
-            <CommandItem onSelect={() => window.open(siteConfig.links.githubRepo, '_blank', 'noopener,noreferrer')}>
-              <Code className="mr-2 h-4 w-4" />
+            <CommandItem
+              className="group"
+              onSelect={() => window.open(siteConfig.links.githubRepo, '_blank', 'noopener,noreferrer')}
+            >
+              <div className="transition-transform duration-200 group-hover:-rotate-12">
+                <Code className="mr-2 h-4 w-4" />
+              </div>
               Source code
             </CommandItem>
           </CommandGroup>
@@ -191,6 +243,9 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
               link.content ? (
                 link.content.map((subLink) => (
                   <MenuCommandItem
+                    currentPath={location.pathname}
+                    href={subLink.href}
+                    icon={subLink.icon}
                     key={subLink.href}
                     onSelect={() => {
                       runCommand(() =>
@@ -204,6 +259,9 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
                 ))
               ) : (
                 <MenuCommandItem
+                  currentPath={location.pathname}
+                  href={link.href}
+                  icon={link.icon}
                   key={link.href}
                   onSelect={() => {
                     runCommand(() =>
@@ -223,12 +281,15 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
           <CommandGroup heading="Social">
             {socialConfig.map((social) => (
               <CommandItem
+                className="group"
                 key={social.name}
                 onSelect={() => {
                   window.open(social.url, '_blank', 'noopener,noreferrer');
                 }}
               >
-                <Icon className="mr-2 h-4 w-4" icon={social.icon} />
+                <div className="transition-transform duration-200 group-hover:-rotate-12">
+                  <Icon className="mr-2 h-4 w-4" icon={social.icon} />
+                </div>
                 {social.name}
               </CommandItem>
             ))}
@@ -237,16 +298,22 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
           <CommandSeparator />
 
           <CommandGroup heading="Theme">
-            <CommandItem onSelect={() => runCommand(() => setTheme('light'))}>
-              <Sun className="mr-2 h-4 w-4" />
+            <CommandItem className="group" onSelect={() => runCommand(() => setTheme('light'))}>
+              <div className="transition-transform duration-200 group-hover:-rotate-12">
+                <Sun className="mr-2 h-4 w-4" />
+              </div>
               Light
             </CommandItem>
-            <CommandItem onSelect={() => runCommand(() => setTheme('dark'))}>
-              <Moon className="mr-2 h-4 w-4" />
+            <CommandItem className="group" onSelect={() => runCommand(() => setTheme('dark'))}>
+              <div className="transition-transform duration-200 group-hover:-rotate-12">
+                <Moon className="mr-2 h-4 w-4" />
+              </div>
               Dark
             </CommandItem>
-            <CommandItem onSelect={() => runCommand(() => setTheme('auto'))}>
-              <Laptop className="mr-2 h-4 w-4" />
+            <CommandItem className="group" onSelect={() => runCommand(() => setTheme('auto'))}>
+              <div className="transition-transform duration-200 group-hover:-rotate-12">
+                <Laptop className="mr-2 h-4 w-4" />
+              </div>
               System
             </CommandItem>
           </CommandGroup>
@@ -257,13 +324,28 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
 }
 
 interface MenuCommandProps {
+  currentPath?: string;
+  href?: string;
+  icon?: LucideIcon;
   onSelect?: (value: string) => void;
   value: string;
 }
 
-const MenuCommandItem = ({ value, onSelect }: MenuCommandProps) => (
-  <CommandItem onSelect={onSelect} value={value}>
-    <File className="mr-2 h-4 w-4" />
-    <span>{value}</span>
-  </CommandItem>
-);
+const MenuCommandItem = ({ value, icon, href, currentPath, onSelect }: MenuCommandProps) => {
+  const IconComponent = icon || File;
+  const isActive = href && currentPath === href;
+
+  return (
+    <CommandItem className="group" onSelect={onSelect} value={value}>
+      <div className="transition-transform duration-200 group-hover:-rotate-12">
+        <IconComponent className="mr-2 h-4 w-4" />
+      </div>
+      <span>{value}</span>
+      {isActive && (
+        <Badge className="ml-auto" variant="secondary">
+          You are here
+        </Badge>
+      )}
+    </CommandItem>
+  );
+};

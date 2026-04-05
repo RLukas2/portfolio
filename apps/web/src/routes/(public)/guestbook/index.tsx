@@ -8,8 +8,6 @@ import SignInModal from '@/components/auth/sign-in-modal';
 import MessageForm from '@/components/guestbook/message-form';
 import Messages from '@/components/guestbook/messages';
 import PageHeading from '@/components/shared/page-heading';
-import { pagesData } from '@/lib/data/pages-data';
-import { seoData as seoMetadata } from '@/lib/data/seo-data';
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
 import { $getAllGuestbookEntries } from '@/lib/server';
@@ -27,8 +25,10 @@ export const Route = createFileRoute('/(public)/guestbook/')({
   head: () => {
     const seoData = seo({
       title: `Guestbook | ${siteConfig.title}`,
-      description: seoMetadata.guestbook.description,
-      keywords: seoMetadata.guestbook.keywords,
+      description:
+        'Client testimonials and feedback from collaborations. See what others say about working with a professional full-stack developer.',
+      keywords:
+        'Developer Reviews, Client Testimonials, Web Developer Feedback, Professional References, Collaboration Reviews',
       url: `${getBaseUrl()}/guestbook`,
       canonical: `${getBaseUrl()}/guestbook`,
     });
@@ -76,7 +76,7 @@ function RouteComponent() {
 
   return (
     <>
-      <PageHeading description={pagesData.guestbook.description} title={pagesData.guestbook.title} />
+      <PageHeading description={'A place for you to leave your comments and feedback.'} title={'Guestbook'} />
 
       {user ? <MessageForm user={user as UserType} /> : <SignInButton />}
       {isLoading || isFetching ? <GuestbookSkeleton /> : <Messages messages={messages} />}

@@ -1,6 +1,7 @@
 import { type Bookmark } from '@xbrk/types';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 import { ExternalLink, Globe } from 'lucide-react';
+import Link from '@/components/shared/link';
 
 interface BookmarkCardProps {
   bookmark: Bookmark;
@@ -8,7 +9,7 @@ interface BookmarkCardProps {
 
 export default function BookmarkCard({ bookmark }: Readonly<BookmarkCardProps>) {
   return (
-    <a
+    <Link
       className="group flex h-full min-w-0 cursor-pointer flex-col overflow-hidden rounded-2xl border bg-card transition-all duration-300 hover:border-foreground/20 hover:shadow-xl"
       href={bookmark.link}
       rel="noopener noreferrer"
@@ -47,6 +48,6 @@ export default function BookmarkCard({ bookmark }: Readonly<BookmarkCardProps>) 
           </p>
         )}
       </div>
-    </a>
+    </Link>
   );
 }

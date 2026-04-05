@@ -63,3 +63,5 @@ lerna-debug.log*
 .tanstack
 worker-configuration.d.ts
 Thumbs.db
+
+temp/

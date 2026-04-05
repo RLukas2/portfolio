@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { type ComponentProps } from 'react';
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-xl font-medium text-sm outline-none transition-all duration-300 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "group/button inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap rounded-lg border border-transparent bg-clip-padding font-medium text-sm outline-none transition-all focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -19,9 +19,12 @@ const buttonVariants = cva(
         ghost:
           'hover:scale-[1.02] hover:bg-accent/80 hover:text-accent-foreground active:scale-[0.98] dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:text-primary/80 hover:underline',
+        shadow:
+          'border border-secondary-foreground bg-background shadow-[3px_3px_rgb(0_0_0_/_20%)] hover:scale-[1.02] hover:bg-primary hover:text-primary-foreground hover:shadow-[4px_4px_rgb(0_0_0_/_30%)] active:scale-[0.98] active:shadow-[2px_2px_rgb(0_0_0_/_20%)] dark:shadow-[3px_3px_rgb(255_255_255_/_40%)] dark:active:shadow-[2px_2px_rgb(255_255_255_/_40%)] dark:hover:shadow-[4px_4px_rgb(255_255_255_/_50%)]',
       },
       size: {
         default: 'h-10 px-5 py-2.5 has-[>svg]:px-4',
+        xs: 'h-8 gap-1 rounded-lg px-2 has-[>svg]:px-3',
         sm: 'h-9 gap-1.5 rounded-lg px-4 has-[>svg]:px-3',
         lg: 'h-12 rounded-xl px-8 has-[>svg]:px-6',
         icon: 'size-10 rounded-xl',

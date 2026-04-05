@@ -15,7 +15,7 @@ const Header = ({ links, user }: Readonly<{ links: NavItem[]; user: UserType }>)
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-violet-500/20 to-transparent" />
 
       <div className="container relative lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl">
-        <div className="flex h-16 items-center justify-between gap-6 sm:h-18 md:h-20">
+        <div className="flex h-16 items-center justify-between gap-6">
           <Logo className="transition-opacity hover:opacity-80" />
           <Navbar links={links} user={user} />
         </div>

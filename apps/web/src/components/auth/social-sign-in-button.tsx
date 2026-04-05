@@ -34,6 +34,7 @@ export default function SocialSignInButton() {
     <div className="flex flex-col items-center gap-2">
       {AUTH_PROVIDERS.map(({ provider, icon, label }) => (
         <Button
+          aria-label="Sign in button"
           className="flex w-full gap-2"
           disabled={loadingProvider !== null}
           key={provider}

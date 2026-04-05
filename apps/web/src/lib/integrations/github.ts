@@ -7,7 +7,6 @@ import { env } from '../env/server';
 const GITHUB_API_BASE_URL = 'https://api.github.com' as const;
 const GITHUB_GRAPHQL_API_URL = 'https://api.github.com/graphql' as const;
 const DAYS_TO_FETCH = 30 as const;
-const GITHUB_USERNAME = env.GITHUB_USERNAME;
 
 function createGithubHeaders() {
   const headers: HeadersInit = {
@@ -22,6 +21,8 @@ function createGithubHeaders() {
 }
 
 async function getGithubStats() {
+  const GITHUB_USERNAME = env.GITHUB_USERNAME;
+
   if (!GITHUB_USERNAME) {
     return null;
   }
@@ -77,6 +78,8 @@ export interface Contributions {
 }
 
 async function getGithubActivities() {
+  const GITHUB_USERNAME = env.GITHUB_USERNAME;
+
   if (!GITHUB_USERNAME) {
     return {
       contributionsByLast30Days: [],

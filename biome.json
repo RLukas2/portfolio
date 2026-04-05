@@ -35,6 +35,9 @@
       "correctness": {
         "useExhaustiveDependencies": "info"
       },
+      "performance": {
+        "noBarrelFile": "off"
+      },
       "style": {
         "useImportType": "off",
         "useFilenamingConvention": "off",

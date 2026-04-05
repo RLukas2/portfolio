@@ -78,7 +78,7 @@ const NavBar = ({ links, user }: Readonly<MainNavbarProps>) => {
       {/* Desktop actions */}
       <div className="hidden items-center gap-2 lg:flex">
         {user && <AvatarDropdown user={user as UserType} />}
-        <div className="flex items-center gap-1 rounded-full border border-border/50 bg-muted/30 p-1 backdrop-blur-sm">
+        <div className="flex items-center gap-1 rounded-2xl border border-border/50 bg-muted/30 p-1 backdrop-blur-sm">
           <Suspense fallback={<Spinner className="size-5" />}>
             <SearchCommand />
           </Suspense>

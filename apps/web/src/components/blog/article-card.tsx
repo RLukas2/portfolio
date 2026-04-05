@@ -8,6 +8,22 @@ interface ArticleCardProps {
   article: ArticleType & { viewCount: number; likesCount: number };
 }
 
+/**
+ * ArticleCard component displays a blog article preview card.
+ *
+ * Features:
+ * - Responsive card with hover effects (border, shadow, gradient overlay)
+ * - Lazy-loaded cover image with zoom effect on hover
+ * - Article title, description, and metadata (date, views, likes)
+ * - "Read" indicator that appears on hover
+ * - Accessible link overlay for entire card
+ *
+ * Uses direct Tailwind classes for styling (no Container component).
+ * Designed for use in grid layouts on blog list and home pages.
+ *
+ * @param article - Article data including title, description, image, and engagement metrics
+ * @returns Rendered article card with interactive hover effects
+ */
 const ArticleCard = ({ article }: ArticleCardProps) => (
   <article className="group relative flex flex-col overflow-hidden rounded-2xl border bg-card transition-all duration-300 hover:border-foreground/20 hover:shadow-xl">
     {/* Hover gradient overlay */}

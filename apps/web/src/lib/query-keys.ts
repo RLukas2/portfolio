@@ -62,4 +62,48 @@ export const queryKeys = {
     stats: () => [...queryKeys.github.all, 'stats'] as const,
     activity: () => [...queryKeys.github.all, 'activity'] as const,
   },
+  endorsement: {
+    all: ['endorsement'] as const,
+    lists: () => [...queryKeys.endorsement.all, 'list'] as const,
+    listApproved: () => [...queryKeys.endorsement.lists(), 'approved'] as const,
+    listAll: () => [...queryKeys.endorsement.lists(), 'all'] as const,
+    byId: (id: string) => [...queryKeys.endorsement.all, 'byId', id] as const,
+  },
+  short: {
+    all: ['short'] as const,
+    lists: () => [...queryKeys.short.all, 'list'] as const,
+    listPublic: () => [...queryKeys.short.lists(), 'public'] as const,
+    listAll: () => [...queryKeys.short.lists(), 'all'] as const,
+    details: () => [...queryKeys.short.all, 'detail'] as const,
+    detail: (slug: string) => [...queryKeys.short.details(), slug] as const,
+    byId: (id: string) => [...queryKeys.short.all, 'byId', id] as const,
+  },
+  view: {
+    all: ['view'] as const,
+    byArticle: (articleId: string) => [...queryKeys.view.all, 'byArticle', articleId] as const,
+  },
+  reaction: {
+    all: ['reaction'] as const,
+    byArticle: (articleId: string) => [...queryKeys.reaction.all, 'byArticle', articleId] as const,
+    userReaction: (articleId: string, userId: string) =>
+      [...queryKeys.reaction.all, 'userReaction', articleId, userId] as const,
+  },
+  share: {
+    all: ['share'] as const,
+    byArticle: (articleId: string) => [...queryKeys.share.all, 'byArticle', articleId] as const,
+  },
+  spotify: {
+    all: ['spotify'] as const,
+    nowPlaying: () => [...queryKeys.spotify.all, 'nowPlaying'] as const,
+  },
+  dashboard: {
+    all: ['dashboard'] as const,
+    stats: () => [...queryKeys.dashboard.all, 'stats'] as const,
+    analytics: () => [...queryKeys.dashboard.all, 'analytics'] as const,
+  },
+  bookmark: {
+    all: ['bookmark'] as const,
+    lists: () => [...queryKeys.bookmark.all, 'list'] as const,
+    listPublic: () => [...queryKeys.bookmark.lists(), 'public'] as const,
+  },
 } as const;

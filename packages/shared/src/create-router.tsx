@@ -28,6 +28,7 @@ export function createRouter<TRouteTree extends AnyRoute>({ routeTree }: CreateR
     defaultErrorComponent: DefaultCatchBoundary,
     defaultNotFoundComponent: () => <NotFound />,
     scrollRestoration: true,
+    defaultHashScrollIntoView: { behavior: 'smooth' },
     defaultStructuralSharing: true,
   });
 

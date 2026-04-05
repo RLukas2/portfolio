@@ -1,8 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
+import Stats from '@/components/github-stats';
 import PageHeading from '@/components/shared/page-heading';
-import { pagesData } from '@/lib/data/pages-data';
-import { seoData as seoMetadata } from '@/lib/data/seo-data';
 import { seo } from '@/lib/seo';
 import { getBaseUrl } from '@/lib/utils';
 
@@ -11,8 +10,10 @@ export const Route = createFileRoute('/(public)/stats/')({
   head: () => {
     const seoData = seo({
       title: `Stats | ${siteConfig.title}`,
-      description: seoMetadata.stats.description,
-      keywords: seoMetadata.stats.keywords,
+      description:
+        'Development activity and contributions on GitHub. Track record of consistent coding and open source contributions demonstrating active development expertise.',
+      keywords:
+        'Developer Statistics, GitHub Activity, Open Source Contributions, Active Developer, Coding Activity, Software Development Track Record',
       url: `${getBaseUrl()}/stats`,
       canonical: `${getBaseUrl()}/stats`,
     });
@@ -27,8 +28,9 @@ export const Route = createFileRoute('/(public)/stats/')({
 function RouteComponent() {
   return (
     <>
-      <PageHeading description={pagesData.stats.description} title={pagesData.stats.title} />
-      {/* <Stats /> */}
+      <PageHeading description={'Development activity and open source contributions'} title={'Statistics'} />
+
+      <Stats />
     </>
   );
 }

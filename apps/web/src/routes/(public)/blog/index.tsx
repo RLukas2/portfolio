@@ -4,8 +4,6 @@ import { siteConfig } from '@xbrk/config';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import FilteredArticles from '@/components/blog/filtered-articles';
 import PageHeading from '@/components/shared/page-heading';
-import { pagesData } from '@/lib/data/pages-data';
-import { seoData as seoMetadata } from '@/lib/data/seo-data';
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
 import { $getAllPublicArticles } from '@/lib/server';
@@ -22,8 +20,10 @@ export const Route = createFileRoute('/(public)/blog/')({
   head: () => {
     const seoData = seo({
       title: `Blog | ${siteConfig.title}`,
-      description: seoMetadata.blog.description,
-      keywords: seoMetadata.blog.keywords,
+      description:
+        'Expert insights on web development, React, TypeScript, and building scalable business applications. Learn best practices for modern software development.',
+      keywords:
+        'Web Development Blog, React Tutorials, TypeScript Best Practices, Software Development Tips, Business Application Development, Full-Stack Development Guide',
       url: `${getBaseUrl()}/blog`,
       canonical: `${getBaseUrl()}/blog`,
     });
@@ -63,11 +63,15 @@ function RouteComponent() {
     queryFn: () => $getAllPublicArticles(),
   });
 
-  const description = pagesData.blog.description.replace('{count}', articles.length.toString());
+  const description =
+    'On my blog, I have written {count} items in total. In the search box below, you can look for articles by title.'.replace(
+      '{count}',
+      articles.length.toString(),
+    );
 
   return (
     <>
-      <PageHeading description={description} title={pagesData.blog.title} />
+      <PageHeading description={description} title={'Blog'} />
 
       {isLoading || isFetching ? <BlogSkeleton /> : <FilteredArticles articles={articles} />}
     </>

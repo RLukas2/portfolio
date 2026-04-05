@@ -14,6 +14,7 @@ import { Route as LlmsDottxtRouteImport } from "./routes/llms[.]txt";
 import { Route as publicLayoutRouteImport } from "./routes/(public)/layout";
 import { Route as authLayoutRouteImport } from "./routes/(auth)/layout";
 import { Route as publicIndexRouteImport } from "./routes/(public)/index";
+import { Route as publicSplatRouteImport } from "./routes/(public)/$$";
 import { Route as authSigninRouteImport } from "./routes/(auth)/signin";
 import { Route as ApiContactIndexRouteImport } from "./routes/api/contact/index";
 import { Route as ApiChatIndexRouteImport } from "./routes/api/chat/index";
@@ -21,6 +22,8 @@ import { Route as ApiChangelogIndexRouteImport } from "./routes/api/changelog/in
 import { Route as publicUsesIndexRouteImport } from "./routes/(public)/uses/index";
 import { Route as publicStatsIndexRouteImport } from "./routes/(public)/stats/index";
 import { Route as publicSnippetsIndexRouteImport } from "./routes/(public)/snippets/index";
+import { Route as publicServicesIndexRouteImport } from "./routes/(public)/services/index";
+import { Route as publicResumeIndexRouteImport } from "./routes/(public)/resume/index";
 import { Route as publicProjectsIndexRouteImport } from "./routes/(public)/projects/index";
 import { Route as publicProfileIndexRouteImport } from "./routes/(public)/profile/index";
 import { Route as publicGuestbookIndexRouteImport } from "./routes/(public)/guestbook/index";
@@ -57,6 +60,11 @@ const publicIndexRoute = publicIndexRouteImport.update({
   path: "/",
   getParentRoute: () => publicLayoutRoute,
 } as any);
+const publicSplatRoute = publicSplatRouteImport.update({
+  id: "/$$",
+  path: "/$$",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
 const authSigninRoute = authSigninRouteImport.update({
   id: "/signin",
   path: "/signin",
@@ -90,6 +98,16 @@ const publicStatsIndexRoute = publicStatsIndexRouteImport.update({
 const publicSnippetsIndexRoute = publicSnippetsIndexRouteImport.update({
   id: "/snippets/",
   path: "/snippets/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicServicesIndexRoute = publicServicesIndexRouteImport.update({
+  id: "/services/",
+  path: "/services/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicResumeIndexRoute = publicResumeIndexRouteImport.update({
+  id: "/resume/",
+  path: "/resume/",
   getParentRoute: () => publicLayoutRoute,
 } as any);
 const publicProjectsIndexRoute = publicProjectsIndexRouteImport.update({
@@ -157,6 +175,7 @@ export interface FileRoutesByFullPath {
   "/llms.txt": typeof LlmsDottxtRoute;
   "/sitemap.xml": typeof SitemapDotxmlRoute;
   "/signin": typeof authSigninRoute;
+  "/$$": typeof publicSplatRoute;
   "/": typeof publicIndexRoute;
   "/blog/$articleId": typeof publicBlogArticleIdRoute;
   "/projects/$projectId": typeof publicProjectsProjectIdRoute;
@@ -168,6 +187,8 @@ export interface FileRoutesByFullPath {
   "/guestbook/": typeof publicGuestbookIndexRoute;
   "/profile/": typeof publicProfileIndexRoute;
   "/projects/": typeof publicProjectsIndexRoute;
+  "/resume/": typeof publicResumeIndexRoute;
+  "/services/": typeof publicServicesIndexRoute;
   "/snippets/": typeof publicSnippetsIndexRoute;
   "/stats/": typeof publicStatsIndexRoute;
   "/uses/": typeof publicUsesIndexRoute;
@@ -181,6 +202,7 @@ export interface FileRoutesByTo {
   "/llms.txt": typeof LlmsDottxtRoute;
   "/sitemap.xml": typeof SitemapDotxmlRoute;
   "/signin": typeof authSigninRoute;
+  "/$$": typeof publicSplatRoute;
   "/": typeof publicIndexRoute;
   "/blog/$articleId": typeof publicBlogArticleIdRoute;
   "/projects/$projectId": typeof publicProjectsProjectIdRoute;
@@ -192,6 +214,8 @@ export interface FileRoutesByTo {
   "/guestbook": typeof publicGuestbookIndexRoute;
   "/profile": typeof publicProfileIndexRoute;
   "/projects": typeof publicProjectsIndexRoute;
+  "/resume": typeof publicResumeIndexRoute;
+  "/services": typeof publicServicesIndexRoute;
   "/snippets": typeof publicSnippetsIndexRoute;
   "/stats": typeof publicStatsIndexRoute;
   "/uses": typeof publicUsesIndexRoute;
@@ -208,6 +232,7 @@ export interface FileRoutesById {
   "/llms.txt": typeof LlmsDottxtRoute;
   "/sitemap.xml": typeof SitemapDotxmlRoute;
   "/(auth)/signin": typeof authSigninRoute;
+  "/(public)/$$": typeof publicSplatRoute;
   "/(public)/": typeof publicIndexRoute;
   "/(public)/blog/$articleId": typeof publicBlogArticleIdRoute;
   "/(public)/projects/$projectId": typeof publicProjectsProjectIdRoute;
@@ -219,6 +244,8 @@ export interface FileRoutesById {
   "/(public)/guestbook/": typeof publicGuestbookIndexRoute;
   "/(public)/profile/": typeof publicProfileIndexRoute;
   "/(public)/projects/": typeof publicProjectsIndexRoute;
+  "/(public)/resume/": typeof publicResumeIndexRoute;
+  "/(public)/services/": typeof publicServicesIndexRoute;
   "/(public)/snippets/": typeof publicSnippetsIndexRoute;
   "/(public)/stats/": typeof publicStatsIndexRoute;
   "/(public)/uses/": typeof publicUsesIndexRoute;
@@ -234,6 +261,7 @@ export interface FileRouteTypes {
     | "/llms.txt"
     | "/sitemap.xml"
     | "/signin"
+    | "/$$"
     | "/"
     | "/blog/$articleId"
     | "/projects/$projectId"
@@ -245,6 +273,8 @@ export interface FileRouteTypes {
     | "/guestbook/"
     | "/profile/"
     | "/projects/"
+    | "/resume/"
+    | "/services/"
     | "/snippets/"
     | "/stats/"
     | "/uses/"
@@ -258,6 +288,7 @@ export interface FileRouteTypes {
     | "/llms.txt"
     | "/sitemap.xml"
     | "/signin"
+    | "/$$"
     | "/"
     | "/blog/$articleId"
     | "/projects/$projectId"
@@ -269,6 +300,8 @@ export interface FileRouteTypes {
     | "/guestbook"
     | "/profile"
     | "/projects"
+    | "/resume"
+    | "/services"
     | "/snippets"
     | "/stats"
     | "/uses"
@@ -284,6 +317,7 @@ export interface FileRouteTypes {
     | "/llms.txt"
     | "/sitemap.xml"
     | "/(auth)/signin"
+    | "/(public)/$$"
     | "/(public)/"
     | "/(public)/blog/$articleId"
     | "/(public)/projects/$projectId"
@@ -295,6 +329,8 @@ export interface FileRouteTypes {
     | "/(public)/guestbook/"
     | "/(public)/profile/"
     | "/(public)/projects/"
+    | "/(public)/resume/"
+    | "/(public)/services/"
     | "/(public)/snippets/"
     | "/(public)/stats/"
     | "/(public)/uses/"
@@ -355,6 +391,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof publicIndexRouteImport;
       parentRoute: typeof publicLayoutRoute;
     };
+    "/(public)/$$": {
+      id: "/(public)/$$";
+      path: "/$$";
+      fullPath: "/$$";
+      preLoaderRoute: typeof publicSplatRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
     "/(auth)/signin": {
       id: "/(auth)/signin";
       path: "/signin";
@@ -402,6 +445,20 @@ declare module "@tanstack/react-router" {
       path: "/snippets";
       fullPath: "/snippets/";
       preLoaderRoute: typeof publicSnippetsIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/services/": {
+      id: "/(public)/services/";
+      path: "/services";
+      fullPath: "/services/";
+      preLoaderRoute: typeof publicServicesIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/resume/": {
+      id: "/(public)/resume/";
+      path: "/resume";
+      fullPath: "/resume/";
+      preLoaderRoute: typeof publicResumeIndexRouteImport;
       parentRoute: typeof publicLayoutRoute;
     };
     "/(public)/projects/": {
@@ -504,6 +561,7 @@ const authLayoutRouteWithChildren = authLayoutRoute._addFileChildren(
 );
 
 interface publicLayoutRouteChildren {
+  publicSplatRoute: typeof publicSplatRoute;
   publicIndexRoute: typeof publicIndexRoute;
   publicBlogArticleIdRoute: typeof publicBlogArticleIdRoute;
   publicProjectsProjectIdRoute: typeof publicProjectsProjectIdRoute;
@@ -514,12 +572,15 @@ interface publicLayoutRouteChildren {
   publicGuestbookIndexRoute: typeof publicGuestbookIndexRoute;
   publicProfileIndexRoute: typeof publicProfileIndexRoute;
   publicProjectsIndexRoute: typeof publicProjectsIndexRoute;
+  publicResumeIndexRoute: typeof publicResumeIndexRoute;
+  publicServicesIndexRoute: typeof publicServicesIndexRoute;
   publicSnippetsIndexRoute: typeof publicSnippetsIndexRoute;
   publicStatsIndexRoute: typeof publicStatsIndexRoute;
   publicUsesIndexRoute: typeof publicUsesIndexRoute;
 }
 
 const publicLayoutRouteChildren: publicLayoutRouteChildren = {
+  publicSplatRoute: publicSplatRoute,
   publicIndexRoute: publicIndexRoute,
   publicBlogArticleIdRoute: publicBlogArticleIdRoute,
   publicProjectsProjectIdRoute: publicProjectsProjectIdRoute,
@@ -530,6 +591,8 @@ const publicLayoutRouteChildren: publicLayoutRouteChildren = {
   publicGuestbookIndexRoute: publicGuestbookIndexRoute,
   publicProfileIndexRoute: publicProfileIndexRoute,
   publicProjectsIndexRoute: publicProjectsIndexRoute,
+  publicResumeIndexRoute: publicResumeIndexRoute,
+  publicServicesIndexRoute: publicServicesIndexRoute,
   publicSnippetsIndexRoute: publicSnippetsIndexRoute,
   publicStatsIndexRoute: publicStatsIndexRoute,
   publicUsesIndexRoute: publicUsesIndexRoute,

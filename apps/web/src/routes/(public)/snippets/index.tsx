@@ -4,7 +4,6 @@ import { siteConfig } from '@xbrk/config';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import PageHeading from '@/components/shared/page-heading';
 import Snippets from '@/components/snippets';
-import { pagesData } from '@/lib/data/pages-data';
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
 import { $getAllPublicSnippets } from '@/lib/server';
@@ -20,7 +19,7 @@ export const Route = createFileRoute('/(public)/snippets/')({
   head: () => {
     const seoData = seo({
       title: `Snippets | ${siteConfig.title}`,
-      description: pagesData.snippets.description,
+      description: 'A collection of code snippets that I use in my projects.',
       keywords: siteConfig.keywords,
       url: `${getBaseUrl()}/snippets`,
       canonical: `${getBaseUrl()}/snippets`,
@@ -55,7 +54,7 @@ function RouteComponent() {
 
   return (
     <>
-      <PageHeading description={pagesData.snippets.description} title={pagesData.snippets.title} />
+      <PageHeading description={'A collection of code snippets that I use in my projects.'} title={'Snippets'} />
       {isLoading || isFetching ? <SnippetsSkeleton /> : <Snippets snippets={snippets} />}
     </>
   );

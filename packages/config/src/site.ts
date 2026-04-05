@@ -7,11 +7,12 @@ import type { SiteConfig } from '@xbrk/types';
 export const siteConfig: SiteConfig = {
   title: 'Tuan Ngo-Hoang',
   name: 'rickielukas',
-  description: 'Full-stack developer and software engineer',
+  description: 'Full-stack Developer and Software Engineer',
+  hiringStatus: 'open',
   keywords: 'web development, software engineering, portfolio',
   url: 'https://xbrk.dev',
   author: {
-    name: 'Tuan Ngo-Hoang',
+    name: 'Ngô Hoàng Tuấn',
     email: 'nhtuan314@gmail.com',
     url: 'https://xbrk.dev',
     handle: '@rickielukas',
