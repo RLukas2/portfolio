@@ -64,10 +64,12 @@ function RouteComponent() {
   });
 
   const description =
-    'On my blog, I have written {count} items in total. In the search box below, you can look for articles by title.'.replace(
-      '{count}',
-      articles.length.toString(),
-    );
+    articles.length > 0
+      ? 'On my blog, I have written {count} items in total. In the search box below, you can look for articles by title.'.replace(
+          '{count}',
+          articles.length.toString(),
+        )
+      : 'Welcome to my blog. Articles will appear here once published.';
 
   return (
     <>

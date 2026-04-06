@@ -5,12 +5,17 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, Calendar, Code2 } from 'lucide-react';
 import Link from '@/components/shared/link';
 import { containerVariants, itemVariants } from '@/lib/constants/framer-motion-variants';
+import EmptyState from '../shared/empty-state';
 
 interface SnippetsProps {
   snippets: SnippetType[];
 }
 
 export default function Snippets({ snippets }: Readonly<SnippetsProps>) {
+  if (snippets.length === 0) {
+    return <EmptyState message="No snippets found. Time to write some code!" />;
+  }
+
   return (
     <motion.div animate="visible" className="grid gap-4 sm:grid-cols-2" initial="hidden" variants={containerVariants}>
       {snippets.map((snippet) => (

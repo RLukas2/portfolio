@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { FileText, Search } from 'lucide-react';
 import { type ChangeEvent, useState } from 'react';
 import { containerVariants, itemVariants } from '@/lib/constants/framer-motion-variants';
+import EmptyState from '../shared/empty-state';
 import ArticleCard from './article-card';
 
 interface FilteredArticlesProps {
@@ -21,6 +22,11 @@ export default function FilteredArticles({ articles }: Readonly<FilteredArticles
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
+
+  // If no articles at all, show empty state without search
+  if (articles.length === 0) {
+    return <EmptyState message="The posts are playing hide and seek – we just can't find them!" />;
+  }
 
   return (
     <>
