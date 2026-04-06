@@ -7,7 +7,7 @@ import { defineNitroConfig } from 'nitro/config';
  * This runs on the server side and applies to all routes.
  */
 export default defineNitroConfig({
-  compatibilityDate: 'latest',
+  compatibilityDate: '2026-04-06',
 
   // Security headers applied to all routes
   routeRules: {
@@ -37,14 +37,22 @@ export default defineNitroConfig({
         // Prevent MIME type sniffing
         'X-Content-Type-Options': 'nosniff',
 
-        // Enable browser XSS protection
-        'X-XSS-Protection': '1; mode=block',
+        // Enable browser XSS protection (modern recommendation is '0' to prevent abuse)
+        'X-XSS-Protection': '0',
 
         // Control referrer information
         'Referrer-Policy': 'strict-origin-when-cross-origin',
 
         // Permissions Policy (formerly Feature Policy)
-        'Permissions-Policy': ['camera=()', 'microphone=()', 'geolocation=()'].join(', '),
+        'Permissions-Policy': ['camera=()', 'microphone=()', 'geolocation=()', 'payment=()', 'fullscreen=(self)'].join(
+          ', ',
+        ),
+
+        // Force HTTPS and protect against downgrade attacks
+        'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+
+        // Isolate browsing context to prevent cross-origin popups from accessing window (Safe out of the box usually)
+        'Cross-Origin-Opener-Policy': 'same-origin',
       },
     },
 
