@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
 import { Button } from '@xbrk/ui/button';
+import { LazyImage } from '@xbrk/ui/lazy-image';
 import { motion } from 'framer-motion';
 import { DownloadIcon, FileTextIcon } from 'lucide-react';
 import Biography from '@/components/about/biography';
@@ -55,11 +56,11 @@ function RouteComponent() {
           initial={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <img
+          <LazyImage
             alt={siteConfig.author.name}
-            className="rounded-full object-cover transition-all duration-300 hover:scale-105 xl:rounded-lg"
             height={256}
-            loading="eager"
+            imageClassName="rounded-full object-cover transition-all duration-300 hover:scale-105 xl:rounded-lg"
+            priority={true}
             src="/images/avatar.jpg"
             width={256}
           />

@@ -64,6 +64,7 @@ function Home() {
         <Suspense fallback={<Spinner />}>
           <RecentPosts />
         </Suspense>
+        <SectionDivider />
         <ConnectSection />
       </div>
     </>
