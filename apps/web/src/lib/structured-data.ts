@@ -7,6 +7,11 @@ const COPYRIGHT_YEAR = new Date().getFullYear();
 
 const DEFAULT_LANGUAGE = 'en-US';
 
+// Cache for base schemas that don't change between requests
+let cachedPersonSchema: Person | null = null;
+let cachedOrganizationSchema: Organization | null = null;
+let cachedWebSiteSchema: WebSite | null = null;
+
 // =============================================================================
 // Schema Types
 // =============================================================================
@@ -152,6 +157,11 @@ function normalizeImageUrl(image: string | undefined): string | undefined {
 }
 
 function createPersonSchema(options?: { includeId?: boolean }): Person {
+  // Return cached version if available and options match
+  if (cachedPersonSchema && options?.includeId) {
+    return cachedPersonSchema;
+  }
+
   const schema: Person = {
     '@type': 'Person',
     name: siteConfig.author.name,
@@ -170,12 +180,18 @@ function createPersonSchema(options?: { includeId?: boolean }): Person {
 
   if (options?.includeId) {
     schema['@id'] = schemaIds.person();
+    cachedPersonSchema = schema;
   }
 
   return schema;
 }
 
 function createOrganizationSchema(options?: { includeId?: boolean }): Organization {
+  // Return cached version if available and options match
+  if (cachedOrganizationSchema && options?.includeId) {
+    return cachedOrganizationSchema;
+  }
+
   const schema: Organization = {
     '@type': 'Organization',
     name: siteConfig.title,
@@ -185,12 +201,18 @@ function createOrganizationSchema(options?: { includeId?: boolean }): Organizati
 
   if (options?.includeId) {
     schema['@id'] = schemaIds.organization();
+    cachedOrganizationSchema = schema;
   }
 
   return schema;
 }
 
 function createWebSiteSchema(options?: { includeId?: boolean; useRefs?: boolean }): WebSite {
+  // Return cached version if available and options match
+  if (cachedWebSiteSchema && options?.includeId && options?.useRefs) {
+    return cachedWebSiteSchema;
+  }
+
   const schema: WebSite = {
     '@type': 'WebSite',
     name: siteConfig.title,
@@ -213,6 +235,9 @@ function createWebSiteSchema(options?: { includeId?: boolean; useRefs?: boolean 
 
   if (options?.includeId) {
     schema['@id'] = schemaIds.website();
+    if (options?.useRefs) {
+      cachedWebSiteSchema = schema;
+    }
   }
 
   return schema;
@@ -333,6 +358,21 @@ function createSoftwareProjectSchema({
 // Public API
 // =============================================================================
 
+/**
+ * Generates a JSON-LD structured data graph for SEO.
+ *
+ * Wraps schema objects in a @graph structure for embedding in HTML.
+ *
+ * @param schemas - Array of schema.org objects
+ * @returns JSON-LD string ready for script tag insertion
+ *
+ * @example
+ * ```tsx
+ * <script type="application/ld+json">
+ *   {generateStructuredDataGraph(getHomepageSchemas())}
+ * </script>
+ * ```
+ */
 export function generateStructuredDataGraph(schemas: SchemaObject[]): string {
   return JSON.stringify({
     '@context': 'https://schema.org',
@@ -340,6 +380,13 @@ export function generateStructuredDataGraph(schemas: SchemaObject[]): string {
   });
 }
 
+/**
+ * Gets structured data schemas for the homepage.
+ *
+ * Includes Person, Organization, and WebSite schemas.
+ *
+ * @returns Array of schema objects for homepage
+ */
 export function getHomepageSchemas(): SchemaObject[] {
   return [
     createPersonSchema({ includeId: true }),
@@ -348,6 +395,13 @@ export function getHomepageSchemas(): SchemaObject[] {
   ];
 }
 
+/**
+ * Gets structured data schemas for the about page.
+ *
+ * Includes Person, Organization, WebSite, ProfilePage, and Breadcrumb schemas.
+ *
+ * @returns Array of schema objects for about page
+ */
 export function getAboutPageSchemas(): SchemaObject[] {
   return [
     createPersonSchema({ includeId: true }),
@@ -361,6 +415,13 @@ export function getAboutPageSchemas(): SchemaObject[] {
   ];
 }
 
+/**
+ * Gets structured data schemas for the blog listing page.
+ *
+ * Includes Person, Organization, WebSite, CollectionPage, and Breadcrumb schemas.
+ *
+ * @returns Array of schema objects for blog list page
+ */
 export function getBlogListSchemas(): SchemaObject[] {
   return [
     createPersonSchema({ includeId: true }),
@@ -378,6 +439,14 @@ export function getBlogListSchemas(): SchemaObject[] {
   ];
 }
 
+/**
+ * Gets structured data schemas for a blog post page.
+ *
+ * Includes Person, Organization, WebSite, BlogPosting, and Breadcrumb schemas.
+ *
+ * @param post - Blog post metadata
+ * @returns Array of schema objects for blog post page
+ */
 export function getBlogPostSchemas(post: {
   title: string;
   description: string;
@@ -411,6 +480,13 @@ export function getBlogPostSchemas(post: {
   ];
 }
 
+/**
+ * Gets structured data schemas for the projects listing page.
+ *
+ * Includes Person, Organization, WebSite, CollectionPage, and Breadcrumb schemas.
+ *
+ * @returns Array of schema objects for projects list page
+ */
 export function getProjectListSchemas(): SchemaObject[] {
   return [
     createPersonSchema({ includeId: true }),
@@ -428,6 +504,14 @@ export function getProjectListSchemas(): SchemaObject[] {
   ];
 }
 
+/**
+ * Gets structured data schemas for a project detail page.
+ *
+ * Includes Person, Organization, WebSite, SoftwareSourceCode, and Breadcrumb schemas.
+ *
+ * @param project - Project metadata
+ * @returns Array of schema objects for project page
+ */
 export function getProjectSchemas(project: {
   title: string;
   description: string;

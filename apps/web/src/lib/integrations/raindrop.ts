@@ -7,8 +7,12 @@ import { env } from '../env/server';
 const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1';
 export const PAGE_SIZE = 4;
 
-// Internal helper — builds fetch options with the Raindrop access token.
-// Not exposed as a server function to avoid creating an unnecessary HTTP endpoint.
+/**
+ * Creates request options with Raindrop API authentication.
+ * Internal helper for building fetch options with the access token.
+ *
+ * @returns Fetch request options with authorization headers
+ */
 function getRequestOptions(): RequestInit {
   return {
     method: 'GET',
@@ -19,9 +23,20 @@ function getRequestOptions(): RequestInit {
   };
 }
 
+/**
+ * Server function to fetch all Raindrop collections.
+ *
+ * @returns Array of bookmark collections or null on error
+ */
 export const getCollections = createServerFn({ method: 'GET' }).handler(async () => {
   try {
     const response = await fetch(`${RAINDROP_API_URL}/collections`, getRequestOptions());
+
+    if (!response.ok) {
+      Sentry.captureException(new Error(`Raindrop API error: ${response.status}`));
+      return null;
+    }
+
     return await response.json();
   } catch (error) {
     Sentry.captureException(error);
@@ -29,6 +44,12 @@ export const getCollections = createServerFn({ method: 'GET' }).handler(async ()
   }
 });
 
+/**
+ * Server function to fetch a specific Raindrop collection by ID.
+ *
+ * @param id - The collection ID
+ * @returns Collection data or null on error
+ */
 export const getCollection = createServerFn({ method: 'GET' })
   .inputValidator(
     z.object({
@@ -38,6 +59,12 @@ export const getCollection = createServerFn({ method: 'GET' })
   .handler(async ({ data }) => {
     try {
       const response = await fetch(`${RAINDROP_API_URL}/collection/${data.id}`, getRequestOptions());
+
+      if (!response.ok) {
+        Sentry.captureException(new Error(`Raindrop API error: ${response.status}`));
+        return null;
+      }
+
       const collection = await response.json();
       return collection;
     } catch (error) {
@@ -46,6 +73,14 @@ export const getCollection = createServerFn({ method: 'GET' })
     }
   });
 
+/**
+ * Server function to fetch bookmarks from a specific collection.
+ * Supports pagination.
+ *
+ * @param collectionId - The collection ID
+ * @param pageIndex - Page number for pagination (optional, defaults to 0)
+ * @returns Array of bookmarks or empty array on error
+ */
 export const getBookmarksByCollectionId = createServerFn({ method: 'GET' })
   .inputValidator(
     z.object({
@@ -60,6 +95,12 @@ export const getBookmarksByCollectionId = createServerFn({ method: 'GET' })
         perpage: String(PAGE_SIZE),
       });
       const response = await fetch(`${RAINDROP_API_URL}/raindrops/${data.collectionId}?${params}`, getRequestOptions());
+
+      if (!response.ok) {
+        Sentry.captureException(new Error(`Raindrop API error: ${response.status}`));
+        return [];
+      }
+
       return await response.json();
     } catch (error) {
       Sentry.captureException(error);

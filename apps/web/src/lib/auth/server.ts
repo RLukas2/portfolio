@@ -2,8 +2,23 @@ import { initAuth } from '@xbrk/auth';
 import { env } from '@/lib/env/server';
 import { getBaseUrl } from '@/lib/utils';
 
-// `productionUrl` is the canonical URL registered with OAuth providers (fixed per deployment).
-// `baseUrl` is the runtime URL (may differ in preview deployments).
+/**
+ * Better Auth server instance for authentication operations.
+ *
+ * Configured with OAuth providers (GitHub, Twitter, Google, Facebook)
+ * and environment-specific URLs.
+ *
+ * The `productionUrl` is the canonical URL registered with OAuth providers.
+ * The `baseUrl` is the runtime URL (may differ in preview deployments).
+ *
+ * @example
+ * ```ts
+ * import { auth } from '@/lib/auth/server';
+ *
+ * // Get session
+ * const session = await auth.api.getSession({ headers });
+ * ```
+ */
 const productionUrl = env.VITE_APP_URL ?? getBaseUrl();
 
 export const auth = initAuth({

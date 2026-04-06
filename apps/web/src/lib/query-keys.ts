@@ -1,3 +1,18 @@
+/**
+ * Query keys for React Query cache management.
+ *
+ * Provides a hierarchical structure for organizing query keys across different resources.
+ * Each resource has methods for generating consistent, type-safe query keys.
+ *
+ * @example
+ * ```ts
+ * // Get all blog posts
+ * queryKeys.blog.listPublic()
+ *
+ * // Get specific blog post
+ * queryKeys.blog.detail('my-post-slug')
+ * ```
+ */
 export const queryKeys = {
   blog: {
     all: ['blog'] as const,
