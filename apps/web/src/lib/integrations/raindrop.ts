@@ -29,6 +29,11 @@ function getRequestOptions(): RequestInit {
  * @returns Array of bookmark collections or null on error
  */
 export const getCollections = createServerFn({ method: 'GET' }).handler(async () => {
+  if (!env.RAINDROP_ACCESS_TOKEN) {
+    Sentry.captureException(new Error('Raindrop access token is not set'));
+    return null;
+  }
+
   try {
     const response = await fetch(`${RAINDROP_API_URL}/collections`, getRequestOptions());
 
@@ -57,6 +62,11 @@ export const getCollection = createServerFn({ method: 'GET' })
     }),
   )
   .handler(async ({ data }) => {
+    if (!env.RAINDROP_ACCESS_TOKEN) {
+      Sentry.captureException(new Error('Raindrop access token is not set'));
+      return null;
+    }
+
     try {
       const response = await fetch(`${RAINDROP_API_URL}/collection/${data.id}`, getRequestOptions());
 
@@ -89,6 +99,11 @@ export const getBookmarksByCollectionId = createServerFn({ method: 'GET' })
     }),
   )
   .handler(async ({ data }) => {
+    if (!env.RAINDROP_ACCESS_TOKEN) {
+      Sentry.captureException(new Error('Raindrop access token is not set'));
+      return null;
+    }
+
     try {
       const params = new URLSearchParams({
         page: String(data.pageIndex ?? 0),
