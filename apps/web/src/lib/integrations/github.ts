@@ -8,6 +8,12 @@ const GITHUB_API_BASE_URL = 'https://api.github.com' as const;
 const GITHUB_GRAPHQL_API_URL = 'https://api.github.com/graphql' as const;
 const DAYS_TO_FETCH = 30 as const;
 
+/**
+ * Creates headers for GitHub API requests.
+ * Includes authorization token if available in environment.
+ *
+ * @returns Headers object for fetch requests
+ */
 function createGithubHeaders() {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -20,6 +26,22 @@ function createGithubHeaders() {
   return headers;
 }
 
+/**
+ * Fetches GitHub user statistics including repository count and total stars.
+ *
+ * Retrieves user profile data and repository information from GitHub API.
+ * Filters out forked repositories and calculates total stars across owned repos.
+ *
+ * @returns Object containing user data, repo count, and stars count, or null on error
+ *
+ * @example
+ * ```ts
+ * const stats = await getGithubStats();
+ * if (stats) {
+ *   console.log(`${stats.repos} repos with ${stats.starsCount} stars`);
+ * }
+ * ```
+ */
 async function getGithubStats() {
   const GITHUB_USERNAME = env.GITHUB_USERNAME;
 
@@ -37,7 +59,10 @@ async function getGithubStats() {
       fetch(reposUrl, { headers }),
     ]);
 
-    if ([userResponse, reposResponse].some((response) => !response.ok)) {
+    if (!(userResponse.ok && reposResponse.ok)) {
+      Sentry.captureException(
+        new Error(`GitHub API error: User ${userResponse.status}, Repos ${reposResponse.status}`),
+      );
       return null;
     }
 
@@ -67,16 +92,36 @@ export interface ContributionCountByDay {
   Wednesday: number;
 }
 
+/**
+ * Contribution count for a specific day of the week.
+ */
 export interface ContributionCountByDayOfWeek {
   count: number;
   day: string;
 }
 
+/**
+ * Aggregated contribution data.
+ */
 export interface Contributions {
   contributionCountByDayOfWeek: ContributionCountByDayOfWeek[];
   contributionsByLast30Days: ContributionDay[];
 }
 
+/**
+ * Fetches GitHub contribution activity for the last 30 days.
+ *
+ * Queries GitHub GraphQL API to retrieve contribution calendar data
+ * and calculates productivity metrics by day of the week.
+ *
+ * @returns Object containing contribution data and day-of-week statistics
+ *
+ * @example
+ * ```ts
+ * const activities = await getGithubActivities();
+ * console.log(activities.contributionsByLast30Days);
+ * ```
+ */
 async function getGithubActivities() {
   const GITHUB_USERNAME = env.GITHUB_USERNAME;
 
@@ -127,11 +172,13 @@ async function getGithubActivities() {
   });
 
   if (!response.ok) {
+    Sentry.captureException(new Error(`GitHub GraphQL API error: ${response.status}`));
     return contributions;
   }
 
   const apiResponse = await response.json();
   if (apiResponse.errors) {
+    Sentry.captureException(new Error(`GitHub GraphQL errors: ${JSON.stringify(apiResponse.errors)}`));
     return contributions;
   }
 
@@ -155,7 +202,15 @@ async function getGithubActivities() {
   return contributions;
 }
 
-// Function to calculate the productive data by days
+/**
+ * Calculates the most productive day of the week based on contribution data.
+ *
+ * Aggregates contribution counts by day of the week and returns them
+ * in chronological order (Monday through Sunday).
+ *
+ * @param contributionCalendar - GitHub contribution calendar data
+ * @returns Array of day-of-week contribution counts sorted chronologically
+ */
 function calculateMostProductiveDayOfWeek(
   contributionCalendar: ContributionCalender,
 ): { day: string; count: number }[] {

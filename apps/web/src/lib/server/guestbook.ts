@@ -4,12 +4,24 @@ import { z } from 'zod/v4';
 import { authMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
 
+/**
+ * Server function to fetch all guestbook entries.
+ *
+ * @returns Array of guestbook entries
+ */
 export const $getAllGuestbookEntries = createServerFn({ method: 'GET' })
   .middleware([dbMiddleware])
   .handler(({ context }) => {
     return guestbookService.getAll(context.db);
   });
 
+/**
+ * Server function to create a new guestbook entry.
+ * Requires authentication.
+ *
+ * @param message - The guestbook message (1-500 characters)
+ * @returns The created guestbook entry
+ */
 export const $createGuestbookEntry = createServerFn({ method: 'POST' })
   .middleware([dbMiddleware, authMiddleware])
   .inputValidator(
@@ -21,6 +33,13 @@ export const $createGuestbookEntry = createServerFn({ method: 'POST' })
     return guestbookService.create(ctx.context.db, ctx.data, ctx.context.user.id);
   });
 
+/**
+ * Server function to delete a guestbook entry.
+ * Requires authentication and proper permissions.
+ *
+ * @param id - The guestbook entry ID
+ * @returns Success status
+ */
 export const $deleteGuestbookEntry = createServerFn({ method: 'POST' })
   .middleware([dbMiddleware, authMiddleware])
   .inputValidator(z.object({ id: z.string() }))

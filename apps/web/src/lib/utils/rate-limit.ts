@@ -16,6 +16,29 @@ interface RateLimitState {
 
 const rateLimitStore = new Map<string, RateLimitState>();
 
+// Cleanup expired entries every 5 minutes to prevent memory leaks
+const CLEANUP_INTERVAL = 5 * 60 * 1000;
+let cleanupTimer: ReturnType<typeof setInterval> | null = null;
+
+/**
+ * Starts automatic cleanup of expired rate limit entries.
+ * Called automatically on first rate limit check.
+ */
+function startCleanup() {
+  if (cleanupTimer) {
+    return;
+  }
+
+  cleanupTimer = setInterval(() => {
+    const now = Date.now();
+    for (const [key, state] of rateLimitStore.entries()) {
+      if (now >= state.resetAt) {
+        rateLimitStore.delete(key);
+      }
+    }
+  }, CLEANUP_INTERVAL);
+}
+
 /**
  * Check if an action is rate limited
  * @param key - Unique identifier for the action (e.g., 'like-article', 'post-comment')
@@ -26,6 +49,11 @@ export function checkRateLimit(
   key: string,
   config: RateLimitConfig,
 ): { isLimited: boolean; remainingMs: number; message: string } {
+  // Start cleanup on first use
+  if (!cleanupTimer) {
+    startCleanup();
+  }
+
   const now = Date.now();
   const state = rateLimitStore.get(key);
 
@@ -63,10 +91,14 @@ export function resetRateLimit(key: string): void {
 }
 
 /**
- * Clear all rate limits
+ * Clear all rate limits and stop cleanup timer
  */
 export function clearAllRateLimits(): void {
   rateLimitStore.clear();
+  if (cleanupTimer) {
+    clearInterval(cleanupTimer);
+    cleanupTimer = null;
+  }
 }
 
 /**

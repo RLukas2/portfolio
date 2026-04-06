@@ -4,6 +4,9 @@ import { articles, experience, project } from '@xbrk/db/schema';
 import { and, desc, eq, ilike, or } from 'drizzle-orm';
 import { z } from 'zod';
 
+/**
+ * Project data structure for AI tools.
+ */
 export interface ToolProject {
   demoUrl?: string | null;
   description?: string | null;
@@ -15,6 +18,9 @@ export interface ToolProject {
   title: string;
 }
 
+/**
+ * Article data structure for AI tools.
+ */
 export interface ToolArticle {
   createdAt: Date;
   description?: string | null;
@@ -24,6 +30,9 @@ export interface ToolArticle {
   title: string;
 }
 
+/**
+ * Experience data structure for AI tools.
+ */
 export interface ToolExperience {
   description?: string | null;
   endDate?: string | null;
@@ -301,6 +310,13 @@ const recommendExperience = recommendExperienceDef.server(async ({ id }) => {
   return exp;
 });
 
+/**
+ * Returns all available AI tools for the chatbot.
+ *
+ * Provides tools for searching and recommending projects, articles, and experience entries.
+ *
+ * @returns Array of AI tool definitions
+ */
 export default function getTools() {
   return [
     getProjects,
