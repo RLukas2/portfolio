@@ -1,62 +1,83 @@
 import { defineNitroConfig } from 'nitro/config';
 
-/**
- * Nitro server configuration for apps/web
- *
- * Configures security headers, routing, and server behavior.
- * This runs on the server side and applies to all routes.
- */
+// ============================================================
+// CSP Directive Builder
+// Edit these arrays to manage allowed sources per directive.
+// ============================================================
+
+const CSP_SOURCES = {
+  script: [
+    'https://cdn.jsdelivr.net',
+    'https://va.vercel-scripts.com',
+    'https://vercel.live',
+    'https://*.sentry.io',
+    'https://us.i.posthog.com',
+    'https://us-assets.i.posthog.com',
+  ],
+  style: ['https://cdn.jsdelivr.net'],
+  font: ['https://cdn.jsdelivr.net'],
+  connect: [
+    'https://api.github.com',
+    'https://api.raindrop.io',
+    'https://*.sentry.io',
+    'https://us.i.posthog.com',
+    'https://us-assets.i.posthog.com',
+    'https://github-contributions-api.jogruber.de',
+    'wss://vercel.live',
+  ],
+  frame: ['https://vercel.live'],
+  worker: ['https://us-assets.i.posthog.com'],
+};
+
+function buildCsp(): string {
+  const directives: string[] = [
+    "default-src 'self'",
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${CSP_SOURCES.script.join(' ')}`,
+    `style-src 'self' 'unsafe-inline' ${CSP_SOURCES.style.join(' ')}`,
+    "img-src 'self' data: https: blob:",
+    `font-src 'self' data: ${CSP_SOURCES.font.join(' ')}`,
+    `connect-src 'self' ${CSP_SOURCES.connect.join(' ')}`,
+    `frame-src 'self' ${CSP_SOURCES.frame.join(' ')}`,
+    `worker-src 'self' ${CSP_SOURCES.worker.join(' ')}`,
+    "media-src 'self' https:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    'upgrade-insecure-requests',
+  ];
+  return directives.join('; ');
+}
+
+// ============================================================
+// Security Headers
+// ============================================================
+
+const SECURITY_HEADERS = {
+  'Content-Security-Policy': buildCsp(),
+  'X-Frame-Options': 'DENY',
+  'X-Content-Type-Options': 'nosniff',
+  'X-XSS-Protection': '0',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': ['camera=()', 'microphone=()', 'geolocation=()', 'payment=()', 'fullscreen=(self)'].join(', '),
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'Cross-Origin-Resource-Policy': 'same-origin',
+} as const;
+
+// ============================================================
+// Nitro Config
+// ============================================================
+
 export default defineNitroConfig({
   compatibilityDate: '2026-04-06',
 
-  // Security headers applied to all routes
   routeRules: {
     '/**': {
-      headers: {
-        // Content Security Policy - Prevents XSS attacks
-        // Adjust these directives based on your actual needs
-        'Content-Security-Policy': [
-          "default-src 'self'",
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://va.vercel-scripts.com https://vercel.live https://*.sentry.io https://us.i.posthog.com",
-          "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
-          "img-src 'self' data: https: blob:",
-          "font-src 'self' data: https://cdn.jsdelivr.net",
-          "connect-src 'self' https://api.github.com https://api.raindrop.io https://*.sentry.io https://us.i.posthog.com wss://vercel.live https://github-contributions-api.jogruber.de",
-          "frame-src 'self' https://vercel.live",
-          "media-src 'self' https:",
-          "object-src 'none'",
-          "base-uri 'self'",
-          "form-action 'self'",
-          "frame-ancestors 'none'",
-          'upgrade-insecure-requests',
-        ].join('; '),
-
-        // Prevent clickjacking attacks
-        'X-Frame-Options': 'DENY',
-
-        // Prevent MIME type sniffing
-        'X-Content-Type-Options': 'nosniff',
-
-        // Enable browser XSS protection (modern recommendation is '0' to prevent abuse)
-        'X-XSS-Protection': '0',
-
-        // Control referrer information
-        'Referrer-Policy': 'strict-origin-when-cross-origin',
-
-        // Permissions Policy (formerly Feature Policy)
-        'Permissions-Policy': ['camera=()', 'microphone=()', 'geolocation=()', 'payment=()', 'fullscreen=(self)'].join(
-          ', ',
-        ),
-
-        // Force HTTPS and protect against downgrade attacks
-        'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
-
-        // Isolate browsing context to prevent cross-origin popups from accessing window (Safe out of the box usually)
-        'Cross-Origin-Opener-Policy': 'same-origin',
-      },
+      headers: SECURITY_HEADERS,
     },
 
-    // Stricter CSP for API routes (no inline scripts needed)
+    // Stricter CSP for API routes — no scripts or styles needed
     '/api/**': {
       headers: {
         'Content-Security-Policy': "default-src 'none'; frame-ancestors 'none'",
