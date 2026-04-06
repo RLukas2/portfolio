@@ -19,7 +19,7 @@
   "dependencies": {
     "@sentry/node": "catalog:",
     "@t3-oss/env-core": "catalog:",
-    "@vercel/blob": "^2.3.2",
+    "@vercel/blob": "^2.3.3",
     "@xbrk/auth": "workspace:*",
     "@xbrk/db": "workspace:*",
     "@xbrk/utils": "workspace:*",

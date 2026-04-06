@@ -36,26 +36,26 @@ catalog:
   "@tanstack/react-form": "^1.28.6"
   "@tanstack/react-form-devtools": latest
   "@tanstack/react-form-start": latest
-  "@tanstack/react-query": "^5.96.1"
-  "@tanstack/react-query-devtools": ^5.96.1
+  "@tanstack/react-query": "^5.96.2"
+  "@tanstack/react-query-devtools": ^5.96.2
   "@tanstack/react-router": "^1.168.10"
   "@tanstack/react-router-devtools": "^1.166.11"
   "@tanstack/react-router-ssr-query": ^1.166.10
   "@tanstack/react-start": "^1.167.16"
 
   # Types
-  "@types/node": "^25.5.0"
+  "@types/node": "^25.5.2"
   "@types/react": "^19.2.14"
   "@types/react-dom": "^19.2.3"
   "autoprefixer": "^10.4.27"
-  "better-auth": "1.5.5"
+  "better-auth": "1.5.6"
   "lucide-react": "^1.7.0"
   "react": "^19.2.4"
   "react-dom": "^19.2.4"
-  "simple-icons": "^13.21.0"
+  "simple-icons": "^16.15.0"
 
   # Tailwind CSS + UI
   "tailwindcss": "^4.2.1"
-  "typescript": "^5.9.3"
+  "typescript": "^6.0.2"
   "vite": "^8.0.3"
   "zod": "^4.3.6"
