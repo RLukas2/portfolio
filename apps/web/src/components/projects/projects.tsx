@@ -1,6 +1,7 @@
 import type { ProjectType } from '@xbrk/types';
 import { motion } from 'framer-motion';
 import { slideInWithFadeOut } from '@/lib/constants/framer-motion-variants';
+import EmptyState from '../shared/empty-state';
 import ProjectCard from './project-card';
 
 interface ProjectsProps {
@@ -8,6 +9,10 @@ interface ProjectsProps {
 }
 
 export default function Projects({ projects }: Readonly<ProjectsProps>) {
+  if (projects.length === 0) {
+    return <EmptyState message="The projects are probably off having a party somewhere without us!" />;
+  }
+
   return (
     <motion.div
       animate="visible"

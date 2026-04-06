@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
+import { Spinner } from '@xbrk/ui/spinner';
+import { Suspense } from 'react';
 import ConnectSection from '@/components/home/connect-section';
 import FeaturedProjects from '@/components/home/featured-projects';
 import PersonalHero from '@/components/home/personal-hero';
@@ -55,10 +57,13 @@ function Home() {
       <PersonalHero />
 
       <div className="flex flex-col items-center gap-8">
-        <FeaturedProjects />
+        <Suspense fallback={<Spinner />}>
+          <FeaturedProjects />
+        </Suspense>
         <SectionDivider />
-        <RecentPosts />
-        <SectionDivider />
+        <Suspense fallback={<Spinner />}>
+          <RecentPosts />
+        </Suspense>
         <ConnectSection />
       </div>
     </>
