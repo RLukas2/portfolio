@@ -27,12 +27,15 @@ import { Route as publicResumeIndexRouteImport } from "./routes/(public)/resume/
 import { Route as publicProjectsIndexRouteImport } from "./routes/(public)/projects/index";
 import { Route as publicProfileIndexRouteImport } from "./routes/(public)/profile/index";
 import { Route as publicGuestbookIndexRouteImport } from "./routes/(public)/guestbook/index";
+import { Route as publicChangelogIndexRouteImport } from "./routes/(public)/changelog/index";
+import { Route as publicBookmarksIndexRouteImport } from "./routes/(public)/bookmarks/index";
 import { Route as publicBlogIndexRouteImport } from "./routes/(public)/blog/index";
 import { Route as publicAboutIndexRouteImport } from "./routes/(public)/about/index";
 import { Route as ApiAuthSplatRouteImport } from "./routes/api/auth/$";
 import { Route as publicSnippetsSnippetIdRouteImport } from "./routes/(public)/snippets/$snippetId";
 import { Route as publicServicesServiceIdRouteImport } from "./routes/(public)/services/$serviceId";
 import { Route as publicProjectsProjectIdRouteImport } from "./routes/(public)/projects/$projectId";
+import { Route as publicBookmarksBookmarkIdRouteImport } from "./routes/(public)/bookmarks/$bookmarkId";
 import { Route as publicBlogArticleIdRouteImport } from "./routes/(public)/blog/$articleId";
 import { Route as ApiStatsGithubIndexRouteImport } from "./routes/api/stats/github/index";
 import { Route as ApiStatsGithubActivityRouteImport } from "./routes/api/stats/github/activity";
@@ -125,6 +128,16 @@ const publicGuestbookIndexRoute = publicGuestbookIndexRouteImport.update({
   path: "/guestbook/",
   getParentRoute: () => publicLayoutRoute,
 } as any);
+const publicChangelogIndexRoute = publicChangelogIndexRouteImport.update({
+  id: "/changelog/",
+  path: "/changelog/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicBookmarksIndexRoute = publicBookmarksIndexRouteImport.update({
+  id: "/bookmarks/",
+  path: "/bookmarks/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
 const publicBlogIndexRoute = publicBlogIndexRouteImport.update({
   id: "/blog/",
   path: "/blog/",
@@ -155,6 +168,12 @@ const publicProjectsProjectIdRoute = publicProjectsProjectIdRouteImport.update({
   path: "/projects/$projectId",
   getParentRoute: () => publicLayoutRoute,
 } as any);
+const publicBookmarksBookmarkIdRoute =
+  publicBookmarksBookmarkIdRouteImport.update({
+    id: "/bookmarks/$bookmarkId",
+    path: "/bookmarks/$bookmarkId",
+    getParentRoute: () => publicLayoutRoute,
+  } as any);
 const publicBlogArticleIdRoute = publicBlogArticleIdRouteImport.update({
   id: "/blog/$articleId",
   path: "/blog/$articleId",
@@ -178,12 +197,15 @@ export interface FileRoutesByFullPath {
   "/$$": typeof publicSplatRoute;
   "/": typeof publicIndexRoute;
   "/blog/$articleId": typeof publicBlogArticleIdRoute;
+  "/bookmarks/$bookmarkId": typeof publicBookmarksBookmarkIdRoute;
   "/projects/$projectId": typeof publicProjectsProjectIdRoute;
   "/services/$serviceId": typeof publicServicesServiceIdRoute;
   "/snippets/$snippetId": typeof publicSnippetsSnippetIdRoute;
   "/api/auth/$": typeof ApiAuthSplatRoute;
   "/about/": typeof publicAboutIndexRoute;
   "/blog/": typeof publicBlogIndexRoute;
+  "/bookmarks/": typeof publicBookmarksIndexRoute;
+  "/changelog/": typeof publicChangelogIndexRoute;
   "/guestbook/": typeof publicGuestbookIndexRoute;
   "/profile/": typeof publicProfileIndexRoute;
   "/projects/": typeof publicProjectsIndexRoute;
@@ -205,12 +227,15 @@ export interface FileRoutesByTo {
   "/$$": typeof publicSplatRoute;
   "/": typeof publicIndexRoute;
   "/blog/$articleId": typeof publicBlogArticleIdRoute;
+  "/bookmarks/$bookmarkId": typeof publicBookmarksBookmarkIdRoute;
   "/projects/$projectId": typeof publicProjectsProjectIdRoute;
   "/services/$serviceId": typeof publicServicesServiceIdRoute;
   "/snippets/$snippetId": typeof publicSnippetsSnippetIdRoute;
   "/api/auth/$": typeof ApiAuthSplatRoute;
   "/about": typeof publicAboutIndexRoute;
   "/blog": typeof publicBlogIndexRoute;
+  "/bookmarks": typeof publicBookmarksIndexRoute;
+  "/changelog": typeof publicChangelogIndexRoute;
   "/guestbook": typeof publicGuestbookIndexRoute;
   "/profile": typeof publicProfileIndexRoute;
   "/projects": typeof publicProjectsIndexRoute;
@@ -235,12 +260,15 @@ export interface FileRoutesById {
   "/(public)/$$": typeof publicSplatRoute;
   "/(public)/": typeof publicIndexRoute;
   "/(public)/blog/$articleId": typeof publicBlogArticleIdRoute;
+  "/(public)/bookmarks/$bookmarkId": typeof publicBookmarksBookmarkIdRoute;
   "/(public)/projects/$projectId": typeof publicProjectsProjectIdRoute;
   "/(public)/services/$serviceId": typeof publicServicesServiceIdRoute;
   "/(public)/snippets/$snippetId": typeof publicSnippetsSnippetIdRoute;
   "/api/auth/$": typeof ApiAuthSplatRoute;
   "/(public)/about/": typeof publicAboutIndexRoute;
   "/(public)/blog/": typeof publicBlogIndexRoute;
+  "/(public)/bookmarks/": typeof publicBookmarksIndexRoute;
+  "/(public)/changelog/": typeof publicChangelogIndexRoute;
   "/(public)/guestbook/": typeof publicGuestbookIndexRoute;
   "/(public)/profile/": typeof publicProfileIndexRoute;
   "/(public)/projects/": typeof publicProjectsIndexRoute;
@@ -264,12 +292,15 @@ export interface FileRouteTypes {
     | "/$$"
     | "/"
     | "/blog/$articleId"
+    | "/bookmarks/$bookmarkId"
     | "/projects/$projectId"
     | "/services/$serviceId"
     | "/snippets/$snippetId"
     | "/api/auth/$"
     | "/about/"
     | "/blog/"
+    | "/bookmarks/"
+    | "/changelog/"
     | "/guestbook/"
     | "/profile/"
     | "/projects/"
@@ -291,12 +322,15 @@ export interface FileRouteTypes {
     | "/$$"
     | "/"
     | "/blog/$articleId"
+    | "/bookmarks/$bookmarkId"
     | "/projects/$projectId"
     | "/services/$serviceId"
     | "/snippets/$snippetId"
     | "/api/auth/$"
     | "/about"
     | "/blog"
+    | "/bookmarks"
+    | "/changelog"
     | "/guestbook"
     | "/profile"
     | "/projects"
@@ -320,12 +354,15 @@ export interface FileRouteTypes {
     | "/(public)/$$"
     | "/(public)/"
     | "/(public)/blog/$articleId"
+    | "/(public)/bookmarks/$bookmarkId"
     | "/(public)/projects/$projectId"
     | "/(public)/services/$serviceId"
     | "/(public)/snippets/$snippetId"
     | "/api/auth/$"
     | "/(public)/about/"
     | "/(public)/blog/"
+    | "/(public)/bookmarks/"
+    | "/(public)/changelog/"
     | "/(public)/guestbook/"
     | "/(public)/profile/"
     | "/(public)/projects/"
@@ -482,6 +519,20 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof publicGuestbookIndexRouteImport;
       parentRoute: typeof publicLayoutRoute;
     };
+    "/(public)/changelog/": {
+      id: "/(public)/changelog/";
+      path: "/changelog";
+      fullPath: "/changelog/";
+      preLoaderRoute: typeof publicChangelogIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/bookmarks/": {
+      id: "/(public)/bookmarks/";
+      path: "/bookmarks";
+      fullPath: "/bookmarks/";
+      preLoaderRoute: typeof publicBookmarksIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
     "/(public)/blog/": {
       id: "/(public)/blog/";
       path: "/blog";
@@ -524,6 +575,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof publicProjectsProjectIdRouteImport;
       parentRoute: typeof publicLayoutRoute;
     };
+    "/(public)/bookmarks/$bookmarkId": {
+      id: "/(public)/bookmarks/$bookmarkId";
+      path: "/bookmarks/$bookmarkId";
+      fullPath: "/bookmarks/$bookmarkId";
+      preLoaderRoute: typeof publicBookmarksBookmarkIdRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
     "/(public)/blog/$articleId": {
       id: "/(public)/blog/$articleId";
       path: "/blog/$articleId";
@@ -564,11 +622,14 @@ interface publicLayoutRouteChildren {
   publicSplatRoute: typeof publicSplatRoute;
   publicIndexRoute: typeof publicIndexRoute;
   publicBlogArticleIdRoute: typeof publicBlogArticleIdRoute;
+  publicBookmarksBookmarkIdRoute: typeof publicBookmarksBookmarkIdRoute;
   publicProjectsProjectIdRoute: typeof publicProjectsProjectIdRoute;
   publicServicesServiceIdRoute: typeof publicServicesServiceIdRoute;
   publicSnippetsSnippetIdRoute: typeof publicSnippetsSnippetIdRoute;
   publicAboutIndexRoute: typeof publicAboutIndexRoute;
   publicBlogIndexRoute: typeof publicBlogIndexRoute;
+  publicBookmarksIndexRoute: typeof publicBookmarksIndexRoute;
+  publicChangelogIndexRoute: typeof publicChangelogIndexRoute;
   publicGuestbookIndexRoute: typeof publicGuestbookIndexRoute;
   publicProfileIndexRoute: typeof publicProfileIndexRoute;
   publicProjectsIndexRoute: typeof publicProjectsIndexRoute;
@@ -583,11 +644,14 @@ const publicLayoutRouteChildren: publicLayoutRouteChildren = {
   publicSplatRoute: publicSplatRoute,
   publicIndexRoute: publicIndexRoute,
   publicBlogArticleIdRoute: publicBlogArticleIdRoute,
+  publicBookmarksBookmarkIdRoute: publicBookmarksBookmarkIdRoute,
   publicProjectsProjectIdRoute: publicProjectsProjectIdRoute,
   publicServicesServiceIdRoute: publicServicesServiceIdRoute,
   publicSnippetsSnippetIdRoute: publicSnippetsSnippetIdRoute,
   publicAboutIndexRoute: publicAboutIndexRoute,
   publicBlogIndexRoute: publicBlogIndexRoute,
+  publicBookmarksIndexRoute: publicBookmarksIndexRoute,
+  publicChangelogIndexRoute: publicChangelogIndexRoute,
   publicGuestbookIndexRoute: publicGuestbookIndexRoute,
   publicProfileIndexRoute: publicProfileIndexRoute,
   publicProjectsIndexRoute: publicProjectsIndexRoute,
