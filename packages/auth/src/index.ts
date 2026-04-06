@@ -71,6 +71,7 @@ export function initAuth(options: InitAuthOptions) {
     socialProviders,
     onAPIError: {
       onError: handleAuthError,
+      errorURL: '/signin',
     },
     user: {
       deleteUser: {

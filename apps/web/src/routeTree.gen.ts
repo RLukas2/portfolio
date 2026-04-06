@@ -16,6 +16,7 @@ import { Route as authLayoutRouteImport } from "./routes/(auth)/layout";
 import { Route as publicIndexRouteImport } from "./routes/(public)/index";
 import { Route as publicSplatRouteImport } from "./routes/(public)/$$";
 import { Route as authSigninRouteImport } from "./routes/(auth)/signin";
+import { Route as authErrorRouteImport } from "./routes/(auth)/error";
 import { Route as ApiContactIndexRouteImport } from "./routes/api/contact/index";
 import { Route as ApiChatIndexRouteImport } from "./routes/api/chat/index";
 import { Route as ApiChangelogIndexRouteImport } from "./routes/api/changelog/index";
@@ -71,6 +72,11 @@ const publicSplatRoute = publicSplatRouteImport.update({
 const authSigninRoute = authSigninRouteImport.update({
   id: "/signin",
   path: "/signin",
+  getParentRoute: () => authLayoutRoute,
+} as any);
+const authErrorRoute = authErrorRouteImport.update({
+  id: "/error",
+  path: "/error",
   getParentRoute: () => authLayoutRoute,
 } as any);
 const ApiContactIndexRoute = ApiContactIndexRouteImport.update({
@@ -193,6 +199,7 @@ const ApiStatsGithubActivityRoute = ApiStatsGithubActivityRouteImport.update({
 export interface FileRoutesByFullPath {
   "/llms.txt": typeof LlmsDottxtRoute;
   "/sitemap.xml": typeof SitemapDotxmlRoute;
+  "/error": typeof authErrorRoute;
   "/signin": typeof authSigninRoute;
   "/$$": typeof publicSplatRoute;
   "/": typeof publicIndexRoute;
@@ -223,6 +230,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   "/llms.txt": typeof LlmsDottxtRoute;
   "/sitemap.xml": typeof SitemapDotxmlRoute;
+  "/error": typeof authErrorRoute;
   "/signin": typeof authSigninRoute;
   "/$$": typeof publicSplatRoute;
   "/": typeof publicIndexRoute;
@@ -256,6 +264,7 @@ export interface FileRoutesById {
   "/(public)": typeof publicLayoutRouteWithChildren;
   "/llms.txt": typeof LlmsDottxtRoute;
   "/sitemap.xml": typeof SitemapDotxmlRoute;
+  "/(auth)/error": typeof authErrorRoute;
   "/(auth)/signin": typeof authSigninRoute;
   "/(public)/$$": typeof publicSplatRoute;
   "/(public)/": typeof publicIndexRoute;
@@ -288,6 +297,7 @@ export interface FileRouteTypes {
   fullPaths:
     | "/llms.txt"
     | "/sitemap.xml"
+    | "/error"
     | "/signin"
     | "/$$"
     | "/"
@@ -318,6 +328,7 @@ export interface FileRouteTypes {
   to:
     | "/llms.txt"
     | "/sitemap.xml"
+    | "/error"
     | "/signin"
     | "/$$"
     | "/"
@@ -350,6 +361,7 @@ export interface FileRouteTypes {
     | "/(public)"
     | "/llms.txt"
     | "/sitemap.xml"
+    | "/(auth)/error"
     | "/(auth)/signin"
     | "/(public)/$$"
     | "/(public)/"
@@ -440,6 +452,13 @@ declare module "@tanstack/react-router" {
       path: "/signin";
       fullPath: "/signin";
       preLoaderRoute: typeof authSigninRouteImport;
+      parentRoute: typeof authLayoutRoute;
+    };
+    "/(auth)/error": {
+      id: "/(auth)/error";
+      path: "/error";
+      fullPath: "/error";
+      preLoaderRoute: typeof authErrorRouteImport;
       parentRoute: typeof authLayoutRoute;
     };
     "/api/contact/": {
@@ -607,10 +626,12 @@ declare module "@tanstack/react-router" {
 }
 
 interface authLayoutRouteChildren {
+  authErrorRoute: typeof authErrorRoute;
   authSigninRoute: typeof authSigninRoute;
 }
 
 const authLayoutRouteChildren: authLayoutRouteChildren = {
+  authErrorRoute: authErrorRoute,
   authSigninRoute: authSigninRoute,
 };
 
