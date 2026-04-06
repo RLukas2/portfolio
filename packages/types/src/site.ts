@@ -18,9 +18,11 @@ export interface SiteConfig {
 
   /** Optional Calendly integration */
   calendlyUrl?: string;
+  /** Website description */
   description: string;
   /** Hiring status for the author */
   hiringStatus?: 'off' | 'open' | 'hired';
+  /** Keywords used to describe the website */
   keywords: string;
 
   /** External links */

@@ -109,7 +109,7 @@ export async function getAll(
 }
 
 /**
- * Deletes a comment. Only the comment owner or an admin can delete.
+ * Deletes a comment and all its nested replies. Only the comment owner or an admin can delete.
  * Uses transaction to ensure consistency.
  * @throws {Error} If comment not found or requester lacks permission.
  */
@@ -128,6 +128,10 @@ export async function remove(db: DbClient, input: { id: string }, userId: string
         throw new Error('You are not allowed to delete this comment');
       }
 
+      // Delete child comments first (replies) to avoid foreign key constraint violation
+      await tx.delete(comments).where(eq(comments.parentId, input.id));
+
+      // Then delete the parent comment
       await tx.delete(comments).where(eq(comments.id, input.id));
     });
   } catch (error) {

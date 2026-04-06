@@ -22,6 +22,8 @@
     "auth:generate": "pnpm --filter @xbrk/auth generate",
     "db:push": "pnpm --filter @xbrk/db db:push",
     "db:studio": "pnpm --filter @xbrk/db db:studio",
+    "db:generate": "pnpm --filter @xbrk/db db:generate",
+    "db:migrate": "pnpm --filter @xbrk/db db:migrate",
     "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm run lint:ws",
     "ui-add": "pnpm --filter @xbrk/ui ui-add",

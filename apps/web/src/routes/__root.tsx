@@ -117,10 +117,10 @@ export const Route = createRootRouteWithContext<{
 
 /// === PostHog ===
 
-const VITE_POSTHOG_KEY = env.VITE_POSTHOG_KEY;
-const VITE_POSTHOG_HOST = env.VITE_POSTHOG_HOST;
-
 const initPostHog = createIsomorphicFn().client(() => {
+  const VITE_POSTHOG_KEY = env.VITE_POSTHOG_KEY;
+  const VITE_POSTHOG_HOST = env.VITE_POSTHOG_HOST;
+
   if (!(VITE_POSTHOG_KEY && VITE_POSTHOG_HOST)) {
     console.warn('PostHog is not initialized because VITE_POSTHOG_KEY or VITE_POSTHOG_HOST is not set');
 
@@ -129,10 +129,12 @@ const initPostHog = createIsomorphicFn().client(() => {
 
   posthog.init(VITE_POSTHOG_KEY, {
     api_host: VITE_POSTHOG_HOST,
-    defaults: '2025-11-30',
+    defaults: '2026-01-30',
     cookieless_mode: 'on_reject',
     disable_external_dependency_loading: true,
   });
+
+  posthog.capture('my_custom_event', { property: 'value' });
 });
 
 initPostHog();
