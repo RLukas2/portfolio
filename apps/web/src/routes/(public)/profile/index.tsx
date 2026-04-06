@@ -61,20 +61,20 @@ export const Route = createFileRoute('/(public)/profile/')({
   }),
 });
 
+const WHITESPACE_REGEX = /\s+/;
+
 const getInitials = (name: string) => {
-  return (
-    name
-      .trim()
-      // biome-ignore lint/performance/useTopLevelRegex: valid regex
-      .split(/\s+/)
-      .filter(Boolean)
-      .map((word) => word.charAt(0))
-      .join('')
-      .toUpperCase()
-  );
+  return name
+    .trim()
+    .split(WHITESPACE_REGEX)
+    .filter(Boolean)
+    .map((word) => word.charAt(0))
+    .join('')
+    .toUpperCase();
 };
 
 const AT_SYMBOL_REGEX = /^@/;
+const TWITTER_HANDLE_REGEX = /^[a-zA-Z0-9_]+$/;
 
 function ProfilePage() {
   const router = useRouter();
@@ -86,6 +86,10 @@ function ProfilePage() {
   const [editForm, setEditForm] = useState({
     name: user?.name || '',
     twitterHandle: user?.twitterHandle || '',
+  });
+  const [formErrors, setFormErrors] = useState({
+    name: '',
+    twitterHandle: '',
   });
 
   if (!user) {
@@ -100,7 +104,45 @@ function ProfilePage() {
     );
   }
 
+  const validateForm = () => {
+    const errors = { name: '', twitterHandle: '' };
+    let isValid = true;
+
+    // Name validation
+    if (!editForm.name.trim()) {
+      errors.name = 'Name is required';
+      isValid = false;
+    } else if (editForm.name.trim().length < 2) {
+      errors.name = 'Name must be at least 2 characters';
+      isValid = false;
+    } else if (editForm.name.trim().length > 100) {
+      errors.name = 'Name must be less than 100 characters';
+      isValid = false;
+    }
+
+    // Twitter handle validation
+    if (editForm.twitterHandle.trim()) {
+      if (editForm.twitterHandle.trim().length < 3) {
+        errors.twitterHandle = 'Twitter handle must be at least 3 characters';
+        isValid = false;
+      } else if (editForm.twitterHandle.trim().length > 15) {
+        errors.twitterHandle = 'Twitter handle must be less than 15 characters';
+        isValid = false;
+      } else if (!TWITTER_HANDLE_REGEX.test(editForm.twitterHandle.trim())) {
+        errors.twitterHandle = 'Twitter handle can only contain letters, numbers, and underscores';
+        isValid = false;
+      }
+    }
+
+    setFormErrors(errors);
+    return isValid;
+  };
+
   const handleEditSubmit = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       const newName = editForm.name.trim();
       const newTwitterHandle = editForm.twitterHandle.trim();
@@ -121,6 +163,7 @@ function ProfilePage() {
       await queryClient.invalidateQueries({ queryKey: ['user'] });
       await router.invalidate();
       toast.success('Profile updated successfully');
+      setFormErrors({ name: '', twitterHandle: '' });
     } catch (error) {
       console.error(error);
       toast.error('Failed to update profile');
@@ -269,47 +312,55 @@ function ProfilePage() {
                   <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
                     <Input
+                      aria-describedby={formErrors.name ? 'name-error' : undefined}
+                      aria-invalid={!!formErrors.name}
                       id="name"
-                      onChange={(e) =>
+                      onChange={(e) => {
                         setEditForm((prev) => ({
                           ...prev,
                           name: e.target.value,
-                        }))
-                      }
+                        }));
+                        setFormErrors((prev) => ({ ...prev, name: '' }));
+                      }}
                       placeholder="Enter your name"
                       value={editForm.name}
                     />
+                    {formErrors.name && (
+                      <p className="text-destructive text-sm" id="name-error" role="alert">
+                        {formErrors.name}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="twitterHandle">Twitter Handle</Label>
                     <Input
+                      aria-describedby={formErrors.twitterHandle ? 'twitter-error' : undefined}
+                      aria-invalid={!!formErrors.twitterHandle}
                       id="twitterHandle"
-                      onChange={(e) =>
+                      onChange={(e) => {
                         setEditForm((prev) => ({
                           ...prev,
                           twitterHandle: e.target.value.replace(AT_SYMBOL_REGEX, ''),
-                        }))
-                      }
+                        }));
+                        setFormErrors((prev) => ({ ...prev, twitterHandle: '' }));
+                      }}
                       placeholder="Enter your Twitter handle (without @)"
                       value={editForm.twitterHandle}
                     />
-                    <p className="text-muted-foreground text-xs">Enter your Twitter handle without the @ symbol</p>
+                    {formErrors.twitterHandle ? (
+                      <p className="text-destructive text-sm" id="twitter-error" role="alert">
+                        {formErrors.twitterHandle}
+                      </p>
+                    ) : (
+                      <p className="text-muted-foreground text-xs">Enter your Twitter handle without the @ symbol</p>
+                    )}
                   </div>
                 </div>
                 <DialogFooter>
                   <Button onClick={() => setIsEditing(false)} variant="outline">
                     Cancel
                   </Button>
-                  <Button
-                    disabled={
-                      editForm.name.trim().length === 0 ||
-                      (editForm.name.trim() === user.name.trim() &&
-                        editForm.twitterHandle.trim() === (user.twitterHandle || '').trim())
-                    }
-                    onClick={handleEditSubmit}
-                  >
-                    Save Changes
-                  </Button>
+                  <Button onClick={handleEditSubmit}>Save Changes</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
