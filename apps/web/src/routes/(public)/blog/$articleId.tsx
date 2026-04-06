@@ -194,7 +194,7 @@ function RouteComponent() {
               </div>
               <div className="inline-flex items-center gap-1.5 rounded-full border border-rose-200/50 bg-rose-50/50 px-3 py-1.5 text-rose-600 text-xs backdrop-blur-sm dark:border-rose-800/50 dark:bg-rose-950/30 dark:text-rose-400">
                 <Heart className="size-3.5" />
-                <span>{article.likes} likes</span>
+                <span>{article.likesCount} likes</span>
               </div>
               {article.comments && article.comments.length > 0 && (
                 <div className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
