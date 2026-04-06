@@ -400,3 +400,12 @@
   transform: rotate(3deg) translate(0px, -4px);
   @apply absolute right-0 block h-full w-24 opacity-100 shadow-[0_0_10px_hsl(var(--primary)),0_0_5px_hsl(var(--primary))];
 }
+
+/* ========================================
+   Revert for sonnar
+   ======================================== */
+[data-sonner-toast][data-styled="true"] {
+  padding: 16px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}

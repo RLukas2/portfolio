@@ -60,7 +60,7 @@ export default function CommentEditor({
     'aria-disabled:cursor-not-allowed aria-disabled:opacity-80',
   );
 
-  const tiptapClassName = cn('focus-visible:outline-none', editable && 'min-h-10 px-3 py-2');
+  const tiptapClassName = cn('focus-visible:outline-none', editable && 'min-h-20 px-3 py-2');
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: we don't want to re-create the editor on every render
   useEffect(() => {
