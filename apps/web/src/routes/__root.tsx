@@ -9,6 +9,7 @@ import posthog from 'posthog-js';
 import { CookieBanner } from '@/components/analytics/cookie-banner';
 import { type AuthQueryResult, authQueryOptions } from '@/lib/auth/queries';
 import { env } from '@/lib/env/client';
+import printCss from '@/print.css?url';
 import appCss from '@/style.css?url';
 
 export const Route = createRootRouteWithContext<{
@@ -48,6 +49,12 @@ export const Route = createRootRouteWithContext<{
         as: 'style',
         type: 'text/css',
       },
+      {
+        rel: 'stylesheet',
+        href: printCss,
+        media: 'print',
+        type: 'text/css',
+      },
       // Favicon links
       {
         rel: 'icon',
@@ -80,10 +87,20 @@ export const Route = createRootRouteWithContext<{
       {
         rel: 'preconnect',
         href: 'https://api.github.com',
+        crossOrigin: 'anonymous',
       },
       {
         rel: 'dns-prefetch',
         href: 'https://api.raindrop.io',
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://cdn.jsdelivr.net',
+        crossOrigin: 'anonymous',
       },
     ],
   }),
