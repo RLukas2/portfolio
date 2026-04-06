@@ -7,6 +7,7 @@ import { ThemeProvider, useTheme } from '@xbrk/shared/theme-provider';
 import { Toaster } from '@xbrk/ui/sonner';
 import posthog from 'posthog-js';
 import { CookieBanner } from '@/components/analytics/cookie-banner';
+import { RouteProgress } from '@/components/shared/route-progress';
 import { type AuthQueryResult, authQueryOptions } from '@/lib/auth/queries';
 import { env } from '@/lib/env/client';
 import printCss from '@/print.css?url';
@@ -149,6 +150,8 @@ function ShellComponent({ children }: { children: React.ReactNode }) {
 
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <PostHogProvider client={posthog}>
+          <RouteProgress />
+
           {children}
 
           <Toaster resolvedTheme={resolvedTheme} />
