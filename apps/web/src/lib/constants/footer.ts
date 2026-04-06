@@ -39,6 +39,10 @@ export const FOOTER_LINKS = [
         title: 'Uses',
         path: '/uses',
       },
+      {
+        title: 'Bookmarks',
+        path: '/bookmarks',
+      },
     ],
   },
   {
@@ -47,6 +51,10 @@ export const FOOTER_LINKS = [
       {
         title: 'Guestbook',
         path: '/guestbook',
+      },
+      {
+        title: 'Changelog',
+        path: '/changelog',
       },
     ],
   },

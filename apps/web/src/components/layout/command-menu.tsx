@@ -62,11 +62,11 @@ export default function CommandMenu({ ...props }: Readonly<DialogProps>) {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Rotate placeholder text every 3 seconds
+  // Rotate placeholder text every 10 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setPlaceholderIndex((prevIndex) => (prevIndex + 1) % PLACEHOLDER_MESSAGES.length);
-    }, 3000);
+    }, 10_000);
     return () => clearInterval(timer);
   }, []);
 
