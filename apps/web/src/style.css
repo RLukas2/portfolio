@@ -210,19 +210,6 @@
    BORDER & BACKGROUND BASE
    ======================================== */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: hsl(var(--border));
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
     @apply bg-background text-foreground;
   }
@@ -349,4 +336,67 @@
   .pulse-subtle {
     animation: pulse-subtle 2s ease-in-out infinite;
   }
+}
+
+/* ========================================
+   RDP 
+   ======================================== */
+.rdp-vhidden {
+  @apply hidden;
+}
+
+/* ========================================
+   Calendar for GitHub Analysis
+   ======================================== */
+.react-activity-calendar__calendar {
+  width: 100%;
+  height: 100%;
+}
+
+.react-activity-calendar {
+  width: 100% !important;
+}
+
+/* ========================================
+   Tiptap
+   ======================================== */
+.tiptap p.is-editor-empty:first-child::before {
+  float: left;
+  height: 0;
+  pointer-events: none;
+  content: attr(data-placeholder);
+  @apply text-muted-foreground;
+}
+
+/* ========================================
+   Steps components for styling MDX
+   ======================================== */
+.steps {
+  counter-reset: step;
+}
+
+.step:before {
+  content: counter(step);
+  counter-increment: step;
+  @apply absolute -left-[50px] flex h-9 w-9 items-center justify-center rounded-full border-4 border-background bg-muted text-center text-base font-medium;
+}
+
+.step {
+  @apply relative;
+}
+
+/* ========================================
+   NProgress Loading Bar
+   ======================================== */
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  @apply fixed top-0 left-0 z-[9999] h-0.5 w-full bg-primary;
+}
+
+#nprogress .peg {
+  transform: rotate(3deg) translate(0px, -4px);
+  @apply absolute right-0 block h-full w-24 opacity-100 shadow-[0_0_10px_hsl(var(--primary)),0_0_5px_hsl(var(--primary))];
 }
