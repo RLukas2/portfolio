@@ -7,8 +7,11 @@
 @import "@fontsource-variable/roboto-mono";
 @import "@fontsource/cal-sans";
 
+/* KaTeX styles for math rendering */
+@import "../../../packages/md/node_modules/katex/dist/katex.min.css";
+
 @source "../../../packages/ui/src/*.{ts,tsx}";
-@source "../../../packages/mdx/src/*.{ts,tsx}";
+@source "../../../packages/md/src/*.{ts,tsx}";
 @source "../../../packages/shared/src/*.{ts,tsx}";
 
 @custom-variant dark (&:where(.dark, .dark *));
