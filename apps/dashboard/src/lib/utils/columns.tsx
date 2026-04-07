@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { type ColumnDef } from '@tanstack/react-table';
 import { Checkbox } from '@xbrk/ui/checkbox';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
@@ -9,7 +10,18 @@ export interface BaseItemType {
   title: string;
 }
 
-export function createCommonColumns<T extends BaseItemType>(entityName: string): ColumnDef<T>[] {
+interface CreateCommonColumnsOptions {
+  /**
+   * The base path for editing items (e.g., '/blog', '/projects')
+   * If provided, the title column will be clickable and navigate to the edit page
+   */
+  editBasePath?: string;
+}
+
+export function createCommonColumns<T extends BaseItemType>(
+  entityName: string,
+  options?: CreateCommonColumnsOptions,
+): ColumnDef<T>[] {
   return [
     {
       id: 'select',
@@ -34,6 +46,18 @@ export function createCommonColumns<T extends BaseItemType>(entityName: string):
     {
       accessorKey: 'title',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
+      cell: ({ row }) =>
+        options?.editBasePath ? (
+          <Link
+            className="font-medium text-primary hover:underline"
+            // @ts-expect-error - Dynamic route construction
+            to={`${options.editBasePath}/${row.original.id}/edit`}
+          >
+            {row.original.title}
+          </Link>
+        ) : (
+          row.original.title
+        ),
       filterFn: 'includesString',
     },
     {
