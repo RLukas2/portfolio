@@ -1,5 +1,5 @@
 import { ClientOnly } from '@tanstack/react-router';
-import { CustomMDX } from '@xbrk/mdx';
+import { Markdown } from '@xbrk/md';
 import { Spinner } from '@xbrk/ui/spinner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@xbrk/ui/tabs';
 import { Textarea } from '@xbrk/ui/textarea';
@@ -48,7 +48,7 @@ export function FormMDXEditor({ field, label, placeholder, className }: Readonly
               <ClientOnly>
                 <Suspense fallback={<Spinner className="size-6" />}>
                   <article className="prose prose-slate dark:prose-invert !max-w-none">
-                    <CustomMDX source={field.state.value} />
+                    <Markdown source={field.state.value} />
                   </article>
                 </Suspense>
               </ClientOnly>

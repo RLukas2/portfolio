@@ -16,7 +16,7 @@ const CopyButton = ({ className, value, withMeta = false, ...props }: CopyButton
     <div className={cn('absolute top-1 right-2', withMeta && 'top-16')}>
       <Button
         {...props}
-        className={cn('relative z-10 size-7', className)}
+        className={cn('relative z-10 size-7 cursor-pointer', className)}
         onClick={() => copyToClipboard(value)}
         size="icon"
         variant="ghost"

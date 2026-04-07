@@ -8,6 +8,9 @@
 @import "@fontsource-variable/roboto-mono";
 @import "@fontsource/cal-sans";
 
+/* KaTeX styles for math rendering */
+@import "../../packages/md/node_modules/katex/dist/katex.min.css";
+
 @plugin "@tailwindcss/typography";
 
 @source "../../../packages/ui/src/*.{ts,tsx}";

@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import { CustomMDX } from '@xbrk/mdx';
+import { Markdown } from '@xbrk/md';
 import { NotFound } from '@xbrk/ui/not-found';
 import { Spinner } from '@xbrk/ui/spinner';
 import { formatDate } from '@xbrk/utils';
@@ -73,7 +73,7 @@ function RouteComponent() {
 
         <Suspense fallback={<Spinner className="size-6" />}>
           <article className="prose prose-slate dark:prose-invert !max-w-none">
-            <CustomMDX source={snippet.data?.code ?? ''} />
+            <Markdown source={snippet.data?.code ?? ''} />
           </article>
         </Suspense>
       </div>

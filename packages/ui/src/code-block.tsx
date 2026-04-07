@@ -35,7 +35,7 @@ export default function CodeBlock({
   return (
     <figure
       className={cn(
-        'not-prose group relative my-6 overflow-hidden rounded-lg border bg-secondary/50 text-sm',
+        'not-prose group [&_pre]:!bg-transparent [&_code]:!bg-transparent relative my-6 overflow-hidden rounded-lg border bg-secondary/50 text-sm',
         figureClassName,
       )}
     >
@@ -52,7 +52,7 @@ export default function CodeBlock({
       )}
 
       <ScrollArea>
-        <pre className={cn('p-4 text-[13px]', className)} ref={textInput} {...rest}>
+        <pre className={cn('!bg-transparent p-4 text-[13px]', className)} ref={textInput} {...rest}>
           {children}
         </pre>
         <ScrollBar orientation="horizontal" />

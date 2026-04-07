@@ -42,7 +42,7 @@
     "@xbrk/auth": "workspace:*",
     "@xbrk/config": "workspace:*",
     "@xbrk/db": "workspace:*",
-    "@xbrk/mdx": "workspace:*",
+    "@xbrk/md": "workspace:*",
     "@xbrk/shared": "workspace:*",
     "@xbrk/types": "workspace:*",
     "@xbrk/ui": "workspace:*",
