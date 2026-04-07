@@ -2,18 +2,23 @@ import { Image } from '@unpic/react';
 import { cn } from '@xbrk/ui';
 import Callout from '@xbrk/ui/callout';
 import { File, Files, Folder } from '@xbrk/ui/files';
+import type { Components } from 'hast-util-to-jsx-runtime';
 import {
   type AnchorHTMLAttributes,
   type ComponentProps,
   type ComponentPropsWithoutRef,
-  type ComponentType,
   type HTMLAttributes,
   type ImgHTMLAttributes,
   lazy,
 } from 'react';
 
-// biome-ignore lint/suspicious/noExplicitAny: MDX components need flexible typing
-export const components: Record<string, ComponentType<any> | undefined> = {
+/**
+ * Custom React components for markdown elements.
+ * These override the default HTML elements with styled versions.
+ *
+ * Type-safe using Components from hast-util-to-jsx-runtime.
+ */
+export const components: Components = {
   h1: ({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
     <h1 className={cn('mt-2 scroll-m-20 font-bold text-4xl tracking-tight', className)} {...props} />
   ),
@@ -73,7 +78,7 @@ export const components: Record<string, ComponentType<any> | undefined> = {
   hr: ({ ...props }) => <hr className="my-4 md:my-8" {...props} />,
   table: ({ className, ...props }: HTMLAttributes<HTMLTableElement>) => (
     <div className="my-6 w-full overflow-y-auto">
-      <table className={cn('w-full', className)} {...props} /> {/* NOSONAR */}
+      <table className={cn('w-full', className)} {...props} />
     </div>
   ),
   tr: ({ className, ...props }: HTMLAttributes<HTMLTableRowElement>) => (
@@ -95,8 +100,9 @@ export const components: Record<string, ComponentType<any> | undefined> = {
     />
   ),
   pre: lazy(() => import('@xbrk/ui/code-block')),
-  figcaption: lazy(() => import('@xbrk/ui/code-block-header')),
-  code: ({ className, ...props }: ComponentPropsWithoutRef<'code'>) => <code {...props} />,
+  code: ({ className, ...props }: ComponentPropsWithoutRef<'code'>) => (
+    <code className={cn('relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm', className)} {...props} />
+  ),
   steps: ({ ...props }) => <div className="steps mb-12 ml-8 border-l pl-8" {...props} />,
   step: ({ className, ...props }: ComponentProps<'h3'>) => (
     <h3 className={cn('step mt-8 scroll-m-20 font-semibold text-lg tracking-tight', className)} {...props} />

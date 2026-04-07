@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import { CustomMDX } from '@xbrk/mdx';
+import { Markdown } from '@xbrk/md';
 import ProjectLink from '@xbrk/shared/link';
 import { STACKS } from '@xbrk/shared/stack';
 import Icon from '@xbrk/ui/icon';
@@ -221,7 +221,7 @@ function RouteComponent() {
           >
             <Suspense fallback={<Spinner className="size-6" />}>
               <div className="prose prose-slate dark:prose-invert max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
-                <CustomMDX source={content} />
+                <Markdown source={content} />
               </div>
             </Suspense>
           </motion.div>

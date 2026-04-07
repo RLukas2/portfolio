@@ -1,4 +1,4 @@
-import { CustomMDX } from '@xbrk/mdx';
+import { Markdown } from '@xbrk/md';
 import type { ServiceType } from '@xbrk/types';
 import { Spinner } from '@xbrk/ui/spinner';
 import ZoomImage from '@xbrk/ui/zoom-image';
@@ -40,7 +40,7 @@ export default function ServiceContent({ service }: Readonly<ServiceContentProps
         <div className="mt-5 space-y-6 leading-[1.8] dark:text-neutral-300">
           <Suspense fallback={<Spinner className="size-6" />}>
             <article className="prose prose-slate dark:prose-invert !max-w-none">
-              <CustomMDX source={content} />
+              <Markdown source={content} />
             </article>
           </Suspense>
         </div>

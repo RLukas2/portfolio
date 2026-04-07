@@ -15,7 +15,7 @@ const ArticleAuthor = ({ article }: ArticleAuthorProps) => {
   const hasTwitterHandle = article.author.twitterHandle && article.author.twitterHandle.trim() !== '';
 
   return (
-    <div className="mt-4 flex items-center gap-3 sm:gap-4">
+    <div className="my-4 flex items-center gap-3 sm:gap-4">
       {article.author.image && (
         <LazyImage
           alt={article.author.name}

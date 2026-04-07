@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import { CustomMDX } from '@xbrk/mdx';
+import { Markdown } from '@xbrk/md';
 import type { TOC } from '@xbrk/types';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import { motion } from 'framer-motion';
@@ -60,7 +60,7 @@ function RouteComponent() {
                 </div>
               }
             >
-              <CustomMDX source={content} />
+              <Markdown source={content} />
             </Suspense>
           </div>
         </div>
