@@ -4,7 +4,7 @@ import { createCommonColumns, createToggleColumn } from '@/lib/utils/columns';
 import { Actions } from './actions';
 
 export const projectColumns: ColumnDef<ProjectType>[] = [
-  ...createCommonColumns<ProjectType>('projects'),
+  ...createCommonColumns<ProjectType>('projects', { editBasePath: '/projects' }),
   createToggleColumn<ProjectType>('isFeatured', 'Featured'),
   {
     id: 'actions',

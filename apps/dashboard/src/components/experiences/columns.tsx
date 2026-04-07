@@ -5,7 +5,7 @@ import { DataTableColumnHeader } from '../data-table/data-table-column-header';
 import { Actions } from './actions';
 
 export const experienceColumns: ColumnDef<ExperienceType>[] = [
-  ...createCommonColumns<ExperienceType>('experiences'),
+  ...createCommonColumns<ExperienceType>('experiences', { editBasePath: '/experiences' }),
   {
     accessorKey: 'institution',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Institution" />,

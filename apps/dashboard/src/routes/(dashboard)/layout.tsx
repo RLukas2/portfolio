@@ -37,6 +37,9 @@ interface BreadcrumbCrumb {
   label: string;
 }
 
+// UUID pattern for filtering breadcrumbs
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 function generateBreadcrumbs(pathname: string): BreadcrumbCrumb[] {
   const breadcrumbs: BreadcrumbCrumb[] = [{ label: 'Home', href: '/' }];
 
@@ -58,7 +61,7 @@ function generateBreadcrumbs(pathname: string): BreadcrumbCrumb[] {
     edit: 'Edit',
   };
 
-  let currentPath = '/';
+  let currentPath = '';
 
   for (let i = 0; i < segments.length; i++) {
     const segment = segments[i];
@@ -66,19 +69,22 @@ function generateBreadcrumbs(pathname: string): BreadcrumbCrumb[] {
       continue;
     }
 
-    currentPath += `/${segment}`;
-
-    // Skip parameter segments (like $articleId)
-    if (segment.startsWith('$')) {
+    // Skip UUID segments - they're not useful in breadcrumbs
+    // UUIDs are typically 36 characters with dashes
+    const isUUID = UUID_PATTERN.test(segment);
+    if (isUUID) {
       continue;
     }
 
-    // Check if it's an action (create/edit)
+    currentPath += `/${segment}`;
+
+    // Check if it's an action (create/edit) - these should not be clickable
     if (segment === 'create' || segment === 'edit') {
       breadcrumbs.push({
         label: segmentNames[segment] || segment,
       });
     } else {
+      // For resource lists (blog, projects, etc.), make them clickable
       breadcrumbs.push({
         label: segmentNames[segment] || segment.charAt(0).toUpperCase() + segment.slice(1),
         href: i === segments.length - 1 ? undefined : currentPath,
