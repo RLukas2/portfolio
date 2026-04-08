@@ -51,3 +51,45 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
 
   return next({ context: { user: session.user } });
 });
+
+/**
+ * Admin Authorization Middleware
+ *
+ * Enforces admin role requirement on server functions and API routes.
+ * Validates that the authenticated user has admin privileges.
+ *
+ * IMPORTANT: This middleware MUST be used AFTER authMiddleware in the chain.
+ * authMiddleware provides the user context that this middleware validates.
+ *
+ * If user is not admin:
+ * - Sets HTTP 403 status
+ * - Throws an error to halt execution
+ *
+ * @example
+ * ```ts
+ * export const $deleteProject = createServerFn({ method: 'POST' })
+ *   .middleware([sentryMiddleware, dbMiddleware, authMiddleware, adminMiddleware])
+ *   .handler((ctx) => {
+ *     // Only admins can reach here
+ *   });
+ * ```
+ *
+ * @throws {Error} Throws "Forbidden: Admin access required" if user is not admin
+ * @see {@link https://tanstack.com/start/latest/docs/framework/react/middleware TanStack Middleware Docs}
+ */
+export const adminMiddleware = createMiddleware().server(({ next, context }) => {
+  // Type assertion: context.user should exist from authMiddleware
+  const user = (context as unknown as Record<string, unknown>).user as { role?: string } | undefined;
+
+  if (!user) {
+    setResponseStatus(401);
+    throw new Error('Unauthorized: No user in context');
+  }
+
+  if (user.role !== 'admin') {
+    setResponseStatus(403);
+    throw new Error('Forbidden: Admin access required');
+  }
+
+  return next({ context });
+});

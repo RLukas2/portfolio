@@ -2,7 +2,7 @@ import { chat, toServerSentEventsResponse } from '@tanstack/ai';
 import { openaiText } from '@tanstack/ai-openai';
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
-import { authMiddleware } from '@/lib/auth/middleware';
+import { adminMiddleware, authMiddleware } from '@/lib/auth/middleware';
 
 /**
  * AI assistance types for blog post creation
@@ -131,7 +131,7 @@ function buildUserPrompt(type: AssistType, context: AssistContext): string {
  */
 export const Route = createFileRoute('/api/ai/blog-assist/')({
   server: {
-    middleware: [authMiddleware],
+    middleware: [authMiddleware, adminMiddleware],
     handlers: {
       POST: async ({ request }) => {
         try {
