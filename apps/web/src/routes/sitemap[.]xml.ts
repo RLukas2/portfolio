@@ -22,16 +22,26 @@ async function generateSitemap(): Promise<string> {
     serviceService.getAllPublic(db),
   ]);
 
+  const now = new Date().toISOString();
+
+  // Static pages sorted by priority
   const staticPages: SitemapItem[] = [
-    { url: '/', priority: 1.0, changefreq: 'daily' },
-    { url: '/about', priority: 1.0, changefreq: 'daily' },
-    { url: '/projects', priority: 1.0, changefreq: 'daily' },
-    { url: '/blog', priority: 1.0, changefreq: 'daily' },
-    { url: '/bookmarks', priority: 1.0, changefreq: 'daily' },
-    { url: '/stats', priority: 1.0, changefreq: 'daily' },
-    { url: '/snippets', priority: 1.0, changefreq: 'daily' },
-    { url: '/uses', priority: 1.0, changefreq: 'daily' },
-    { url: '/guestbook', priority: 1.0, changefreq: 'daily' },
+    // High priority pages (1.0)
+    { url: '/', priority: 1.0, changefreq: 'daily', lastmod: now },
+    { url: '/about', priority: 1.0, changefreq: 'weekly', lastmod: now },
+    { url: '/blog', priority: 1.0, changefreq: 'daily', lastmod: now },
+    { url: '/projects', priority: 1.0, changefreq: 'weekly', lastmod: now },
+    { url: '/services', priority: 1.0, changefreq: 'weekly', lastmod: now },
+    { url: '/snippets', priority: 1.0, changefreq: 'weekly', lastmod: now },
+    // Medium priority pages (0.7-0.9)
+    { url: '/resume', priority: 0.9, changefreq: 'monthly', lastmod: now },
+    { url: '/uses', priority: 0.8, changefreq: 'monthly', lastmod: now },
+    { url: '/stats', priority: 0.7, changefreq: 'daily', lastmod: now },
+    { url: '/bookmarks', priority: 0.7, changefreq: 'weekly', lastmod: now },
+    { url: '/guestbook', priority: 0.7, changefreq: 'weekly', lastmod: now },
+    // Lower priority pages (0.5-0.6)
+    { url: '/changelog', priority: 0.6, changefreq: 'weekly', lastmod: now },
+    { url: '/profile', priority: 0.5, changefreq: 'monthly', lastmod: now },
   ];
 
   const projectPages: SitemapItem[] = projects.map((project) => ({
@@ -84,8 +94,11 @@ export const Route = createFileRoute('/sitemap.xml')({
             },
           });
         } catch (error) {
-          console.error('Error generating sitemap:', error);
-          return new Response('Internal Server Error', { status: 500 });
+          console.error('Error generating sitemap:', error instanceof Error ? error.message : error);
+          return new Response('Error generating sitemap', {
+            status: 500,
+            headers: { 'Content-Type': 'text/plain' },
+          });
         }
       },
     },
