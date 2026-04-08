@@ -28,7 +28,7 @@ if (dsn) {
       debug: env.NODE_ENV === 'development',
 
       // Trace propagation targets
-      tracePropagationTargets: ['localhost', /^https:\/\/cms\.naurislinde\.dev\//, /^https:\/\/.*\.vercel\.app\//],
+      tracePropagationTargets: ['localhost', /^https:\/\/cms\.xbrk\.dev\//, /^https:\/\/.*\.vercel\.app\//],
     });
 
     console.log('[Sentry] Server initialized successfully');

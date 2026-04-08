@@ -16,7 +16,7 @@ import { getGithubStats } from '@/lib/integrations/github';
  * GET /api/stats/github
  * Response:
  * {
- *   "user": { "login": "fazers", "name": "Nauris Linde", ... },
+ *   "user": { "login": "rlukas2", "name": "Tuan Ngo-Hoang", ... },
  *   "repos": [{ "name": "repo1", "stars": 10, ... }],
  *   "starsCount": 42
  * }

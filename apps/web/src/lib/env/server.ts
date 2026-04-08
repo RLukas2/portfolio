@@ -43,7 +43,7 @@ export const env = createEnv({
     // --- GitHub integration ---
     // Used for fetching public stats and contribution graph.
     // GITHUB_ACCESS_TOKEN is optional but recommended to avoid rate limiting.
-    GITHUB_USERNAME: z.string().min(1).default('fazers'),
+    GITHUB_USERNAME: z.string().min(1).default('rlukas2'),
     // Note: GITHUB_ACCESS_TOKEN is declared in authEnv() — no need to redeclare here.
 
     // --- Bookmarks (Raindrop.io) ---

@@ -18,7 +18,7 @@ const DEFAULT_PORT = 3001 as const;
  * @example
  * ```ts
  * const url = getBaseUrl();
- * // Production: "https://cms.naurislinde.dev"
+ * // Production: "https://cms.xbrk.dev"
  * // Development: "http://localhost:3001"
  * ```
  */
