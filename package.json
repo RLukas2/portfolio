@@ -28,7 +28,8 @@
     "postinstall": "pnpm run lint:ws",
     "ui-add": "pnpm --filter @xbrk/ui ui-add",
     "deps": "pnpm dlx taze@latest latest -Iwr",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
     "typecheck": "turbo run typecheck",
     "prepare": "husky"
   },

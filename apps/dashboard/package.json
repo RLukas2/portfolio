@@ -7,7 +7,9 @@
     "dev": "vite dev --port 3002",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -63,12 +65,15 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/ui": "catalog:",
     "@xbrk/tailwind": "workspace:*",
     "@xbrk/tsconfig": "workspace:*",
     "babel-plugin-react-compiler": "^1.0.0",
+    "happy-dom": "catalog:",
     "nitro": "3.0.260311-beta",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vitest": "catalog:"
   }
 }
