@@ -4,16 +4,15 @@ import { Input } from '@xbrk/ui/input';
 import { Textarea } from '@xbrk/ui/textarea';
 import { Send } from 'lucide-react';
 import { toast } from 'sonner';
-import { contactSchema } from '@/lib/validators';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const ContactForm = ({ onMessageSent }: { onMessageSent?: () => void }) => {
   const form = useAppForm({
     defaultValues: {
       email: '',
       message: '',
-    },
-    validators: {
-      onChange: contactSchema,
+      website: '', // Honeypot field - not validated on client
     },
     onSubmit: async (values) => {
       try {
@@ -25,18 +24,21 @@ export const ContactForm = ({ onMessageSent }: { onMessageSent?: () => void }) =
           body: JSON.stringify({
             email: values.value.email,
             message: values.value.message,
+            website: values.value.website, // Include honeypot
           }),
         });
 
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Network response was not ok');
         }
 
         toast.success('Message sent successfully!');
         form.reset();
         onMessageSent?.();
-      } catch {
-        toast.error('Something went wrong. Please try again.');
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Something went wrong. Please try again.';
+        toast.error(message);
       }
     },
   });
@@ -51,7 +53,20 @@ export const ContactForm = ({ onMessageSent }: { onMessageSent?: () => void }) =
           form.handleSubmit();
         }}
       >
-        <form.AppField name="email">
+        <form.AppField
+          name="email"
+          validators={{
+            onChange: ({ value }) => {
+              if (!value) {
+                return 'Email is required';
+              }
+              if (!EMAIL_REGEX.test(value)) {
+                return 'Invalid email address';
+              }
+              return undefined;
+            },
+          }}
+        >
           {(field) => (
             <field.FormItem>
               <field.FormLabel>Email</field.FormLabel>
@@ -70,7 +85,24 @@ export const ContactForm = ({ onMessageSent }: { onMessageSent?: () => void }) =
           )}
         </form.AppField>
 
-        <form.AppField name="message">
+        <form.AppField
+          name="message"
+          validators={{
+            onChange: ({ value }) => {
+              const trimmed = value.trim();
+              if (!trimmed) {
+                return 'Message is required';
+              }
+              if (trimmed.length < 2) {
+                return 'Message must be at least 2 characters';
+              }
+              if (trimmed.length > 1000) {
+                return 'Message must be less than 1000 characters';
+              }
+              return undefined;
+            },
+          }}
+        >
           {(field) => (
             <field.FormItem>
               <field.FormLabel>Message</field.FormLabel>
@@ -85,6 +117,21 @@ export const ContactForm = ({ onMessageSent }: { onMessageSent?: () => void }) =
               </field.FormControl>
               <field.FormMessage />
             </field.FormItem>
+          )}
+        </form.AppField>
+
+        {/* Honeypot field - hidden from users, bots will fill it */}
+        <form.AppField name="website">
+          {(field) => (
+            <div aria-hidden="true" className="hidden">
+              <Input
+                autoComplete="off"
+                onChange={(e) => field.handleChange(e.target.value)}
+                tabIndex={-1}
+                type="text"
+                value={field.state.value}
+              />
+            </div>
           )}
         </form.AppField>
 
