@@ -145,7 +145,7 @@ export const ReasoningContent = memo(({ className, children, ...props }: Reasoni
     )}
     {...props}
   >
-    <Response className="grid gap-2">{children}</Response>
+    <Response className="grid gap-2" source={children} />
   </CollapsibleContent>
 ));
 

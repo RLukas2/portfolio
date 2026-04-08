@@ -44,9 +44,8 @@ export const ChatMessage = memo(function ChatMessageComponent({
                     // biome-ignore lint/suspicious/noArrayIndexKey: ignored using `--suppress`
                     i
                   }`}
-                >
-                  {part.content}
-                </Response>
+                  source={part.content}
+                />
               );
             case 'thinking':
               return (
