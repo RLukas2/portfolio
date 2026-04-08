@@ -18,7 +18,9 @@
       "!**/.tanstack",
       "!**/.nitro",
       "!**/.output",
-      "!**/.cache"
+      "!**/.cache",
+      "!tooling/tailwind/postcss.config.mjs",
+      "!apps/web/public/pdf.worker.mjs"
     ]
   },
   "assist": {
