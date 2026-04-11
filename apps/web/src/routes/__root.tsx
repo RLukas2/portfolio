@@ -84,6 +84,25 @@ export const Route = createRootRouteWithContext<{
         rel: 'manifest',
         href: '/site.webmanifest',
       },
+      // RSS/Atom Feeds
+      {
+        rel: 'alternate',
+        type: 'application/rss+xml',
+        title: 'RSS Feed',
+        href: '/rss.xml',
+      },
+      {
+        rel: 'alternate',
+        type: 'application/atom+xml',
+        title: 'Atom Feed',
+        href: '/atom.xml',
+      },
+      {
+        rel: 'alternate',
+        type: 'application/feed+json',
+        title: 'JSON Feed',
+        href: '/feed.json',
+      },
       // Preconnect to external domains for better performance
       {
         rel: 'preconnect',
