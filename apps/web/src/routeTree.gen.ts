@@ -10,7 +10,10 @@
 
 import { Route as rootRouteImport } from "./routes/__root";
 import { Route as SitemapDotxmlRouteImport } from "./routes/sitemap[.]xml";
+import { Route as RssDotxmlRouteImport } from "./routes/rss[.]xml";
 import { Route as LlmsDottxtRouteImport } from "./routes/llms[.]txt";
+import { Route as FeedDotjsonRouteImport } from "./routes/feed[.]json";
+import { Route as AtomDotxmlRouteImport } from "./routes/atom[.]xml";
 import { Route as publicLayoutRouteImport } from "./routes/(public)/layout";
 import { Route as authLayoutRouteImport } from "./routes/(auth)/layout";
 import { Route as publicIndexRouteImport } from "./routes/(public)/index";
@@ -21,6 +24,7 @@ import { Route as ApiContactIndexRouteImport } from "./routes/api/contact/index"
 import { Route as ApiChatIndexRouteImport } from "./routes/api/chat/index";
 import { Route as ApiChangelogIndexRouteImport } from "./routes/api/changelog/index";
 import { Route as publicUsesIndexRouteImport } from "./routes/(public)/uses/index";
+import { Route as publicTestIndexRouteImport } from "./routes/(public)/test/index";
 import { Route as publicStatsIndexRouteImport } from "./routes/(public)/stats/index";
 import { Route as publicSnippetsIndexRouteImport } from "./routes/(public)/snippets/index";
 import { Route as publicServicesIndexRouteImport } from "./routes/(public)/services/index";
@@ -46,9 +50,24 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: "/sitemap.xml",
   getParentRoute: () => rootRouteImport,
 } as any);
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: "/rss.xml",
+  path: "/rss.xml",
+  getParentRoute: () => rootRouteImport,
+} as any);
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   id: "/llms.txt",
   path: "/llms.txt",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const FeedDotjsonRoute = FeedDotjsonRouteImport.update({
+  id: "/feed.json",
+  path: "/feed.json",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const AtomDotxmlRoute = AtomDotxmlRouteImport.update({
+  id: "/atom.xml",
+  path: "/atom.xml",
   getParentRoute: () => rootRouteImport,
 } as any);
 const publicLayoutRoute = publicLayoutRouteImport.update({
@@ -97,6 +116,11 @@ const ApiChangelogIndexRoute = ApiChangelogIndexRouteImport.update({
 const publicUsesIndexRoute = publicUsesIndexRouteImport.update({
   id: "/uses/",
   path: "/uses/",
+  getParentRoute: () => publicLayoutRoute,
+} as any);
+const publicTestIndexRoute = publicTestIndexRouteImport.update({
+  id: "/test/",
+  path: "/test/",
   getParentRoute: () => publicLayoutRoute,
 } as any);
 const publicStatsIndexRoute = publicStatsIndexRouteImport.update({
@@ -197,7 +221,10 @@ const ApiStatsGithubActivityRoute = ApiStatsGithubActivityRouteImport.update({
 } as any);
 
 export interface FileRoutesByFullPath {
+  "/atom.xml": typeof AtomDotxmlRoute;
+  "/feed.json": typeof FeedDotjsonRoute;
   "/llms.txt": typeof LlmsDottxtRoute;
+  "/rss.xml": typeof RssDotxmlRoute;
   "/sitemap.xml": typeof SitemapDotxmlRoute;
   "/error": typeof authErrorRoute;
   "/signin": typeof authSigninRoute;
@@ -220,6 +247,7 @@ export interface FileRoutesByFullPath {
   "/services/": typeof publicServicesIndexRoute;
   "/snippets/": typeof publicSnippetsIndexRoute;
   "/stats/": typeof publicStatsIndexRoute;
+  "/test/": typeof publicTestIndexRoute;
   "/uses/": typeof publicUsesIndexRoute;
   "/api/changelog/": typeof ApiChangelogIndexRoute;
   "/api/chat/": typeof ApiChatIndexRoute;
@@ -228,7 +256,10 @@ export interface FileRoutesByFullPath {
   "/api/stats/github/": typeof ApiStatsGithubIndexRoute;
 }
 export interface FileRoutesByTo {
+  "/atom.xml": typeof AtomDotxmlRoute;
+  "/feed.json": typeof FeedDotjsonRoute;
   "/llms.txt": typeof LlmsDottxtRoute;
+  "/rss.xml": typeof RssDotxmlRoute;
   "/sitemap.xml": typeof SitemapDotxmlRoute;
   "/error": typeof authErrorRoute;
   "/signin": typeof authSigninRoute;
@@ -251,6 +282,7 @@ export interface FileRoutesByTo {
   "/services": typeof publicServicesIndexRoute;
   "/snippets": typeof publicSnippetsIndexRoute;
   "/stats": typeof publicStatsIndexRoute;
+  "/test": typeof publicTestIndexRoute;
   "/uses": typeof publicUsesIndexRoute;
   "/api/changelog": typeof ApiChangelogIndexRoute;
   "/api/chat": typeof ApiChatIndexRoute;
@@ -262,7 +294,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/(auth)": typeof authLayoutRouteWithChildren;
   "/(public)": typeof publicLayoutRouteWithChildren;
+  "/atom.xml": typeof AtomDotxmlRoute;
+  "/feed.json": typeof FeedDotjsonRoute;
   "/llms.txt": typeof LlmsDottxtRoute;
+  "/rss.xml": typeof RssDotxmlRoute;
   "/sitemap.xml": typeof SitemapDotxmlRoute;
   "/(auth)/error": typeof authErrorRoute;
   "/(auth)/signin": typeof authSigninRoute;
@@ -285,6 +320,7 @@ export interface FileRoutesById {
   "/(public)/services/": typeof publicServicesIndexRoute;
   "/(public)/snippets/": typeof publicSnippetsIndexRoute;
   "/(public)/stats/": typeof publicStatsIndexRoute;
+  "/(public)/test/": typeof publicTestIndexRoute;
   "/(public)/uses/": typeof publicUsesIndexRoute;
   "/api/changelog/": typeof ApiChangelogIndexRoute;
   "/api/chat/": typeof ApiChatIndexRoute;
@@ -295,7 +331,10 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
+    | "/atom.xml"
+    | "/feed.json"
     | "/llms.txt"
+    | "/rss.xml"
     | "/sitemap.xml"
     | "/error"
     | "/signin"
@@ -318,6 +357,7 @@ export interface FileRouteTypes {
     | "/services/"
     | "/snippets/"
     | "/stats/"
+    | "/test/"
     | "/uses/"
     | "/api/changelog/"
     | "/api/chat/"
@@ -326,7 +366,10 @@ export interface FileRouteTypes {
     | "/api/stats/github/";
   fileRoutesByTo: FileRoutesByTo;
   to:
+    | "/atom.xml"
+    | "/feed.json"
     | "/llms.txt"
+    | "/rss.xml"
     | "/sitemap.xml"
     | "/error"
     | "/signin"
@@ -349,6 +392,7 @@ export interface FileRouteTypes {
     | "/services"
     | "/snippets"
     | "/stats"
+    | "/test"
     | "/uses"
     | "/api/changelog"
     | "/api/chat"
@@ -359,7 +403,10 @@ export interface FileRouteTypes {
     | "__root__"
     | "/(auth)"
     | "/(public)"
+    | "/atom.xml"
+    | "/feed.json"
     | "/llms.txt"
+    | "/rss.xml"
     | "/sitemap.xml"
     | "/(auth)/error"
     | "/(auth)/signin"
@@ -382,6 +429,7 @@ export interface FileRouteTypes {
     | "/(public)/services/"
     | "/(public)/snippets/"
     | "/(public)/stats/"
+    | "/(public)/test/"
     | "/(public)/uses/"
     | "/api/changelog/"
     | "/api/chat/"
@@ -393,7 +441,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   authLayoutRoute: typeof authLayoutRouteWithChildren;
   publicLayoutRoute: typeof publicLayoutRouteWithChildren;
+  AtomDotxmlRoute: typeof AtomDotxmlRoute;
+  FeedDotjsonRoute: typeof FeedDotjsonRoute;
   LlmsDottxtRoute: typeof LlmsDottxtRoute;
+  RssDotxmlRoute: typeof RssDotxmlRoute;
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute;
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute;
   ApiChangelogIndexRoute: typeof ApiChangelogIndexRoute;
@@ -412,11 +463,32 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof SitemapDotxmlRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    "/rss.xml": {
+      id: "/rss.xml";
+      path: "/rss.xml";
+      fullPath: "/rss.xml";
+      preLoaderRoute: typeof RssDotxmlRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     "/llms.txt": {
       id: "/llms.txt";
       path: "/llms.txt";
       fullPath: "/llms.txt";
       preLoaderRoute: typeof LlmsDottxtRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/feed.json": {
+      id: "/feed.json";
+      path: "/feed.json";
+      fullPath: "/feed.json";
+      preLoaderRoute: typeof FeedDotjsonRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/atom.xml": {
+      id: "/atom.xml";
+      path: "/atom.xml";
+      fullPath: "/atom.xml";
+      preLoaderRoute: typeof AtomDotxmlRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/(public)": {
@@ -487,6 +559,13 @@ declare module "@tanstack/react-router" {
       path: "/uses";
       fullPath: "/uses/";
       preLoaderRoute: typeof publicUsesIndexRouteImport;
+      parentRoute: typeof publicLayoutRoute;
+    };
+    "/(public)/test/": {
+      id: "/(public)/test/";
+      path: "/test";
+      fullPath: "/test/";
+      preLoaderRoute: typeof publicTestIndexRouteImport;
       parentRoute: typeof publicLayoutRoute;
     };
     "/(public)/stats/": {
@@ -658,6 +737,7 @@ interface publicLayoutRouteChildren {
   publicServicesIndexRoute: typeof publicServicesIndexRoute;
   publicSnippetsIndexRoute: typeof publicSnippetsIndexRoute;
   publicStatsIndexRoute: typeof publicStatsIndexRoute;
+  publicTestIndexRoute: typeof publicTestIndexRoute;
   publicUsesIndexRoute: typeof publicUsesIndexRoute;
 }
 
@@ -680,6 +760,7 @@ const publicLayoutRouteChildren: publicLayoutRouteChildren = {
   publicServicesIndexRoute: publicServicesIndexRoute,
   publicSnippetsIndexRoute: publicSnippetsIndexRoute,
   publicStatsIndexRoute: publicStatsIndexRoute,
+  publicTestIndexRoute: publicTestIndexRoute,
   publicUsesIndexRoute: publicUsesIndexRoute,
 };
 
@@ -690,7 +771,10 @@ const publicLayoutRouteWithChildren = publicLayoutRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   authLayoutRoute: authLayoutRouteWithChildren,
   publicLayoutRoute: publicLayoutRouteWithChildren,
+  AtomDotxmlRoute: AtomDotxmlRoute,
+  FeedDotjsonRoute: FeedDotjsonRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiChangelogIndexRoute: ApiChangelogIndexRoute,
