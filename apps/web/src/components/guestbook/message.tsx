@@ -25,11 +25,10 @@ export default function Message({ message }: Readonly<MessageProps>) {
           <span className="font-medium">{user.name}</span>
           <Timestamp datetime={createdAt.toString()} />
         </div>
-        <div className="flex items-start gap-3">
-          <p className="text-muted-foreground leading-relaxed">{body}</p>
-          {(currentUser?.id === user.id || currentUser?.role === 'admin') && <DeleteMessageButton messageId={id} />}
-        </div>
+        <p className="text-muted-foreground leading-relaxed">{body}</p>
       </div>
+
+      {(currentUser?.id === user.id || currentUser?.role === 'admin') && <DeleteMessageButton messageId={id} />}
     </div>
   );
 }
