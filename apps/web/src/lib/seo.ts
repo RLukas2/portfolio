@@ -34,7 +34,7 @@ export function seo({
   description,
   keywords,
   author,
-  image = `${getBaseUrl()}/images/cover.avif`,
+  image = `${getBaseUrl()}/site/og-image.jpg`,
   type = 'website',
   url = getBaseUrl(),
   canonical,
