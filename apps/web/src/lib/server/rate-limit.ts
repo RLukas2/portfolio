@@ -166,6 +166,21 @@ export function createRateLimitResponse(
   );
 }
 
+/**
+ * Get rate limit headers for use with handleApiError
+ */
+export function getRateLimitHeaders(limiter: RateLimiter, key: string): Record<string, string> {
+  const resetTime = limiter.getResetTime(key);
+  const retryAfter = Math.ceil(resetTime / 1000);
+
+  return {
+    'Retry-After': retryAfter.toString(),
+    'X-RateLimit-Limit': limiter.getConfig().maxRequests.toString(),
+    'X-RateLimit-Remaining': '0',
+    'X-RateLimit-Reset': new Date(Date.now() + resetTime).toISOString(),
+  };
+}
+
 // Pre-configured rate limiters for different API endpoints
 export const rateLimiters = {
   // Contact form: 3 requests per minute

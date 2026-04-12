@@ -6,7 +6,7 @@ import { siteConfig } from '@xbrk/config';
 import { RateLimitError, ValidationError } from '@xbrk/errors';
 import getTools from '@/lib/ai';
 import { chatAbuseConfig, validateChatRequest } from '@/lib/ai/abuse-guard';
-import { getClientIp, rateLimiters } from '@/lib/server/rate-limit';
+import { getClientIp, getRateLimitHeaders, rateLimiters } from '@/lib/server/rate-limit';
 
 /**
  * AI Chat API Route
@@ -43,7 +43,11 @@ export const Route = createFileRoute('/api/chat/')({
           const clientIp = getClientIp(request);
           if (rateLimiters.chat.isRateLimited(clientIp)) {
             console.warn(`[Chat API] Rate limit exceeded for IP: ${clientIp}`);
-            return handleApiError(new RateLimitError('Too many chat requests. Please slow down.'), request);
+            return handleApiError(
+              new RateLimitError('Too many chat requests. Please slow down.'),
+              request,
+              getRateLimitHeaders(rateLimiters.chat, clientIp),
+            );
           }
 
           const { messages } = await request.json();
