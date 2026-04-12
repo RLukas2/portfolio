@@ -23,7 +23,7 @@ export const auditMiddleware = createMiddleware().server(({ next, context }) => 
   const user = ctx.user as { id: string } | undefined;
 
   // Gracefully degrade if db/user aren't in context yet (shouldn't happen in normal usage)
-  const audit = user ? createAuditor(db, user.id) : () => Promise.resolve();
+  const audit = db && user ? createAuditor(db, user.id) : () => Promise.resolve();
 
   return next({ context: { audit } });
 });
