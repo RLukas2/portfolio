@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/node';
 import { AppError, InternalServerError } from '@xbrk/errors';
 import type { ApiErrorResponse } from '../types/error-response';
 
-// Headers that are safe to send to Sentry (no sensitive values)
+// Only non-PII headers safe to forward to Sentry
 const SAFE_HEADERS = new Set([
   'content-type',
   'content-length',
@@ -11,27 +11,32 @@ const SAFE_HEADERS = new Set([
   'accept-language',
   'user-agent',
   'x-request-id',
-  'x-forwarded-for',
-  'cf-connecting-ip',
 ]);
 
 const isDev = process.env.NODE_ENV === 'development';
 
+// Generic message shown to clients for all 5xx in production
+const GENERIC_5XX_MESSAGE = 'An unexpected error occurred';
+
 /**
- * Convert any error to AppError.
- * For 5xx, always use a generic message in production to avoid leaking internals.
+ * Convert any error to AppError, preserving the original for Sentry.
  */
-function toAppError(error: unknown): AppError {
+function toAppError(error: unknown): { appError: AppError; originalError: unknown } {
   if (error instanceof AppError) {
-    return error;
+    return { appError: error, originalError: error };
   }
 
   if (error instanceof Error) {
-    // Keep original message for logging/Sentry, but use generic for client in prod
-    return new InternalServerError(isDev ? error.message : 'An unexpected error occurred');
+    return {
+      appError: new InternalServerError(isDev ? error.message : GENERIC_5XX_MESSAGE),
+      originalError: error,
+    };
   }
 
-  return new InternalServerError('An unexpected error occurred');
+  return {
+    appError: new InternalServerError(GENERIC_5XX_MESSAGE),
+    originalError: error,
+  };
 }
 
 /**
@@ -50,10 +55,11 @@ function toAppError(error: unknown): AppError {
  * ```
  */
 export function handleApiError(error: unknown, request: Request, headers?: HeadersInit): Response {
-  const appError = toAppError(error);
+  const { appError, originalError } = toAppError(error);
   const is5xx = appError.statusCode >= 500;
 
-  // Only include metadata for 4xx in production; always include in dev
+  // In production: hide message and metadata for 5xx to avoid leaking internals
+  const clientMessage = !isDev && is5xx ? GENERIC_5XX_MESSAGE : appError.message;
   let clientMetadata: Record<string, unknown> | undefined;
   if (isDev || !is5xx) {
     clientMetadata = appError.metadata;
@@ -62,7 +68,7 @@ export function handleApiError(error: unknown, request: Request, headers?: Heade
   const response: ApiErrorResponse = {
     error: {
       code: appError.code,
-      message: appError.message,
+      message: clientMessage,
       statusCode: appError.statusCode,
       timestamp: new Date().toISOString(),
       path: new URL(request.url).pathname,
@@ -71,7 +77,8 @@ export function handleApiError(error: unknown, request: Request, headers?: Heade
     },
   };
 
-  // Log to Sentry for server errors (5xx) — whitelist safe headers only
+  // Log to Sentry for 5xx — send original error to preserve stack trace,
+  // whitelist only non-PII headers
   if (is5xx) {
     const safeHeaders: Record<string, string> = {};
     for (const [key, value] of request.headers.entries()) {
@@ -80,7 +87,7 @@ export function handleApiError(error: unknown, request: Request, headers?: Heade
       }
     }
 
-    Sentry.captureException(appError, {
+    Sentry.captureException(originalError, {
       contexts: {
         request: {
           url: request.url,
