@@ -194,6 +194,9 @@ importers:
       '@xbrk/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@xbrk/errors':
+        specifier: workspace:*
+        version: link:../../packages/errors
       '@xbrk/md':
         specifier: workspace:*
         version: link:../../packages/md
