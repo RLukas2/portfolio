@@ -117,8 +117,8 @@ export function DefaultCatchBoundary({ error, reset }: DefaultCatchBoundaryProps
           </Button>
         </div>
 
-        {/* Dev mode: Show stack trace and metadata */}
-        {error instanceof Error && error.stack && (
+        {/* Dev mode only: Show stack trace and metadata */}
+        {process.env.NODE_ENV === 'development' && error instanceof Error && error.stack && (
           <details className="mt-4 w-full">
             <summary className="cursor-pointer rounded-lg bg-muted p-4 font-medium hover:bg-muted/80">
               🐛 Error Details
