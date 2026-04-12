@@ -4,6 +4,11 @@ Allow: /
 # Replace with your actual domain
 Sitemap: https://yourdomain.com/sitemap.xml
 
+# RSS/Atom Feeds
+# RSS Feed: https://yourdomain.com/rss.xml
+# Atom Feed: https://yourdomain.com/atom.xml
+# JSON Feed: https://yourdomain.com/feed.json
+
 # Crawl-delay for polite bots
 Crawl-delay: 1
 
