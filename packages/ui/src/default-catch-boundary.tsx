@@ -1,5 +1,6 @@
 import { AlertTriangle } from 'lucide-react';
 import { Button } from './button';
+import { Separator } from './separator';
 
 // Type for custom app errors
 interface AppError extends Error {
@@ -89,26 +90,23 @@ export function DefaultCatchBoundary({ error, reset }: DefaultCatchBoundaryProps
         `}
       </style>
 
-      <div className="flex min-h-[60vh] flex-col items-center justify-center space-y-8 px-4">
+      <div className="flex min-h-[60vh] flex-col items-center justify-center space-y-6 px-4">
         {/* Glitch animation */}
-        <h1
-          className="glitch-container mb-6 font-black text-7xl leading-tight tracking-tight sm:text-9xl"
-          data-text="Error"
-        >
+        <h1 className="glitch-container font-black text-7xl leading-tight tracking-tight sm:text-9xl" data-text="Error">
           Error
         </h1>
 
+        <h2 className="animate-pulse text-center font-semibold text-xl sm:text-2xl">Oops! Something went wrong.</h2>
+
+        <Separator />
+
         {/* Error code badge */}
-        <div className="mb-4 flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <AlertTriangle className="h-5 w-5 text-destructive" />
           <span className="font-mono text-muted-foreground text-sm">
             {errorCode} ({statusCode})
           </span>
         </div>
-
-        <h2 className="mb-3 animate-pulse text-center font-semibold text-xl sm:text-2xl">
-          Oops! Something went wrong.
-        </h2>
 
         <p className="max-w-2xl text-center text-base text-zinc-600 leading-relaxed dark:text-zinc-400">
           {error?.message || 'An unexpected error occurred. Please try again later.'}
@@ -122,10 +120,10 @@ export function DefaultCatchBoundary({ error, reset }: DefaultCatchBoundaryProps
         </div>
 
         {/* Dev mode: Show stack trace */}
-        {process.env.NODE_ENV === 'development' && error instanceof Error && (
-          <details className="mt-8 w-full max-w-2xl">
+        {error instanceof Error && error.stack && (
+          <details className="mt-4 w-full">
             <summary className="cursor-pointer rounded-lg bg-muted p-4 font-medium hover:bg-muted/80">
-              🐛 Error Details (Dev Only)
+              🐛 Error Details
             </summary>
             <pre className="mt-2 overflow-auto rounded-lg bg-muted p-4 text-xs">{error.stack}</pre>
           </details>
