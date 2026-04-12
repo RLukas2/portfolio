@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@xbrk/types": "workspace:*",
-    "marked": "^17.0.4"
+    "marked": "^18.0.0"
   },
   "devDependencies": {
     "@xbrk/tsconfig": "workspace:*",

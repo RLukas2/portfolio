@@ -16,7 +16,7 @@
     "@tailwindcss/postcss": "catalog:",
     "@tailwindcss/typography": "^0.5.19",
     "autoprefixer": "catalog:",
-    "postcss": "^8.5.8",
+    "postcss": "^8.5.9",
     "tailwindcss": "catalog:"
   },
   "devDependencies": {
