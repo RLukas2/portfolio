@@ -69,21 +69,33 @@ describe('Chat API Contract', () => {
 
     it('should define error response structure', () => {
       const errorResponse = {
-        error: 'Failed to process chat request',
-        details: 'Additional error info',
+        error: {
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'An unexpected error occurred',
+          statusCode: 500,
+          timestamp: new Date().toISOString(),
+          path: '/api/chat',
+        },
       };
 
       expect(errorResponse).toHaveProperty('error');
-      expect(typeof errorResponse.error).toBe('string');
+      expect(errorResponse.error).toHaveProperty('code');
+      expect(errorResponse.error).toHaveProperty('statusCode');
     });
 
     it('should define validation error response', () => {
       const validationError = {
-        error: 'Invalid message format',
-        details: 'Messages must be an array',
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Invalid message format',
+          statusCode: 400,
+          timestamp: new Date().toISOString(),
+          path: '/api/chat',
+        },
       };
 
-      expect(validationError).toHaveProperty('error');
+      expect(validationError.error).toHaveProperty('code', 'VALIDATION_ERROR');
+      expect(validationError.error).toHaveProperty('statusCode', 400);
     });
   });
 
@@ -136,12 +148,18 @@ describe('Chat API Contract', () => {
   describe('Rate Limiting', () => {
     it('should expect rate limit response structure', () => {
       const rateLimitResponse = {
-        error: 'Too many chat requests. Please slow down.',
-        retryAfter: 60,
+        error: {
+          code: 'RATE_LIMIT_EXCEEDED',
+          message: 'Too many chat requests. Please slow down.',
+          statusCode: 429,
+          timestamp: new Date().toISOString(),
+          path: '/api/chat',
+        },
       };
 
-      expect(rateLimitResponse).toHaveProperty('error');
-      expect(rateLimitResponse.error).toContain('Too many');
+      expect(rateLimitResponse.error).toHaveProperty('code', 'RATE_LIMIT_EXCEEDED');
+      expect(rateLimitResponse.error).toHaveProperty('statusCode', 429);
+      expect(rateLimitResponse.error.message).toContain('Too many');
     });
   });
 

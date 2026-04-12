@@ -8,7 +8,16 @@ import { queryKeys } from '@/lib/query-keys';
 export default function Stats() {
   const { data: result } = useQuery({
     queryKey: queryKeys.github.stats(),
-    queryFn: () => fetch('/api/stats/github').then((res) => res.json()),
+    queryFn: async () => {
+      const res = await fetch('/api/stats/github');
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result?.error?.message ?? 'Failed to fetch GitHub stats');
+      }
+
+      return result;
+    },
   });
 
   const githubData = result?.data;

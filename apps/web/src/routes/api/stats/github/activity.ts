@@ -34,7 +34,9 @@ export const Route = createFileRoute('/api/stats/github/activity')({
           return createSuccessResponse({ contributions });
         } catch (error) {
           console.error('[GitHub Activity API] Error fetching activity:', error);
-          return handleApiError(new ServiceUnavailableError('GitHub activity is temporarily unavailable'), request);
+          const wrapped = new ServiceUnavailableError('GitHub activity is temporarily unavailable');
+          wrapped.cause = error;
+          return handleApiError(wrapped, request);
         }
       },
     },

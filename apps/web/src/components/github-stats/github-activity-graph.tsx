@@ -8,7 +8,14 @@ import { queryKeys } from '@/lib/query-keys';
 export default function GithubActivityGraph() {
   const { data: result, isLoading } = useQuery({
     queryKey: queryKeys.github.activity(),
-    queryFn: () => fetch('/api/stats/github/activity').then((res) => res.json()),
+    queryFn: async () => {
+      const res = await fetch('/api/stats/github/activity');
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error?.message || 'Failed to fetch GitHub activity');
+      }
+      return res.json();
+    },
   });
 
   if (isLoading) {

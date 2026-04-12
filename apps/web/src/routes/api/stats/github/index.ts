@@ -36,7 +36,9 @@ export const Route = createFileRoute('/api/stats/github/')({
           return createSuccessResponse({ user, repos, starsCount });
         } catch (error) {
           console.error('[GitHub Stats API] Error fetching stats:', error);
-          return handleApiError(new ServiceUnavailableError('GitHub statistics are temporarily unavailable'), request);
+          const wrapped = new ServiceUnavailableError('GitHub statistics are temporarily unavailable');
+          wrapped.cause = error;
+          return handleApiError(wrapped, request);
         }
       },
     },

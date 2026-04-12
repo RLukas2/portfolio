@@ -97,7 +97,9 @@ export const Route = createFileRoute('/api/contact/')({
 
           if (error) {
             console.error('[Contact API] Resend error:', error);
-            return handleApiError(new ServiceUnavailableError('Failed to send email'), request);
+            const wrapped = new ServiceUnavailableError('Failed to send email');
+            wrapped.cause = error;
+            return handleApiError(wrapped, request);
           }
 
           return createSuccessResponse({ success: true, emailId: data?.id });
