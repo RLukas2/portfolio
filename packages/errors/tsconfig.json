@@ -1,8 +1,10 @@
 {
-  "extends": "@xbrk/tsconfig/base.json",
+  "extends": "@xbrk/tsconfig/packages.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src"
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "preserve",
+    "rootDir": "."
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
