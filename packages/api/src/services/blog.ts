@@ -215,6 +215,9 @@ export function update(db: DbClient, input: z.infer<typeof UpdateArticleSchema>)
     }
 
     const [updated] = await tx.update(articles).set(articleData).where(eq(articles.id, id)).returning();
+    if (!updated) {
+      throw new Error('Article not found');
+    }
     return updated;
   });
 }

@@ -149,7 +149,12 @@ export async function update(db: DbClient, input: z.infer<typeof UpdateProjectSc
       await tx.update(project).set(projectData).where(eq(project.id, id));
     });
 
-    return db.query.project.findFirst({ where: eq(project.id, id) });
+    return db.query.project.findFirst({ where: eq(project.id, id) }).then((result) => {
+      if (!result) {
+        throw new Error('Project not found');
+      }
+      return result;
+    });
   } catch (error) {
     Sentry.captureException(error);
     console.error('[project.update] Database error:', error);

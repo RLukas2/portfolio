@@ -134,6 +134,9 @@ export function update(db: DbClient, input: z.infer<typeof UpdateServiceSchema>)
       }
 
       const [updated] = await tx.update(service).set(serviceData).where(eq(service.id, id)).returning();
+      if (!updated) {
+        throw new Error('Service not found');
+      }
       return updated;
     } catch (error) {
       Sentry.captureException(error);

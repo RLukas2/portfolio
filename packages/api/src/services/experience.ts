@@ -120,6 +120,9 @@ export function update(db: DbClient, input: z.infer<typeof UpdateExperienceSchem
       }
 
       const [updated] = await tx.update(experience).set(dataToUpdate).where(eq(experience.id, id)).returning();
+      if (!updated) {
+        throw new Error('Experience not found');
+      }
       return updated;
     } catch (error) {
       Sentry.captureException(error);
