@@ -23,7 +23,6 @@
     "@xbrk/auth": "workspace:*",
     "@xbrk/db": "workspace:*",
     "@xbrk/errors": "workspace:*",
-    "@xbrk/shared": "workspace:*",
     "@xbrk/utils": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "zod": "catalog:"

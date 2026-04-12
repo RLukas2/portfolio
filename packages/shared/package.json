@@ -22,7 +22,6 @@
     "@tanstack/react-router-ssr-query": "catalog:",
     "@tanstack/react-start": "catalog:",
     "@xbrk/config": "workspace:*",
-    "@xbrk/shared": "workspace:*",
     "@xbrk/ui": "workspace:*",
     "simple-icons": "catalog:",
     "zod": "catalog:"
