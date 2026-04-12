@@ -1,3 +1,4 @@
+// @ts-ignore
 import cascadeLayers from '@csstools/postcss-cascade-layers';
 import postcssColorMixFunction from '@csstools/postcss-color-mix-function';
 import oklabFunction from '@csstools/postcss-oklab-function';
