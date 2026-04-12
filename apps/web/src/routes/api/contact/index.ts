@@ -4,7 +4,7 @@ import { siteConfig } from '@xbrk/config';
 import { RateLimitError, ServiceUnavailableError, ValidationError } from '@xbrk/errors';
 import { Resend } from 'resend';
 import { env } from '@/lib/env/server';
-import { getClientIp, rateLimiters } from '@/lib/server/rate-limit';
+import { getClientIp, getRateLimitHeaders, rateLimiters } from '@/lib/server/rate-limit';
 import { contactApiSchema } from '@/lib/validators';
 
 /**
@@ -54,6 +54,7 @@ export const Route = createFileRoute('/api/contact/')({
             return handleApiError(
               new RateLimitError('Too many contact form submissions. Please try again later.'),
               request,
+              getRateLimitHeaders(rateLimiters.contact, clientIp),
             );
           }
 
