@@ -18,7 +18,10 @@ export const Route = createFileRoute('/(dashboard)')({
   component: LayoutComponent,
   beforeLoad: ({ context }) => {
     if (!context.user) {
-      throw redirect({ to: '/signin' });
+      throw redirect({
+        to: '/signin',
+        search: { returnTo: undefined, error: undefined, error_description: undefined, message: undefined },
+      });
     }
 
     if (context.user.role !== 'admin') {

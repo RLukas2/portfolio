@@ -1,9 +1,9 @@
-import type { User } from '@xbrk/auth';
+import type { UserType } from '@xbrk/types';
 
 /**
  * Mock user factory for testing
  */
-export function createMockUser(overrides?: Partial<User>): User {
+export function createMockUser(overrides?: Partial<UserType>): UserType {
   return {
     id: 'test-user-id',
     email: 'test@example.com',
@@ -24,7 +24,7 @@ export function createMockUser(overrides?: Partial<User>): User {
 /**
  * Create a mock admin user
  */
-export function createMockAdmin(overrides?: Partial<User>): User {
+export function createMockAdmin(overrides?: Partial<UserType>): UserType {
   return createMockUser({
     role: 'admin',
     email: 'admin@example.com',
@@ -36,7 +36,7 @@ export function createMockAdmin(overrides?: Partial<User>): User {
 /**
  * Create a mock non-admin user
  */
-export function createMockNonAdmin(overrides?: Partial<User>): User {
+export function createMockNonAdmin(overrides?: Partial<UserType>): UserType {
   return createMockUser({
     role: 'user',
     email: 'user@example.com',
@@ -48,9 +48,9 @@ export function createMockNonAdmin(overrides?: Partial<User>): User {
 /**
  * Mock context with user
  */
-export function createMockContext(user: User | null) {
+export function createMockContext(user: UserType | null) {
   return {
     user,
-    db: {} as Record<string, unknown>, // Mock DB if needed
+    db: {} as Record<string, unknown>,
   };
 }
