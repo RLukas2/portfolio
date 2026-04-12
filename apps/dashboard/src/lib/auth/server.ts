@@ -21,6 +21,7 @@ import { getBaseUrl } from '@/lib/utils';
 export const auth = initAuth({
   baseUrl: getBaseUrl(),
   productionUrl: getBaseUrl(),
+  trustedOrigins: env.VITE_APP_URL ? [env.VITE_APP_URL] : [],
   secret: env.BETTER_AUTH_SECRET,
   githubClientId: env.GITHUB_CLIENT_ID,
   githubClientSecret: env.GITHUB_CLIENT_SECRET,

@@ -52,11 +52,18 @@ export function initAuth(options: InitAuthOptions) {
     );
   }
 
+  // Build trusted origins: always include baseUrl and productionUrl,
+  // plus any explicitly provided origins.
+  const trustedOrigins = Array.from(
+    new Set([validatedOptions.baseUrl, validatedOptions.productionUrl, ...(validatedOptions.trustedOrigins ?? [])]),
+  );
+
   const config = {
     database: drizzleAdapter(db, {
       provider: 'pg',
     }),
     baseURL: validatedOptions.baseUrl,
+    trustedOrigins,
     secret: validatedOptions.secret,
     telemetry: {
       enabled: false,

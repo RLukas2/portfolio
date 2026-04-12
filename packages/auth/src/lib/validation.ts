@@ -19,6 +19,7 @@ export const InitAuthOptionsSchema = z
   .object({
     baseUrl: z.string().url('Base URL must be a valid URL'),
     productionUrl: z.string().url('Production URL must be a valid URL'),
+    trustedOrigins: z.array(z.string().url()).optional(),
     secret: z
       .string()
       .min(32, 'Secret must be at least 32 characters for security')
