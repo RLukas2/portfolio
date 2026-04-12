@@ -607,9 +607,6 @@ importers:
       '@xbrk/errors':
         specifier: workspace:*
         version: link:../errors
-      '@xbrk/shared':
-        specifier: workspace:*
-        version: link:../shared
       '@xbrk/utils':
         specifier: workspace:*
         version: link:../utils
@@ -804,9 +801,6 @@ importers:
       '@xbrk/config':
         specifier: workspace:*
         version: link:../config
-      '@xbrk/shared':
-        specifier: workspace:*
-        version: 'link:'
       '@xbrk/ui':
         specifier: workspace:*
         version: link:../ui
