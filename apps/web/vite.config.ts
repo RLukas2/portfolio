@@ -1,6 +1,7 @@
 import path from 'node:path';
 import babel from '@rolldown/plugin-babel';
 import { sentryTanstackStart } from '@sentry/tanstackstart-react/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react';
@@ -17,6 +18,8 @@ const config = defineConfig({
     sourcemap: true,
     target: 'es2022',
     rollupOptions: {
+      // Keep shiki and its sub-packages external so Rolldown never tries to bundle the .wasm file
+      external: [/^shiki/, /^@shikijs\//, /\.wasm$/],
       output: {
         manualChunks(id) {
           // Separate vendor chunks for better caching
@@ -45,6 +48,7 @@ const config = defineConfig({
     tsconfigPaths: true,
   },
   plugins: [
+    tailwindcss(),
     devtools({
       eventBusConfig: {
         port: 1234,
@@ -93,10 +97,11 @@ const config = defineConfig({
   optimizeDeps: {
     entries: ['src/**/*.{ts,tsx}'],
     include: ['react', 'react-dom', '@tanstack/react-router', '@tanstack/react-query'],
-    exclude: ['posthog-js', '@posthog/react', 'framer-motion'],
+    exclude: ['posthog-js', '@posthog/react', 'framer-motion', 'shiki', '@shikijs/rehype', '@shikijs/transformers'],
   },
   ssr: {
     noExternal: [],
+    external: ['shiki', '@shikijs/rehype', '@shikijs/transformers'],
   },
   server: {
     allowedHosts: process.env.ALLOWED_HOSTS?.split(',') || [],
