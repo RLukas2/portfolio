@@ -16,3 +16,7 @@ export {
   userService,
 } from './services';
 export { deleteFile, uploadImage } from './storage';
+
+// Error handling
+export type { ApiErrorResponse, ApiSuccessResponse } from './types/error-response';
+export { createSuccessResponse, handleApiError } from './utils/error-handler';
