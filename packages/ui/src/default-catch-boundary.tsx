@@ -1,17 +1,14 @@
+import { AppError } from '@xbrk/errors';
 import { AlertTriangle } from 'lucide-react';
 import { Button } from './button';
 import { Separator } from './separator';
 
-// Type for custom app errors
-interface AppError extends Error {
-  code: string;
-  metadata?: Record<string, unknown>;
-  statusCode: number;
-}
-
 // Type guard to check if error is AppError
 function isAppError(error: unknown): error is AppError {
-  return error !== null && typeof error === 'object' && 'code' in error && 'statusCode' in error && 'message' in error;
+  return (
+    error instanceof AppError ||
+    (error !== null && typeof error === 'object' && 'code' in error && 'statusCode' in error && 'message' in error)
+  );
 }
 
 interface DefaultCatchBoundaryProps {
@@ -23,6 +20,7 @@ export function DefaultCatchBoundary({ error, reset }: DefaultCatchBoundaryProps
   // Check if it's a known error type using type guard
   const errorCode = isAppError(error) ? error.code : 'UNKNOWN_ERROR';
   const statusCode = isAppError(error) ? error.statusCode : 500;
+  const metadata = isAppError(error) ? error.metadata : undefined;
 
   const handleRetry = () => {
     if (reset) {
@@ -119,13 +117,21 @@ export function DefaultCatchBoundary({ error, reset }: DefaultCatchBoundaryProps
           </Button>
         </div>
 
-        {/* Dev mode: Show stack trace */}
+        {/* Dev mode: Show stack trace and metadata */}
         {error instanceof Error && error.stack && (
           <details className="mt-4 w-full">
             <summary className="cursor-pointer rounded-lg bg-muted p-4 font-medium hover:bg-muted/80">
               🐛 Error Details
             </summary>
-            <pre className="mt-2 overflow-auto rounded-lg bg-muted p-4 text-xs">{error.stack}</pre>
+            <div className="mt-2 space-y-2">
+              {metadata && Object.keys(metadata).length > 0 && (
+                <div className="overflow-auto rounded-lg bg-muted p-4">
+                  <div className="mb-2 font-semibold text-sm">Metadata:</div>
+                  <pre className="text-xs">{JSON.stringify(metadata, null, 2)}</pre>
+                </div>
+              )}
+              <pre className="overflow-auto rounded-lg bg-muted p-4 text-xs">{error.stack}</pre>
+            </div>
           </details>
         )}
       </div>

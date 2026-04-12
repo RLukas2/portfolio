@@ -1,5 +1,5 @@
 {
   "extends": "@xbrk/tsconfig/base.json",
   "include": ["."],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "./postcss.config.mjs"]
 }

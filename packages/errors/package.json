@@ -1,0 +1,18 @@
+{
+  "name": "@xbrk/errors",
+  "license": "MIT",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "git clean -xdf .cache dist node_modules",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@xbrk/tsconfig": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

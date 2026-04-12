@@ -1,6 +1,6 @@
 // biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
 import * as Sentry from '@sentry/node';
-import { AppError, InternalServerError } from '@xbrk/shared/errors';
+import { AppError, InternalServerError } from '@xbrk/errors';
 import type { ApiErrorResponse } from '../types/error-response';
 
 /**

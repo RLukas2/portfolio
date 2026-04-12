@@ -87,6 +87,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tanstack/react-form": "catalog:",
     "@unpic/react": "^1.0.2",
+    "@xbrk/errors": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",
     "embla-carousel-react": "^8.6.0",
@@ -102,6 +103,7 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@xbrk/tsconfig": "workspace:*",
     "react": "catalog:",
