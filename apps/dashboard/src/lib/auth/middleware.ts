@@ -1,5 +1,6 @@
 import { createMiddleware } from '@tanstack/react-start';
 import { getRequest, setResponseStatus } from '@tanstack/react-start/server';
+import { ForbiddenError, UnauthorizedError } from '@xbrk/errors';
 import { auth } from '@/lib/auth/server';
 
 /**
@@ -46,7 +47,7 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
 
   if (!session) {
     setResponseStatus(401);
-    throw new Error('Unauthorized');
+    throw new UnauthorizedError();
   }
 
   return next({ context: { user: session.user } });
@@ -83,12 +84,12 @@ export const adminMiddleware = createMiddleware().server(({ next, context }) => 
 
   if (!user) {
     setResponseStatus(401);
-    throw new Error('Unauthorized: No user in context');
+    throw new UnauthorizedError('No user in context');
   }
 
   if (user.role !== 'admin') {
     setResponseStatus(403);
-    throw new Error('Forbidden: Admin access required');
+    throw new ForbiddenError('Admin access required');
   }
 
   return next({ context });

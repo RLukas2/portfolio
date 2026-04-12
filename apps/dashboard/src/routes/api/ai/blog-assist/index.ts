@@ -1,6 +1,8 @@
 import { chat, toServerSentEventsResponse } from '@tanstack/ai';
 import { openaiText } from '@tanstack/ai-openai';
 import { createFileRoute } from '@tanstack/react-router';
+import { handleApiError } from '@xbrk/api';
+import { ValidationError } from '@xbrk/errors';
 import { z } from 'zod';
 import { adminMiddleware, authMiddleware } from '@/lib/auth/middleware';
 
@@ -143,15 +145,9 @@ export const Route = createFileRoute('/api/ai/blog-assist/')({
           // Validate request body
           const validation = requestSchema.safeParse(payload);
           if (!validation.success) {
-            return new Response(
-              JSON.stringify({
-                error: 'Invalid request',
-                details: validation.error.format(),
-              }),
-              {
-                status: 400,
-                headers: { 'Content-Type': 'application/json' },
-              },
+            return handleApiError(
+              new ValidationError('Invalid request', { details: validation.error.format() }),
+              request,
             );
           }
 
@@ -170,20 +166,7 @@ export const Route = createFileRoute('/api/ai/blog-assist/')({
           return toServerSentEventsResponse(stream);
         } catch (error) {
           console.error('AI blog assist error:', error);
-
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          const details = process.env.NODE_ENV === 'development' ? errorMessage : undefined;
-
-          return new Response(
-            JSON.stringify({
-              error: 'Failed to generate content',
-              details,
-            }),
-            {
-              status: 500,
-              headers: { 'Content-Type': 'application/json' },
-            },
-          );
+          return handleApiError(error, request);
         }
       },
     },
