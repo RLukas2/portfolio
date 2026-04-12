@@ -11,6 +11,7 @@ const initSentry = createClientOnlyFn(async () => {
 export function getRouter() {
   const router = createRouter<typeof routeTree>({
     routeTree,
+    debug: import.meta.env.DEV,
   });
 
   // Initialize Sentry on client-side only

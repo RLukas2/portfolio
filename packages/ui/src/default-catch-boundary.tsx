@@ -12,11 +12,12 @@ function isAppError(error: unknown): error is AppError {
 }
 
 interface DefaultCatchBoundaryProps {
+  debug?: boolean;
   error?: Error | { message?: string };
   reset?: () => void;
 }
 
-export function DefaultCatchBoundary({ error, reset }: DefaultCatchBoundaryProps) {
+export function DefaultCatchBoundary({ error, reset, debug = false }: DefaultCatchBoundaryProps) {
   // Check if it's a known error type using type guard
   const errorCode = isAppError(error) ? error.code : 'UNKNOWN_ERROR';
   const statusCode = isAppError(error) ? error.statusCode : 500;
@@ -118,7 +119,7 @@ export function DefaultCatchBoundary({ error, reset }: DefaultCatchBoundaryProps
         </div>
 
         {/* Dev mode only: Show stack trace and metadata */}
-        {process.env.NODE_ENV === 'development' && error instanceof Error && error.stack && (
+        {debug && error instanceof Error && error.stack && (
           <details className="mt-4 w-full">
             <summary className="cursor-pointer rounded-lg bg-muted p-4 font-medium hover:bg-muted/80">
               🐛 Error Details

@@ -6,10 +6,14 @@ import { DefaultCatchBoundary } from '@xbrk/ui/default-catch-boundary';
 import { NotFound } from '@xbrk/ui/not-found';
 
 interface CreateRouterOptions<TRouteTree extends AnyRoute> {
+  debug?: boolean;
   routeTree: TRouteTree;
 }
 
-export function createRouter<TRouteTree extends AnyRoute>({ routeTree }: CreateRouterOptions<TRouteTree>) {
+export function createRouter<TRouteTree extends AnyRoute>({
+  routeTree,
+  debug = false,
+}: CreateRouterOptions<TRouteTree>) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -25,7 +29,7 @@ export function createRouter<TRouteTree extends AnyRoute>({ routeTree }: CreateR
     routeTree,
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
-    defaultErrorComponent: DefaultCatchBoundary,
+    defaultErrorComponent: (props) => <DefaultCatchBoundary {...props} debug={debug} />,
     defaultNotFoundComponent: () => <NotFound />,
     scrollRestoration: true,
     defaultHashScrollIntoView: { behavior: 'smooth' },
