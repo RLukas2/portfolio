@@ -143,8 +143,8 @@ export function sanitizeMessage(content: string): string {
         // Keep code blocks but sanitize them
         return match.replace(/[<>]/g, '');
       })
-      // Remove HTML tags outside code blocks
-      .replace(/<[^>]*>/g, '')
+      // Remove HTML-significant characters outside code blocks
+      .replace(/[<>]/g, '')
       // Normalize whitespace
       .replace(/\s+/g, ' ')
       .trim()
