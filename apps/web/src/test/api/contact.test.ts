@@ -69,36 +69,50 @@ describe('Contact API Contract', () => {
   describe('Response Contract', () => {
     it('should define success response structure', () => {
       const successResponse = {
-        success: true,
-        data: { id: 'email-id' },
+        data: { success: true, emailId: 'email-id' },
       };
 
-      expect(successResponse).toHaveProperty('success');
-      expect(successResponse.success).toBe(true);
+      expect(successResponse).toHaveProperty('data');
+      expect(successResponse.data).toHaveProperty('success');
+      expect(successResponse.data.success).toBe(true);
     });
 
     it('should define error response structure', () => {
       const errorResponse = {
-        error: 'Failed to send email',
-        details: 'Additional error info',
+        error: {
+          code: 'SERVICE_UNAVAILABLE',
+          message: 'An unexpected error occurred',
+          statusCode: 503,
+          timestamp: new Date().toISOString(),
+          path: '/api/contact',
+        },
       };
 
       expect(errorResponse).toHaveProperty('error');
-      expect(typeof errorResponse.error).toBe('string');
+      expect(errorResponse.error).toHaveProperty('code');
+      expect(errorResponse.error).toHaveProperty('message');
+      expect(errorResponse.error).toHaveProperty('statusCode');
     });
 
     it('should define validation error response structure', () => {
       const validationError = {
-        error: 'Invalid input',
-        details: {
-          fieldErrors: {
-            email: ['Invalid email format'],
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Invalid input',
+          statusCode: 400,
+          timestamp: new Date().toISOString(),
+          path: '/api/contact',
+          metadata: {
+            details: {
+              fieldErrors: { email: ['Invalid email format'] },
+            },
           },
         },
       };
 
-      expect(validationError).toHaveProperty('error');
-      expect(validationError).toHaveProperty('details');
+      expect(validationError.error).toHaveProperty('code', 'VALIDATION_ERROR');
+      expect(validationError.error).toHaveProperty('statusCode', 400);
+      expect(validationError.error).toHaveProperty('metadata');
     });
   });
 
@@ -137,13 +151,17 @@ describe('Contact API Contract', () => {
   describe('Rate Limiting', () => {
     it('should expect rate limit response structure', () => {
       const rateLimitResponse = {
-        error: 'Too many requests',
-        retryAfter: 60,
+        error: {
+          code: 'RATE_LIMIT_EXCEEDED',
+          message: 'Too many contact form submissions. Please try again later.',
+          statusCode: 429,
+          timestamp: new Date().toISOString(),
+          path: '/api/contact',
+        },
       };
 
-      expect(rateLimitResponse).toHaveProperty('error');
-      expect(rateLimitResponse).toHaveProperty('retryAfter');
-      expect(typeof rateLimitResponse.retryAfter).toBe('number');
+      expect(rateLimitResponse.error).toHaveProperty('code', 'RATE_LIMIT_EXCEEDED');
+      expect(rateLimitResponse.error).toHaveProperty('statusCode', 429);
     });
   });
 });

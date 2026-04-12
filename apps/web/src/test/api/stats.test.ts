@@ -48,48 +48,54 @@ describe('GitHub Stats API Contract', () => {
 
     it('should define complete stats response', () => {
       const statsResponse = {
-        user: {
-          login: 'username',
-          name: 'Full Name',
-          followers: 100,
-        },
-        repos: [
-          {
-            name: 'repo1',
-            stars: 10,
+        data: {
+          user: {
+            login: 'username',
+            name: 'Full Name',
+            followers: 100,
           },
-        ],
-        starsCount: 42,
+          repos: [{ name: 'repo1', stars: 10 }],
+          starsCount: 42,
+        },
       };
 
-      expect(statsResponse).toHaveProperty('user');
-      expect(statsResponse).toHaveProperty('repos');
-      expect(statsResponse).toHaveProperty('starsCount');
-      expect(statsResponse.repos).toBeInstanceOf(Array);
-      expect(typeof statsResponse.starsCount).toBe('number');
+      expect(statsResponse).toHaveProperty('data');
+      expect(statsResponse.data).toHaveProperty('user');
+      expect(statsResponse.data).toHaveProperty('repos');
+      expect(statsResponse.data).toHaveProperty('starsCount');
+      expect(statsResponse.data.repos).toBeInstanceOf(Array);
+      expect(typeof statsResponse.data.starsCount).toBe('number');
     });
   });
 
   describe('Error Handling', () => {
     it('should define error response structure', () => {
       const errorResponse = {
-        error: 'Failed to fetch GitHub statistics',
-        details: 'API rate limit exceeded',
+        error: {
+          code: 'SERVICE_UNAVAILABLE',
+          message: 'An unexpected error occurred',
+          statusCode: 503,
+          timestamp: new Date().toISOString(),
+          path: '/api/stats/github',
+        },
       };
 
       expect(errorResponse).toHaveProperty('error');
-      expect(typeof errorResponse.error).toBe('string');
+      expect(errorResponse.error).toHaveProperty('code', 'SERVICE_UNAVAILABLE');
+      expect(errorResponse.error).toHaveProperty('statusCode', 503);
     });
 
     it('should handle missing data gracefully', () => {
       const partialResponse = {
-        user: null,
-        repos: [],
-        starsCount: 0,
+        data: {
+          user: null,
+          repos: [],
+          starsCount: 0,
+        },
       };
 
-      expect(partialResponse.repos).toBeInstanceOf(Array);
-      expect(partialResponse.starsCount).toBe(0);
+      expect(partialResponse.data.repos).toBeInstanceOf(Array);
+      expect(partialResponse.data.starsCount).toBe(0);
     });
   });
 
@@ -133,14 +139,19 @@ describe('GitHub Activity API Contract', () => {
     });
 
     it('should define activity response array', () => {
-      const activities = [
-        { date: '2024-01-15', count: 5, level: 2 },
-        { date: '2024-01-16', count: 3, level: 1 },
-      ];
+      const activityResponse = {
+        data: {
+          contributions: [
+            { date: '2024-01-15', count: 5, level: 2 },
+            { date: '2024-01-16', count: 3, level: 1 },
+          ],
+        },
+      };
 
-      expect(Array.isArray(activities)).toBe(true);
-      expect(activities.length).toBeGreaterThan(0);
-      expect(activities[0]).toHaveProperty('date');
+      expect(activityResponse).toHaveProperty('data');
+      expect(activityResponse.data).toHaveProperty('contributions');
+      expect(Array.isArray(activityResponse.data.contributions)).toBe(true);
+      expect(activityResponse.data.contributions[0]).toHaveProperty('date');
     });
   });
 
