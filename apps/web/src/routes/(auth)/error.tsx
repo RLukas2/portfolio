@@ -56,7 +56,7 @@ function AuthErrorPage() {
               onClick={() =>
                 navigate({
                   to: '/signin',
-                  search: { error: undefined, error_description: undefined, message: undefined },
+                  search: { error: undefined, error_description: undefined, message: undefined, returnTo: undefined },
                 })
               }
               variant="default"

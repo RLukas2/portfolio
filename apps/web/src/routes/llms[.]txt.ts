@@ -15,7 +15,7 @@ export const Route = createFileRoute('/llms.txt')({
 
 ${siteConfig.author.name} is a ${siteConfig.author.jobTitle} based in ${siteConfig.author.location}.
 
-Specializing in: ${siteConfig.author.knowsAbout.join(', ')}.
+Specializing in: ${siteConfig.author.knowsAbout?.join(', ') ?? 'Full-stack Development'}.
 
 Status: ${siteConfig.hiringStatus === 'open' ? 'Open to new opportunities' : 'Not available for hire'}.
 
@@ -43,7 +43,7 @@ Status: ${siteConfig.hiringStatus === 'open' ? 'Open to new opportunities' : 'No
 
 ## Tech Stack
 
-Primary technologies: ${siteConfig.author.knowsAbout.join(', ')}
+Primary technologies: ${siteConfig.author.knowsAbout?.join(', ') ?? 'Full-stack Development'}
 
 ## Contact Information
 

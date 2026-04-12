@@ -4,7 +4,7 @@ export const Route = createFileRoute('/(public)/test/')({
   component: RouteComponent,
 });
 
-function BombComponent() {
+function BombComponent(): never {
   throw new Error('Test error boundary!');
 }
 

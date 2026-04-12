@@ -14,6 +14,7 @@ export const Route = createFileRoute('/(auth)')({
           error: undefined,
           error_description: undefined,
           message: undefined,
+          returnTo: undefined,
         },
       });
     }
