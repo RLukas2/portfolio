@@ -110,7 +110,8 @@ export async function create(db: DbClient, input: z.infer<typeof CreateProjectSc
       projectData.imageUrl = imageUrl;
     }
 
-    return db.insert(project).values(projectData);
+    const [created] = await db.insert(project).values(projectData).returning();
+    return created;
   } catch (error) {
     Sentry.captureException(error);
     console.error('[project.create] Database error:', error);
@@ -147,6 +148,8 @@ export async function update(db: DbClient, input: z.infer<typeof UpdateProjectSc
 
       await tx.update(project).set(projectData).where(eq(project.id, id));
     });
+
+    return db.query.project.findFirst({ where: eq(project.id, id) });
   } catch (error) {
     Sentry.captureException(error);
     console.error('[project.update] Database error:', error);

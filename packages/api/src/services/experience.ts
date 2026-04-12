@@ -73,7 +73,8 @@ export function create(db: DbClient, input: z.infer<typeof CreateExperienceSchem
         dataToInsert.imageUrl = imageUrl;
       }
 
-      return db.insert(experience).values(dataToInsert);
+      const [created] = await db.insert(experience).values(dataToInsert).returning();
+      return created;
     } catch (error) {
       Sentry.captureException(error);
       console.error('[experience.create] Error:', error);
@@ -118,7 +119,8 @@ export function update(db: DbClient, input: z.infer<typeof UpdateExperienceSchem
         }
       }
 
-      return tx.update(experience).set(dataToUpdate).where(eq(experience.id, id));
+      const [updated] = await tx.update(experience).set(dataToUpdate).where(eq(experience.id, id)).returning();
+      return updated;
     } catch (error) {
       Sentry.captureException(error);
       console.error('[experience.update] Error:', error);

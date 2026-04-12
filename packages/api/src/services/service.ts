@@ -96,7 +96,8 @@ export function create(db: DbClient, input: z.infer<typeof CreateServiceSchema>)
         serviceData.imageUrl = imageUrl;
       }
 
-      return db.insert(service).values(serviceData);
+      const [created] = await db.insert(service).values(serviceData).returning();
+      return created;
     } catch (error) {
       Sentry.captureException(error);
       console.error('[service.create] Database error:', error);
@@ -132,7 +133,8 @@ export function update(db: DbClient, input: z.infer<typeof UpdateServiceSchema>)
         }
       }
 
-      return tx.update(service).set(serviceData).where(eq(service.id, id));
+      const [updated] = await tx.update(service).set(serviceData).where(eq(service.id, id)).returning();
+      return updated;
     } catch (error) {
       Sentry.captureException(error);
       console.error('[service.update] Database error:', error);
