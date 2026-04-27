@@ -22,43 +22,43 @@ catalog:
   "@better-auth/cli": "1.4.21"
 
   # Testing (Vitest + Testing Library)
-  "vitest": "^3.2.0"
-  "@vitest/ui": "^3.2.0"
-  "happy-dom": "^20.8.9"
+  "vitest": "^4.1.5"
+  "@vitest/ui": "^4.1.5"
+  "happy-dom": "^20.9.0"
 
   # Utilities (Zod, Prettier,...)
-  "@sentry/node": "^10.19.0"
+  "@sentry/node": "^10.50.0"
   "@t3-oss/env-core": "^0.13.11"
-  "@tailwindcss/postcss": "^4.2.1"
-  "@tailwindcss/vite": "^4.2.2"
+  "@tailwindcss/postcss": "^4.2.4"
+  "@tailwindcss/vite": "^4.2.4"
 
   # Tanstack (latest)
   "@tanstack/devtools-a11y": latest
   "@tanstack/devtools-vite": ^0.6.0
-  "@tanstack/react-devtools": ^0.10.1
-  "@tanstack/react-form": "^1.28.6"
+  "@tanstack/react-devtools": ^0.10.2
+  "@tanstack/react-form": "^1.29.1"
   "@tanstack/react-form-devtools": latest
   "@tanstack/react-form-start": latest
-  "@tanstack/react-query": "^5.96.1"
-  "@tanstack/react-query-devtools": ^5.96.1
-  "@tanstack/react-router": "^1.168.10"
-  "@tanstack/react-router-devtools": "^1.166.11"
-  "@tanstack/react-router-ssr-query": ^1.166.10
-  "@tanstack/react-start": "^1.167.16"
+  "@tanstack/react-query": "^5.100.5"
+  "@tanstack/react-query-devtools": ^5.100.5
+  "@tanstack/react-router": "^1.168.24"
+  "@tanstack/react-router-devtools": "^1.166.13"
+  "@tanstack/react-router-ssr-query": ^1.166.12
+  "@tanstack/react-start": "^1.167.49"
 
   # Types
   "@types/node": "^25.5.0"
   "@types/react": "^19.2.14"
   "@types/react-dom": "^19.2.3"
-  "autoprefixer": "^10.4.27"
-  "better-auth": "1.5.5"
-  "lucide-react": "^1.7.0"
-  "react": "^19.2.4"
-  "react-dom": "^19.2.4"
-  "simple-icons": "^13.21.0"
+  "autoprefixer": "^10.5.0"
+  "better-auth": "1.6.9"
+  "lucide-react": "^1.11.0"
+  "react": "^19.2.5"
+  "react-dom": "^19.2.5"
+  "simple-icons": "^16.18.0"
 
   # Tailwind CSS + UI
-  "tailwindcss": "^4.2.1"
-  "typescript": "^5.9.3"
-  "vite": "^8.0.3"
+  "tailwindcss": "^4.2.4"
+  "typescript": "^6.0.3"
+  "vite": "^8.0.10"
   "zod": "^4.3.6"
