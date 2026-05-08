@@ -1,7 +1,14 @@
 'use no memo';
 
 import { type RankingInfo, rankItem } from '@tanstack/match-sorter-utils';
-import type { ColumnDef, ColumnFiltersState, FilterFn, SortingState } from '@tanstack/react-table';
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  FilterFn,
+  PaginationState,
+  SortingState,
+  Updater,
+} from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
@@ -11,7 +18,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@xbrk/ui/table';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbar } from './data-table-toolbar';
 
@@ -28,6 +35,8 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   entityName?: string;
+  onPaginationChange?: (updaterOrValue: Updater<PaginationState>) => void;
+  pagination?: PaginationState;
 }
 
 const fuzzyFilter: FilterFn<unknown> = (row, columnId, value, addMeta) => {
@@ -46,15 +55,43 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   entityName = 'items',
+  pagination: controlledPagination,
+  onPaginationChange: onControlledPaginationChange,
 }: Readonly<DataTableProps<TData, TValue>>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState('');
-  const [pagination, setPagination] = useState({
+  const [internalPagination, setInternalPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: DEFAULT_PAGE_SIZE,
   });
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const pagination = controlledPagination ?? internalPagination;
+  const setPagination = onControlledPaginationChange ?? setInternalPagination;
+  const previousRowCountRef = useRef(data.length);
+
+  useEffect(() => {
+    if (previousRowCountRef.current === data.length) {
+      return;
+    }
+
+    // Keep the current page in bounds only when row count actually changes.
+    setPagination((prev) => {
+      const maxPageIndex = Math.max(Math.ceil(data.length / prev.pageSize) - 1, 0);
+      if (prev.pageIndex <= maxPageIndex) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        pageIndex: maxPageIndex,
+      };
+    });
+
+    // Clear stale selections when the dataset changes.
+    setRowSelection({});
+    previousRowCountRef.current = data.length;
+  }, [data.length]);
 
   const table = useReactTable({
     data,
@@ -79,6 +116,7 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    autoResetPageIndex: false,
   });
 
   return (
