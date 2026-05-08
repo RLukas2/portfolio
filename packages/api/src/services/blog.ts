@@ -46,6 +46,7 @@ export async function getAll(db: DbClient) {
 /** Returns all published articles with aggregated likes and view counts. */
 export async function getAllPublic(db: DbClient) {
   try {
+    // Use LEFT JOIN with GROUP BY for better performance with indexes
     const result = await db
       .select({
         id: articles.id,
@@ -59,19 +60,14 @@ export async function getAllPublic(db: DbClient) {
         authorId: articles.authorId,
         content: articles.content,
         tags: articles.tags,
-        likesCount: sql<number>`(
-          SELECT COUNT(*)::int 
-          FROM article_likes 
-          WHERE article_likes.article_id = articles.id
-        )`,
-        viewCount: sql<number>`(
-          SELECT COUNT(*)::int 
-          FROM article_views 
-          WHERE article_views.article_id = articles.id
-        )`,
+        likesCount: sql<number>`COALESCE(COUNT(DISTINCT ${articleLikes.id}), 0)::int`,
+        viewCount: sql<number>`COALESCE(COUNT(DISTINCT ${articleViews.id}), 0)::int`,
       })
       .from(articles)
+      .leftJoin(articleLikes, eq(articles.id, articleLikes.articleId))
+      .leftJoin(articleViews, eq(articles.id, articleViews.articleId))
       .where(eq(articles.isDraft, false))
+      .groupBy(articles.id)
       .orderBy(desc(articles.createdAt));
 
     return result;
@@ -85,60 +81,59 @@ export async function getAllPublic(db: DbClient) {
 /**
  * Returns a single article by slug with comments, author, view count, and generated TOC.
  * Draft articles are only accessible to admins.
- * Uses optimized single query with joins instead of multiple queries.
+ * Optimized to use efficient queries with the new indexes.
  * @throws {Error} If article not found or is a draft and requester is not admin.
  */
 export async function getBySlug(db: DbClient, input: { slug: string }, session?: { user: { role: string } } | null) {
   try {
     // Fetch article with all related data in a single optimized query
-    const result = await db
-      .select({
-        article: articles,
-        viewCount: sql<number>`(
-          SELECT COUNT(*)::int 
-          FROM article_views 
-          WHERE article_views.article_id = articles.id
-        )`,
-        likesCount: sql<number>`(
-          SELECT COUNT(*)::int 
-          FROM article_likes 
-          WHERE article_likes.article_id = articles.id
-        )`,
-      })
-      .from(articles)
-      .where(eq(articles.slug, input.slug))
-      .limit(1);
-
-    if (!result[0]) {
-      throw new Error('Article not found');
-    }
-
-    const { article, viewCount, likesCount } = result[0];
-
-    // Check draft access
-    if (article.isDraft && session?.user.role !== 'admin') {
-      throw new Error('Article is not public');
-    }
-
-    // Fetch related data
     const [articleWithRelations] = await db.query.articles.findMany({
-      where: eq(articles.id, article.id),
+      where: eq(articles.slug, input.slug),
       with: {
-        comments: true,
+        comments: {
+          with: {
+            user: true,
+            reactions: true,
+          },
+          orderBy: (comments, { asc }) => [asc(comments.createdAt)],
+        },
         author: true,
       },
       limit: 1,
     });
 
-    const toc = getTOC(article.content ?? '');
+    if (!articleWithRelations) {
+      throw new Error('Article not found');
+    }
+
+    // Check draft access
+    if (articleWithRelations.isDraft && session?.user.role !== 'admin') {
+      throw new Error('Article is not public');
+    }
+
+    // Count views and likes using optimized indexed queries
+    const [viewsResult, likesResult] = await Promise.all([
+      db
+        .select({
+          count: sql<number>`COUNT(*)::int`,
+        })
+        .from(articleViews)
+        .where(eq(articleViews.articleId, articleWithRelations.id)),
+      db
+        .select({
+          count: sql<number>`COUNT(*)::int`,
+        })
+        .from(articleLikes)
+        .where(eq(articleLikes.articleId, articleWithRelations.id)),
+    ]);
+
+    const toc = getTOC(articleWithRelations.content ?? '');
 
     return {
-      ...article,
+      ...articleWithRelations,
       toc,
-      viewCount,
-      likesCount,
-      comments: articleWithRelations?.comments ?? [],
-      author: articleWithRelations?.author,
+      viewCount: viewsResult[0]?.count ?? 0,
+      likesCount: likesResult[0]?.count ?? 0,
     };
   } catch (error) {
     if (

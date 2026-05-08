@@ -1,3 +1,4 @@
+export * as auditService from './audit';
 export * as blogService from './blog';
 export * as commentService from './comment';
 export * as experienceService from './experience';
