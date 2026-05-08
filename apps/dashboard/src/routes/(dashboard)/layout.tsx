@@ -20,7 +20,12 @@ export const Route = createFileRoute('/(dashboard)')({
     if (!context.user) {
       throw redirect({
         to: '/signin',
-        search: { returnTo: undefined, error: undefined, error_description: undefined, message: undefined },
+        search: {
+          returnTo: undefined,
+          error: undefined,
+          error_description: undefined,
+          message: undefined,
+        },
       });
     }
 
@@ -60,6 +65,7 @@ function generateBreadcrumbs(pathname: string): BreadcrumbCrumb[] {
     snippets: 'Snippets',
     services: 'Services',
     users: 'Users',
+    audit: 'Audit Logs',
     create: 'Create',
     edit: 'Edit',
   };

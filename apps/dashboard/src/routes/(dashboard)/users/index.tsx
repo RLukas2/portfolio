@@ -1,34 +1,18 @@
 import { ErrorBoundary } from '@sentry/tanstackstart-react';
 import { createFileRoute } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/react-start';
-import { getRequest } from '@tanstack/react-start/server';
 import type { UserType } from '@xbrk/types';
 import { Card } from '@xbrk/ui/card';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import { Suspense } from 'react';
 import { DataTable } from '@/components/data-table/data-table';
 import { userColumns } from '@/components/users/columns';
-import { auth } from '@/lib/auth/server';
-
-const getUsers = createServerFn({ method: 'GET' }).handler(async () => {
-  const { headers } = getRequest();
-
-  const data = await auth.api.listUsers({
-    query: {
-      sortBy: 'createdAt',
-      sortDirection: 'desc',
-    },
-    headers,
-  });
-
-  return { users: data.users as UserType[] };
-});
+import { $getAllUsers } from '@/lib/server/user';
 
 export const Route = createFileRoute('/(dashboard)/users/')({
   component: Users,
   loader: async () => {
-    const result = await getUsers();
-    return result;
+    const users = await $getAllUsers();
+    return { users: users as UserType[] };
   },
   head: () => ({
     meta: [{ title: 'Users | Dashboard' }, { name: 'description', content: 'Manage your portfolio users' }],
