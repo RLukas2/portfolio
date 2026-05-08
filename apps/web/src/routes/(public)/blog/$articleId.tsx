@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import { Markdown } from '@xbrk/md';
+import { RenderedContent } from '@xbrk/md';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 import { NotFound } from '@xbrk/ui/not-found';
-import { Spinner } from '@xbrk/ui/spinner';
 import { calculateReadingTime, formatDate } from '@xbrk/utils';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, Eye, Heart, MessageCircle, Tag } from 'lucide-react';
-import { Suspense, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import SignInModal from '@/components/auth/sign-in-modal';
 import ArticleComment from '@/components/blog/article-comment';
 import ArticleAuthor from '@/components/blog/author';
@@ -69,7 +68,7 @@ export const Route = createFileRoute('/(public)/blog/$articleId')({
           getBlogPostSchemas({
             title: loaderData.title,
             description: loaderData.description || '',
-            image: loaderData.image || `${getBaseUrl()}/images/cover.avif`,
+            image: loaderData.image || `${getBaseUrl()}/site/og-image.jpg`,
             slug: loaderData.slug || '',
             datePublished: loaderData.createdAt?.toISOString() || new Date().toISOString(),
             dateModified: loaderData.updatedAt?.toISOString() || new Date().toISOString(),
@@ -248,11 +247,9 @@ function RouteComponent() {
             initial={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <Suspense fallback={<Spinner className="size-6" />}>
-              <article className="prose prose-slate dark:prose-invert mt-8 max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
-                <Markdown source={article.content ?? ''} />
-              </article>
-            </Suspense>
+            <article className="prose prose-slate dark:prose-invert mt-8 max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
+              <RenderedContent html={article.renderedContent ?? ''} />
+            </article>
           </motion.div>
 
           {/* Tags and share section */}

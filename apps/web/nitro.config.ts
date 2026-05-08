@@ -5,6 +5,8 @@ import { defineNitroConfig } from 'nitro/config';
 // Edit these arrays to manage allowed sources per directive.
 // ============================================================
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const CSP_SOURCES = {
   script: [
     'https://cdn.jsdelivr.net',
@@ -24,6 +26,8 @@ const CSP_SOURCES = {
     'https://us-assets.i.posthog.com',
     'https://github-contributions-api.jogruber.de',
     'wss://vercel.live',
+    // Allow devtools WebSocket in development (TanStack Devtools, Vite HMR)
+    ...(isDev ? ['ws://localhost:*', 'http://localhost:*'] : []),
   ],
   frame: ['https://vercel.live'],
   worker: ['https://us-assets.i.posthog.com'],
@@ -77,12 +81,14 @@ export default defineNitroConfig({
       headers: SECURITY_HEADERS,
     },
 
-    // Stricter CSP for API routes — no scripts or styles needed
+    // Stricter CSP for API routes — no scripts, styles, or frames needed
     '/api/**': {
       headers: {
         'Content-Security-Policy': "default-src 'none'; frame-ancestors 'none'",
         'X-Frame-Options': 'DENY',
         'X-Content-Type-Options': 'nosniff',
+        'X-XSS-Protection': '0',
+        'Referrer-Policy': 'no-referrer',
       },
     },
   },

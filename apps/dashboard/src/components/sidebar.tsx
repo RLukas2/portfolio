@@ -30,6 +30,7 @@ import {
   LayoutDashboardIcon,
   LogOutIcon,
   NewspaperIcon,
+  ScrollTextIcon,
   SettingsIcon,
   UsersIcon,
 } from 'lucide-react';
@@ -70,6 +71,11 @@ const navigationItems = [
     title: 'Users',
     href: '/users',
     icon: UsersIcon,
+  },
+  {
+    title: 'Audit Logs',
+    href: '/audit',
+    icon: ScrollTextIcon,
   },
 ];
 

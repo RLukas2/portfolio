@@ -1,5 +1,7 @@
 /** biome-ignore-all lint/performance/noBarrelFile: this is a barrel file */
+
 export * from './article.schema';
+export * from './audit.schema';
 export * from './auth.schema';
 export * from './experience.schema';
 export * from './guestbook.schema';

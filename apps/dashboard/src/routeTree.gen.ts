@@ -19,6 +19,7 @@ import { Route as dashboardServicesIndexRouteImport } from "./routes/(dashboard)
 import { Route as dashboardProjectsIndexRouteImport } from "./routes/(dashboard)/projects/index";
 import { Route as dashboardExperiencesIndexRouteImport } from "./routes/(dashboard)/experiences/index";
 import { Route as dashboardBlogIndexRouteImport } from "./routes/(dashboard)/blog/index";
+import { Route as dashboardAuditIndexRouteImport } from "./routes/(dashboard)/audit/index";
 import { Route as ApiAuthSplatRouteImport } from "./routes/api/auth/$";
 import { Route as dashboardSnippetsCreateRouteImport } from "./routes/(dashboard)/snippets/create";
 import { Route as dashboardServicesCreateRouteImport } from "./routes/(dashboard)/services/create";
@@ -79,6 +80,11 @@ const dashboardExperiencesIndexRoute =
 const dashboardBlogIndexRoute = dashboardBlogIndexRouteImport.update({
   id: "/blog/",
   path: "/blog/",
+  getParentRoute: () => dashboardLayoutRoute,
+} as any);
+const dashboardAuditIndexRoute = dashboardAuditIndexRouteImport.update({
+  id: "/audit/",
+  path: "/audit/",
   getParentRoute: () => dashboardLayoutRoute,
 } as any);
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   "/services/create": typeof dashboardServicesCreateRoute;
   "/snippets/create": typeof dashboardSnippetsCreateRoute;
   "/api/auth/$": typeof ApiAuthSplatRoute;
+  "/audit/": typeof dashboardAuditIndexRoute;
   "/blog/": typeof dashboardBlogIndexRoute;
   "/experiences/": typeof dashboardExperiencesIndexRoute;
   "/projects/": typeof dashboardProjectsIndexRoute;
@@ -179,6 +186,7 @@ export interface FileRoutesByTo {
   "/services/create": typeof dashboardServicesCreateRoute;
   "/snippets/create": typeof dashboardSnippetsCreateRoute;
   "/api/auth/$": typeof ApiAuthSplatRoute;
+  "/audit": typeof dashboardAuditIndexRoute;
   "/blog": typeof dashboardBlogIndexRoute;
   "/experiences": typeof dashboardExperiencesIndexRoute;
   "/projects": typeof dashboardProjectsIndexRoute;
@@ -204,6 +212,7 @@ export interface FileRoutesById {
   "/(dashboard)/services/create": typeof dashboardServicesCreateRoute;
   "/(dashboard)/snippets/create": typeof dashboardSnippetsCreateRoute;
   "/api/auth/$": typeof ApiAuthSplatRoute;
+  "/(dashboard)/audit/": typeof dashboardAuditIndexRoute;
   "/(dashboard)/blog/": typeof dashboardBlogIndexRoute;
   "/(dashboard)/experiences/": typeof dashboardExperiencesIndexRoute;
   "/(dashboard)/projects/": typeof dashboardProjectsIndexRoute;
@@ -228,6 +237,7 @@ export interface FileRouteTypes {
     | "/services/create"
     | "/snippets/create"
     | "/api/auth/$"
+    | "/audit/"
     | "/blog/"
     | "/experiences/"
     | "/projects/"
@@ -250,6 +260,7 @@ export interface FileRouteTypes {
     | "/services/create"
     | "/snippets/create"
     | "/api/auth/$"
+    | "/audit"
     | "/blog"
     | "/experiences"
     | "/projects"
@@ -274,6 +285,7 @@ export interface FileRouteTypes {
     | "/(dashboard)/services/create"
     | "/(dashboard)/snippets/create"
     | "/api/auth/$"
+    | "/(dashboard)/audit/"
     | "/(dashboard)/blog/"
     | "/(dashboard)/experiences/"
     | "/(dashboard)/projects/"
@@ -365,6 +377,13 @@ declare module "@tanstack/react-router" {
       path: "/blog";
       fullPath: "/blog/";
       preLoaderRoute: typeof dashboardBlogIndexRouteImport;
+      parentRoute: typeof dashboardLayoutRoute;
+    };
+    "/(dashboard)/audit/": {
+      id: "/(dashboard)/audit/";
+      path: "/audit";
+      fullPath: "/audit/";
+      preLoaderRoute: typeof dashboardAuditIndexRouteImport;
       parentRoute: typeof dashboardLayoutRoute;
     };
     "/api/auth/$": {
@@ -473,6 +492,7 @@ interface dashboardLayoutRouteChildren {
   dashboardProjectsCreateRoute: typeof dashboardProjectsCreateRoute;
   dashboardServicesCreateRoute: typeof dashboardServicesCreateRoute;
   dashboardSnippetsCreateRoute: typeof dashboardSnippetsCreateRoute;
+  dashboardAuditIndexRoute: typeof dashboardAuditIndexRoute;
   dashboardBlogIndexRoute: typeof dashboardBlogIndexRoute;
   dashboardExperiencesIndexRoute: typeof dashboardExperiencesIndexRoute;
   dashboardProjectsIndexRoute: typeof dashboardProjectsIndexRoute;
@@ -493,6 +513,7 @@ const dashboardLayoutRouteChildren: dashboardLayoutRouteChildren = {
   dashboardProjectsCreateRoute: dashboardProjectsCreateRoute,
   dashboardServicesCreateRoute: dashboardServicesCreateRoute,
   dashboardSnippetsCreateRoute: dashboardSnippetsCreateRoute,
+  dashboardAuditIndexRoute: dashboardAuditIndexRoute,
   dashboardBlogIndexRoute: dashboardBlogIndexRoute,
   dashboardExperiencesIndexRoute: dashboardExperiencesIndexRoute,
   dashboardProjectsIndexRoute: dashboardProjectsIndexRoute,

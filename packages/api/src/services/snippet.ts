@@ -82,7 +82,8 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
 
 export async function create(db: DbClient, input: z.infer<typeof CreateSnippetSchema>) {
   try {
-    await db.insert(snippet).values(input);
+    const [created] = await db.insert(snippet).values(input).returning();
+    return created;
   } catch (error) {
     Sentry.captureException(error);
     console.error('[snippet.create] Database error:', error);
@@ -92,7 +93,8 @@ export async function create(db: DbClient, input: z.infer<typeof CreateSnippetSc
 
 export async function update(db: DbClient, input: z.infer<typeof UpdateSnippetSchema>) {
   try {
-    await db.update(snippet).set(input).where(eq(snippet.id, input.id));
+    const [updated] = await db.update(snippet).set(input).where(eq(snippet.id, input.id)).returning();
+    return updated;
   } catch (error) {
     Sentry.captureException(error);
     console.error('[snippet.update] Database error:', error);

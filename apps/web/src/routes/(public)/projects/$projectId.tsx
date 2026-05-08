@@ -1,17 +1,15 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import { Markdown } from '@xbrk/md';
+import { RenderedContent } from '@xbrk/md';
 import ProjectLink from '@xbrk/shared/link';
 import { STACKS } from '@xbrk/shared/stack';
 import Icon from '@xbrk/ui/icon';
 import { NotFound } from '@xbrk/ui/not-found';
-import { Spinner } from '@xbrk/ui/spinner';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@xbrk/ui/tooltip';
 import ZoomImage from '@xbrk/ui/zoom-image';
 import { motion } from 'framer-motion';
 import { Code2, ExternalLink, Sparkles } from 'lucide-react';
-import { Suspense } from 'react';
 import { siGithub } from 'simple-icons';
 import TableOfContents from '@/components/blog/toc';
 import BreadcrumbNavigation from '@/components/shared/breadcrumb-navigation';
@@ -219,11 +217,10 @@ function RouteComponent() {
             initial={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <Suspense fallback={<Spinner className="size-6" />}>
-              <div className="prose prose-slate dark:prose-invert max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
-                <Markdown source={content} />
-              </div>
-            </Suspense>
+            <RenderedContent
+              className="prose prose-slate dark:prose-invert max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300"
+              html={project.renderedContent ?? ''}
+            />
           </motion.div>
         )}
       </div>

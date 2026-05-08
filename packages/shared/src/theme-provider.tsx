@@ -67,7 +67,7 @@ const getNextTheme = createClientOnlyFn((current: ThemeMode): ThemeMode => {
 const themeDetectorScript = (() => {
   function themeFn() {
     try {
-      const storedTheme = localStorage.getItem(themeKey) || 'auto';
+      const storedTheme = localStorage.getItem('theme') || 'auto';
       const validTheme = ['light', 'dark', 'auto'].includes(storedTheme) ? storedTheme : 'auto';
 
       if (validTheme === 'auto') {
@@ -135,7 +135,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   const toggleMode = () => {
     const nextTheme = getNextTheme(themeMode);
-    setThemeMode(nextTheme);
+    setTheme(nextTheme);
   };
 
   return (

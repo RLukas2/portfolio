@@ -195,7 +195,7 @@ export const rateLimiters = {
     maxRequests: 10,
   }),
 
-  // Strict: 5 requests per minute
+  // Strict: 5 requests per minute (external API calls, etc.)
   strict: new RateLimiter({
     windowMs: 60 * 1000,
     maxRequests: 5,

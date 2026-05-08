@@ -1,6 +1,7 @@
 import { createServerFn } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';
 import { blogService } from '@xbrk/api';
+import { processMarkdownToHtml } from '@xbrk/md';
 import { z } from 'zod/v4';
 import { optionalAuthMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
@@ -18,18 +19,24 @@ export const $getAllPublicArticles = createServerFn({ method: 'GET' })
 
 /**
  * Server function to fetch a blog article by its slug.
+ * Processes markdown content to HTML server-side for instant rendering.
  *
  * @param slug - The article slug
- * @returns The article data or null if not found
+ * @returns The article data with pre-rendered HTML content, or null if not found
  */
 export const $getArticleBySlug = createServerFn({ method: 'GET' })
   .middleware([dbMiddleware, optionalAuthMiddleware])
   .inputValidator(z.object({ slug: z.string() }))
   .handler(
     // biome-ignore lint/suspicious/noExplicitAny: Drizzle relation types trigger serialization false positive
-    (ctx): Promise<any> => {
+    async (ctx): Promise<any> => {
       const session = ctx.context.user ? { user: { role: ctx.context.user.role ?? '' } } : null;
-      return blogService.getBySlug(ctx.context.db, ctx.data, session);
+      const article = await blogService.getBySlug(ctx.context.db, ctx.data, session);
+      if (!article) {
+        return null;
+      }
+      const renderedContent = await processMarkdownToHtml(article.content ?? '');
+      return { ...article, renderedContent };
     },
   );
 

@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { createFileRoute } from '@tanstack/react-router';
 import { createSuccessResponse, handleApiError } from '@xbrk/api';
 import { NotFoundError } from '@xbrk/errors';
+import { processMarkdownToHtml } from '@xbrk/md';
 import { getTOC } from '@xbrk/utils';
 
 /**
@@ -25,21 +26,22 @@ import { getTOC } from '@xbrk/utils';
 export const Route = createFileRoute('/api/changelog/')({
   server: {
     handlers: {
-      GET: ({ request }) => {
+      GET: async ({ request }) => {
         try {
           const changelogPath = join(process.cwd(), 'changelog.md');
           const content = readFileSync(changelogPath, 'utf-8');
-          const toc = getTOC(content ?? '');
+          const [toc, renderedContent] = await Promise.all([
+            Promise.resolve(getTOC(content ?? '')),
+            processMarkdownToHtml(content),
+          ]);
 
-          return createSuccessResponse({ content, toc }, undefined, 200, {
+          return createSuccessResponse({ renderedContent, toc }, undefined, 200, {
             'Cache-Control': 'public, max-age=3600, s-maxage=3600',
           });
         } catch (error) {
-          // Check if it's a file not found error
           if (error instanceof Error && 'code' in error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
             return handleApiError(new NotFoundError('Changelog file'), request);
           }
-
           return handleApiError(error, request);
         }
       },

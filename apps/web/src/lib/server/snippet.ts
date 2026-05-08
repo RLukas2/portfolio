@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { snippetService } from '@xbrk/api';
+import { processMarkdownToHtml } from '@xbrk/md';
 import { z } from 'zod/v4';
 import { optionalAuthMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
@@ -17,14 +18,20 @@ export const $getAllPublicSnippets = createServerFn({ method: 'GET' })
 
 /**
  * Server function to fetch a snippet by its slug.
+ * Processes markdown/code content to HTML server-side for instant rendering.
  *
  * @param slug - The snippet slug
- * @returns The snippet data or null if not found
+ * @returns The snippet data with pre-rendered HTML content, or null if not found
  */
 export const $getSnippetBySlug = createServerFn({ method: 'GET' })
   .middleware([dbMiddleware, optionalAuthMiddleware])
   .inputValidator(z.object({ slug: z.string() }))
-  .handler((ctx) => {
+  .handler(async (ctx) => {
     const session = ctx.context.user ? { user: { role: ctx.context.user.role ?? '' } } : null;
-    return snippetService.getBySlug(ctx.context.db, ctx.data, session);
+    const snippet = await snippetService.getBySlug(ctx.context.db, ctx.data, session);
+    if (!snippet) {
+      return null;
+    }
+    const renderedContent = await processMarkdownToHtml(snippet.code ?? '');
+    return { ...snippet, renderedContent };
   });

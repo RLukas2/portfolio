@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { createSuccessResponse, handleApiError } from '@xbrk/api';
-import { ServiceUnavailableError } from '@xbrk/errors';
+import { RateLimitError, ServiceUnavailableError } from '@xbrk/errors';
 import { getGithubStats } from '@/lib/integrations/github';
+import { getClientIp, getRateLimitHeaders, rateLimiters } from '@/lib/server/rate-limit';
 
 /**
  * GitHub Stats API Route
@@ -32,6 +33,15 @@ export const Route = createFileRoute('/api/stats/github/')({
     handlers: {
       GET: async ({ request }) => {
         try {
+          const clientIp = getClientIp(request);
+          if (rateLimiters.strict.isRateLimited(clientIp)) {
+            return handleApiError(
+              new RateLimitError('Too many requests. Please try again later.'),
+              request,
+              getRateLimitHeaders(rateLimiters.strict, clientIp),
+            );
+          }
+
           const { user, repos, starsCount } = (await getGithubStats()) || {};
           return createSuccessResponse({ user, repos, starsCount });
         } catch (error) {

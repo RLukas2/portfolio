@@ -1,4 +1,4 @@
-import { pgEnum, pgTable } from 'drizzle-orm/pg-core';
+import { index, pgEnum, pgTable } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import { z } from 'zod/v4';
 import { validators } from '../lib/validation';
@@ -20,21 +20,32 @@ export type ExperienceTypeValue = (typeof ExperienceType)[keyof typeof Experienc
 
 export const experienceTypeEnum = pgEnum('experience_type', ['work', 'education', 'volunteer', 'certification']);
 
-export const experience = pgTable('experience', (t) => ({
-  id: t.uuid().notNull().primaryKey().defaultRandom(),
-  title: t.varchar({ length: 255 }).notNull(),
-  description: t.varchar({ length: 255 }),
-  imageUrl: t.varchar({ length: 255 }),
-  startDate: t.date({ mode: 'string' }),
-  endDate: t.date({ mode: 'string' }),
-  institution: t.varchar({ length: 255 }),
-  url: t.varchar({ length: 255 }),
-  type: experienceTypeEnum('type').default(ExperienceType.WORK),
-  isDraft: t.boolean().notNull().default(false),
-  isOnGoing: t.boolean().notNull().default(false),
-  createdAt: t.timestamp().defaultNow().notNull(),
-  updatedAt: t.timestamp({ mode: 'date', withTimezone: true }).$onUpdate(() => new Date()),
-}));
+export const experience = pgTable(
+  'experience',
+  (t) => ({
+    id: t.uuid().notNull().primaryKey().defaultRandom(),
+    title: t.varchar({ length: 255 }).notNull(),
+    description: t.varchar({ length: 255 }),
+    imageUrl: t.varchar({ length: 255 }),
+    startDate: t.date({ mode: 'string' }),
+    endDate: t.date({ mode: 'string' }),
+    institution: t.varchar({ length: 255 }),
+    url: t.varchar({ length: 255 }),
+    type: experienceTypeEnum('type').default(ExperienceType.WORK),
+    isDraft: t.boolean().notNull().default(false),
+    isOnGoing: t.boolean().notNull().default(false),
+    createdAt: t.timestamp().defaultNow().notNull(),
+    updatedAt: t.timestamp({ mode: 'date', withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (table) => [
+    index('experience_type_idx').on(table.type),
+    index('experience_is_draft_idx').on(table.isDraft),
+    index('experience_start_date_idx').on(table.startDate),
+    index('experience_created_at_idx').on(table.createdAt),
+    // Composite index for filtering by type and draft status
+    index('experience_type_is_draft_idx').on(table.type, table.isDraft),
+  ],
+);
 
 export const ExperienceBaseSchema = z.object({
   title: validators.title,

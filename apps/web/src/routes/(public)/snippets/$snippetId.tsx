@@ -1,11 +1,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import { Markdown } from '@xbrk/md';
+import { RenderedContent } from '@xbrk/md';
 import { NotFound } from '@xbrk/ui/not-found';
-import { Spinner } from '@xbrk/ui/spinner';
 import { formatDate } from '@xbrk/utils';
-import { Suspense } from 'react';
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
 import { $getSnippetBySlug } from '@/lib/server';
@@ -71,11 +69,9 @@ function RouteComponent() {
           </div>
         </div>
 
-        <Suspense fallback={<Spinner className="size-6" />}>
-          <article className="prose prose-slate dark:prose-invert !max-w-none">
-            <Markdown source={snippet.data?.code ?? ''} />
-          </article>
-        </Suspense>
+        <article className="prose prose-slate dark:prose-invert !max-w-none">
+          <RenderedContent html={snippet.data?.renderedContent ?? ''} />
+        </article>
       </div>
     </article>
   );

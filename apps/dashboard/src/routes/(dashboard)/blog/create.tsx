@@ -30,6 +30,7 @@ function ArticlesCreatePage() {
       router.navigate({ to: '/blog' });
     },
     onError: (_error) => {
+      console.error('Failed to create article', _error);
       toast.error('Failed to create article');
     },
   });
