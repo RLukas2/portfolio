@@ -1,0 +1,5 @@
+{
+  "extends": "@xbrk/tsconfig/packages.json",
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
