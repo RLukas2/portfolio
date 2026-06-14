@@ -4,8 +4,8 @@ import { m } from 'framer-motion';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { useMemo } from 'react';
 
-const MotionDiv = motion.create('div');
-const MotionSlot = motion.create(Slot);
+const MotionDiv = m.create('div');
+const MotionSlot = m.create(Slot);
 
 interface PageHeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   asChild?: boolean;
