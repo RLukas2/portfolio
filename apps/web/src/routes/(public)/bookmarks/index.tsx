@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
 import type { Collection } from '@xbrk/types';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { ArrowRight, Bookmark, FolderOpen } from 'lucide-react';
 import EmptyState from '@/components/shared/empty-state';
 import PageHeading from '@/components/shared/page-heading';
@@ -59,14 +59,14 @@ function RouteComponent() {
       {collections.length === 0 ? (
         <EmptyState message="No bookmarks found yet. We are discovering favorite discoveries!" />
       ) : (
-        <motion.div
+        <m.div
           animate="visible"
           className="grid gap-4 sm:grid-cols-2"
           initial="hidden"
           variants={containerVariants}
         >
           {collections.map((collection: Collection) => (
-            <motion.div key={collection._id} variants={itemVariants}>
+            <m.div key={collection._id} variants={itemVariants}>
               <Link
                 className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-border/50 bg-card p-5 transition-all duration-300 hover:border-border hover:shadow-lg hover:shadow-primary/5"
                 params={{
@@ -100,9 +100,9 @@ function RouteComponent() {
                   </span>
                 </div>
               </Link>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       )}
     </>
   );

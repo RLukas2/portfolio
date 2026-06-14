@@ -1,6 +1,6 @@
 import { ClientOnly } from '@tanstack/react-router';
 import { useTheme } from '@xbrk/shared/theme-provider';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Calendar, GitBranch } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';
 import GithubActivityGraph from '@/components/github-stats/github-activity-graph';
@@ -17,7 +17,7 @@ export default function GithubContributor() {
   }
 
   return (
-    <motion.div
+    <m.div
       animate={{ opacity: 1, y: 0 }}
       className="mt-16 space-y-8"
       initial={{ opacity: 0, y: 20 }}
@@ -62,6 +62,6 @@ export default function GithubContributor() {
 
       {/* Activity graph */}
       <GithubActivityGraph />
-    </motion.div>
+    </m.div>
   );
 }

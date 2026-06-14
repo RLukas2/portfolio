@@ -1,6 +1,6 @@
 import { siteConfig, socialConfig } from '@xbrk/config';
 import Icon from '@xbrk/ui/icon';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import { Mail } from 'lucide-react';
 import { useRef } from 'react';
 import Link from '@/components/shared/link';
@@ -15,11 +15,11 @@ const ConnectSection = () => {
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
   return (
-    <motion.section
+    <m.section
       animate={isInView ? 'visible' : 'hidden'}
       className="w-full"
       id="connect"
-      initial="hidden"
+      initial={false}
       ref={sectionRef}
       transition={{ duration: 0.5 }}
       variants={sectionVariants}
@@ -29,10 +29,10 @@ const ConnectSection = () => {
         <div className="pointer-events-none absolute top-0 right-0 h-64 w-64 rounded-full bg-gradient-to-br from-violet-500/10 to-pink-500/10 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 left-0 h-48 w-48 rounded-full bg-gradient-to-tr from-cyan-500/10 to-blue-500/10 blur-3xl" />
 
-        <motion.div
+        <m.div
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           className="relative flex flex-col items-center text-center"
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <h2 className="font-bold text-2xl tracking-tight sm:text-3xl md:text-4xl">Say Hi</h2>
@@ -75,9 +75,9 @@ const ConnectSection = () => {
               guestbook
             </Link>
           </p>
-        </motion.div>
+        </m.div>
       </div>
-    </motion.section>
+    </m.section>
   );
 };
 

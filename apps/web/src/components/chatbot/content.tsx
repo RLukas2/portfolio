@@ -1,6 +1,6 @@
 import { createChatClientOptions } from '@tanstack/ai-client';
 import { fetchServerSentEvents, useChat } from '@tanstack/ai-react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { useChatHistory } from '@/hooks/use-chat-history';
 import { ChatHeader } from './header';
@@ -47,7 +47,7 @@ export function ChatbotContent({
 
   return (
     <>
-      <motion.div
+      <m.div
         animate={{ opacity: 1 }}
         className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm lg:bg-transparent"
         exit={{ opacity: 0 }}
@@ -55,7 +55,7 @@ export function ChatbotContent({
         onClick={() => setIsOpen(false)}
       />
 
-      <motion.div
+      <m.div
         animate={{ opacity: 1, scale: 1, y: 0 }}
         className="fixed inset-4 z-50 lg:inset-auto lg:right-6 lg:bottom-24 lg:h-[550px] lg:w-[420px]"
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -74,7 +74,7 @@ export function ChatbotContent({
             <ChatInput isLoading={isLoading} sendMessage={sendMessage} />
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </>
   );
 }

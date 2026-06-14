@@ -1,5 +1,5 @@
 import type { ProjectType } from '@xbrk/types';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { slideInWithFadeOut } from '@/lib/constants/framer-motion-variants';
 import EmptyState from '../shared/empty-state';
 import ProjectCard from './project-card';
@@ -14,7 +14,7 @@ export default function Projects({ projects }: Readonly<ProjectsProps>) {
   }
 
   return (
-    <motion.div
+    <m.div
       animate="visible"
       className="grid grid-cols-1 gap-8 sm:grid-cols-2"
       initial="hidden"
@@ -23,6 +23,6 @@ export default function Projects({ projects }: Readonly<ProjectsProps>) {
       {projects.map((project) => (
         <ProjectCard key={project.slug} project={project} />
       ))}
-    </motion.div>
+    </m.div>
   );
 }

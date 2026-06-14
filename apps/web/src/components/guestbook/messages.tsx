@@ -1,5 +1,5 @@
 import type { GuestbookType, UserType } from '@xbrk/types';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { MessageSquare } from 'lucide-react';
 import { containerVariants, itemVariants } from '@/lib/constants/framer-motion-variants';
 import Message from './message';
@@ -26,12 +26,12 @@ export default function Messages({ messages }: Readonly<MessageProps>) {
   }
 
   return (
-    <motion.div animate="visible" className="mt-8 space-y-2" initial="hidden" variants={containerVariants}>
+    <m.div animate="visible" className="mt-8 space-y-2" initial="hidden" variants={containerVariants}>
       {messages.map((message) => (
-        <motion.div key={message.id} variants={itemVariants}>
+        <m.div key={message.id} variants={itemVariants}>
           <Message message={message} />
-        </motion.div>
+        </m.div>
       ))}
-    </motion.div>
+    </m.div>
   );
 }

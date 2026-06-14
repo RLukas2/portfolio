@@ -10,6 +10,7 @@ import { CookieBanner } from '@/components/analytics/cookie-banner';
 import { RouteProgress } from '@/components/shared/route-progress';
 import { type AuthQueryResult, authQueryOptions } from '@/lib/auth/queries';
 import { env } from '@/lib/env/client';
+import { MotionProvider } from '@/components/providers/motion-provider';
 import printCss from '@/print.css?url';
 import appCss from '@/style.css?url';
 
@@ -169,19 +170,21 @@ function ShellComponent({ children }: { children: React.ReactNode }) {
 
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <PostHogProvider client={posthog}>
-          <RouteProgress />
+          <MotionProvider>
+            <RouteProgress />
 
-          {children}
+            {children}
 
-          <Toaster resolvedTheme={resolvedTheme} />
+            <Toaster resolvedTheme={resolvedTheme} />
 
-          {import.meta.env.DEV && <DevtoolsComponent />}
+            {import.meta.env.DEV && <DevtoolsComponent />}
 
-          <ClientOnly>
-            <CookieBanner />
-          </ClientOnly>
+            <ClientOnly>
+              <CookieBanner />
+            </ClientOnly>
 
-          <Scripts />
+            <Scripts />
+          </MotionProvider>
         </PostHogProvider>
       </body>
     </html>

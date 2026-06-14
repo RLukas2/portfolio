@@ -1,6 +1,6 @@
 import { usePostHog } from '@posthog/react';
 import { Button } from '@xbrk/ui/button';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { Cookie, X } from 'lucide-react';
 import { useState } from 'react';
 
@@ -21,7 +21,7 @@ export function CookieBanner() {
   return (
     <AnimatePresence>
       {consentGiven === 'pending' && (
-        <motion.div
+        <m.div
           animate={{ y: 0, opacity: 1 }}
           className="fixed inset-x-0 bottom-0 z-50 p-4"
           exit={{ y: 100, opacity: 0 }}
@@ -62,7 +62,7 @@ export function CookieBanner() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

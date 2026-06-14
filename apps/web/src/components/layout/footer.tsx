@@ -1,7 +1,7 @@
 import { siteConfig, socialConfig } from '@xbrk/config';
 import { cn } from '@xbrk/ui';
 import Icon from '@xbrk/ui/icon';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import Link from '@/components/shared/link';
 import { FOOTER_LINKS } from '@/lib/constants/footer';
 
@@ -16,7 +16,7 @@ const Footer = () => (
     />
 
     <div className="container py-12 lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl">
-      <motion.div
+      <m.div
         animate={{ opacity: 1, y: 0 }}
         className="mb-8 grid grid-cols-2 gap-8 md:grid-cols-4"
         initial={{ opacity: 0, y: 20 }}
@@ -44,7 +44,7 @@ const Footer = () => (
             </div>
           ))}
         </nav>
-      </motion.div>
+      </m.div>
 
       {/* Horizontal divider */}
       <div aria-hidden="true" className="my-8 border-border/50 border-t" />

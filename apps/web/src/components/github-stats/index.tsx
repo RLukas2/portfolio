@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { FaGithub } from 'react-icons/fa';
 import StatCard from '@/components/github-stats/card';
 import GithubContributor from '@/components/github-stats/github-contributor';
@@ -46,7 +46,7 @@ export default function Stats() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <motion.div
+      <m.div
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
         initial={{ opacity: 0, y: 20 }}
@@ -56,10 +56,10 @@ export default function Stats() {
           <FaGithub className="h-5 w-5 text-primary" />
         </div>
         <h2 className="font-semibold text-xl">GitHub Overview</h2>
-      </motion.div>
+      </m.div>
 
       {/* Stat cards */}
-      <motion.div
+      <m.div
         animate={{ opacity: 1, y: 0 }}
         className="grid grid-cols-1 gap-4 sm:grid-cols-3"
         initial={{ opacity: 0, y: 20 }}
@@ -68,7 +68,7 @@ export default function Stats() {
         {statCards.map((card) => (
           <StatCard card={card} key={card.title} />
         ))}
-      </motion.div>
+      </m.div>
 
       <GithubContributor />
     </div>

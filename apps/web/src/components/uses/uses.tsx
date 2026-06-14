@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Layers } from 'lucide-react';
 import type { SimpleIcon } from 'simple-icons';
 import Link from '@/components/shared/link';
@@ -40,7 +40,7 @@ export default function Uses() {
         <h2 className="font-semibold text-xl">Software & Applications</h2>
       </div>
 
-      <motion.div
+      <m.div
         animate="visible"
         className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8"
         initial="hidden"
@@ -50,7 +50,7 @@ export default function Uses() {
           const Icon = createIconComponent(item.icon);
 
           return (
-            <motion.div key={item.name} variants={itemVariants}>
+            <m.div key={item.name} variants={itemVariants}>
               <Link
                 className="group flex flex-col items-center justify-center gap-3 rounded-2xl border bg-card p-4 transition-all duration-300 hover:border-foreground/20 hover:shadow-lg active:scale-95"
                 rel="noopener noreferrer"
@@ -62,10 +62,10 @@ export default function Uses() {
                 </div>
                 <p className="line-clamp-1 text-center font-medium text-xs">{item.name}</p>
               </Link>
-            </motion.div>
+            </m.div>
           );
         })}
-      </motion.div>
+      </m.div>
     </div>
   );
 }

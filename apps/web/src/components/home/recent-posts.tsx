@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { cn } from '@xbrk/ui';
 import { buttonVariants } from '@xbrk/ui/button';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useRef } from 'react';
 import Link from '@/components/shared/link';
@@ -44,75 +44,73 @@ const RecentPosts = () => {
   const recentArticles = articles.slice(0, 3);
 
   return (
-    <motion.section
+    <m.section
       animate={isInView ? 'visible' : 'hidden'}
       className="w-full"
       id="recent-posts"
-      initial="hidden"
+      initial={false}
       ref={sectionRef}
       transition={{ duration: 0.5 }}
       variants={sectionVariants}
     >
       <div className="mb-6 flex flex-col items-center px-1 py-4 text-center sm:mb-10">
-        <motion.span
+        <m.span
           animate={isInView ? { opacity: 1 } : { opacity: 0 }}
           className="mb-3 font-medium text-primary text-sm uppercase tracking-widest"
-          initial={{ opacity: 0 }}
+          initial={false}
           transition={{ delay: 0.1 }}
         >
           From the Blog
-        </motion.span>
-        <motion.h2
+        </m.span>
+        <m.h2
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           className="font-bold text-3xl tracking-tight sm:text-4xl"
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           transition={{ delay: 0.2 }}
         >
           Latest Writing
-        </motion.h2>
-        <motion.p
+        </m.h2>
+        <m.p
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           className="mt-3 max-w-2xl text-muted-foreground"
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           transition={{ delay: 0.3 }}
         >
           Thoughts on tech, side projects, and things I find interesting.
-        </motion.p>
+        </m.p>
       </div>
 
       {recentArticles.length > 0 ? (
         <>
-          <motion.div
-            animate="visible"
+          <m.div
+            animate={isInView ? 'visible' : 'hidden'}
             className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
-            initial="hidden"
+            initial={false}
             variants={containerVariantsFast}
-            viewport={{ once: true }}
-            whileInView="visible"
           >
             {recentArticles.map((article) => (
-              <motion.div key={article.slug} variants={itemVariantsDown}>
+              <m.div key={article.slug} variants={itemVariantsDown}>
                 <ArticleCard article={article} />
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
 
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
+          <m.div
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             className="mt-10 flex justify-center"
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             transition={{ delay: 0.5 }}
           >
             <Link className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'group')} href="/blog">
               View all posts
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
-          </motion.div>
+          </m.div>
         </>
       ) : (
         <EmptyState message="The posts are playing hide and seek – we just can't find them!" />
       )}
-    </motion.section>
+    </m.section>
   );
 };
 
