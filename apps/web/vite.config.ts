@@ -1,5 +1,4 @@
 import path from 'node:path';
-import babel from '@rolldown/plugin-babel';
 import { sentryTanstackStart } from '@sentry/tanstackstart-react/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
@@ -20,26 +19,9 @@ const config = defineConfig({
     rollupOptions: {
       // Keep shiki and its sub-packages external so Rolldown never tries to bundle the .wasm file
       external: [/^shiki/, /^@shikijs\//, /\.wasm$/],
-      output: {
-        manualChunks(id) {
-          // Separate vendor chunks for better caching
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-            if (
-              id.includes('@tanstack/react-router') ||
-              id.includes('@tanstack/react-query') ||
-              id.includes('@tanstack/react-start')
-            ) {
-              return 'tanstack-vendor';
-            }
-            if (id.includes('framer-motion') || id.includes('lucide-react')) {
-              return 'ui-vendor';
-            }
-          }
-        },
-      },
+      // manualChunks intentionally omitted: split chunks break CJS-ESM interop
+      // in TanStack Start's SSR environment (Rolldown wraps CommonJS lazy getters
+      // instead of calling them, causing "__toESM(...).default" to be undefined).
     },
     // Increase chunk size warning limit for vendor chunks
     chunkSizeWarningLimit: 1000,
@@ -85,13 +67,10 @@ const config = defineConfig({
       compatibilityDate: 'latest',
       preset: process.env.VERCEL ? 'vercel' : 'node',
     }),
-    viteReact(),
-    babel({
-      presets: [
-        reactCompilerPreset({
-          target: '19',
-        }),
-      ],
+    viteReact({
+      babel: {
+        presets: [reactCompilerPreset({ target: '19' })],
+      },
     }),
   ],
   optimizeDeps: {

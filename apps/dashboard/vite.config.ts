@@ -1,5 +1,4 @@
 import path from 'node:path';
-import babel from '@rolldown/plugin-babel';
 import { sentryTanstackStart } from '@sentry/tanstackstart-react/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
@@ -58,13 +57,10 @@ const config = defineConfig({
       compatibilityDate: 'latest',
       preset: process.env.VERCEL ? 'vercel' : 'node',
     }),
-    viteReact(),
-    babel({
-      presets: [
-        reactCompilerPreset({
-          target: '19',
-        }),
-      ],
+    viteReact({
+      babel: {
+        presets: [reactCompilerPreset({ target: '19' })],
+      },
     }),
     tailwindcss(),
   ],
