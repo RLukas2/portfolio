@@ -33,7 +33,7 @@ export default function BookmarkList({ id, initialBookmarks }: Readonly<Bookmark
 
   return (
     <div className="space-y-8">
-      <m.div animate="visible" className="grid gap-4 sm:grid-cols-2" initial="hidden" variants={containerVariants}>
+      <m.div animate="visible" className="grid gap-4 sm:grid-cols-2" initial={false} variants={containerVariants}>
         {initialBookmarks.map((bookmark) => (
           <m.div key={bookmark._id} variants={itemVariants}>
             <BookmarkCard bookmark={bookmark} />

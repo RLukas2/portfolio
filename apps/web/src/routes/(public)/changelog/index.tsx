@@ -69,7 +69,7 @@ function RouteComponent() {
           <m.div
             animate={{ opacity: 1, x: 0 }}
             className="hidden text-sm xl:block"
-            initial={{ opacity: 0, x: 20 }}
+            initial={false}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <div className="sticky top-20 -mt-10 pt-10">
