@@ -50,7 +50,7 @@ export default function FilteredArticles({ articles }: Readonly<FilteredArticles
         <m.div
           animate="visible"
           className="grid gap-6 sm:grid-cols-2"
-          initial="hidden"
+          initial={false}
           variants={containerVariants}
         >
           {filteredArticles.map((article) => (

@@ -17,7 +17,7 @@ export default function Projects({ projects }: Readonly<ProjectsProps>) {
     <m.div
       animate="visible"
       className="grid grid-cols-1 gap-8 sm:grid-cols-2"
-      initial="hidden"
+      initial={false}
       variants={slideInWithFadeOut}
     >
       {projects.map((project) => (
