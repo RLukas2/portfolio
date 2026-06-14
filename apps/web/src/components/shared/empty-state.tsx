@@ -14,21 +14,22 @@ const EmptyState = ({ message }: EmptyStateProps) => {
   return (
     <m.div
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      className="my-4 flex flex-col items-center justify-center space-y-3 py-8"
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      className="my-4 flex flex-col items-center justify-center space-y-3 py-8 animate-in fade-in zoom-in-95 duration-500"
+      initial={false}
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
       <m.div
         animate={{ opacity: 1, scale: 1 }}
-        initial={{ opacity: 0, scale: 0.8 }}
+        className="animate-in fade-in zoom-in-75 duration-500 delay-100 fill-mode-both"
+        initial={false}
         transition={{ duration: 0.4, delay: 0.1, ease: 'backOut' }}
       >
         <Frown className="size-12 text-muted-foreground" />
       </m.div>
       <m.p
         animate={{ opacity: 1, y: 0 }}
-        className="text-center text-muted-foreground"
-        initial={{ opacity: 0, y: 10 }}
+        className="text-center text-muted-foreground animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200 fill-mode-both"
+        initial={false}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
         {message}

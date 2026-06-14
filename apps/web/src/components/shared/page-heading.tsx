@@ -41,11 +41,11 @@ const PageHeading = ({
   );
 
   const motionProps = hasMotion
-    ? { animate: animation.show, initial: animation.hide, transition: { duration: 0.5 } }
+    ? { animate: animation.show, initial: false, transition: { duration: 0.5 } }
     : {};
 
   return (
-    <Comp {...motionProps} className={cn('py-16', className)}>
+    <Comp {...motionProps} className={cn('py-16 animate-in fade-in slide-in-from-left-4 duration-500', className)}>
       <div className={cn('relative', { 'flex flex-col items-center': centered })}>
         {/* Decorative gradient */}
         <div
@@ -60,7 +60,7 @@ const PageHeading = ({
             <m.h1
               animate={animation.show}
               className="font-bold text-4xl tracking-tight md:text-5xl lg:text-6xl"
-              initial={animation.hide}
+              initial={false}
               transition={{ delay: 0.1 }}
             >
               {title}
@@ -77,7 +77,7 @@ const PageHeading = ({
                   'text-muted-foreground leading-relaxed md:text-lg',
                   centered ? 'mx-auto max-w-2xl' : 'max-w-2xl',
                 )}
-                initial={animation.hide}
+                initial={false}
                 transition={{ delay: 0.2 }}
               >
                 {description}
@@ -98,7 +98,7 @@ const PageHeading = ({
               <m.div
                 animate={animation.show}
                 className="pointer-events-auto pt-3"
-                initial={animation.hide}
+                initial={false}
                 transition={{ delay: 0.3 }}
               >
                 {children}
