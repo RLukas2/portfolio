@@ -62,7 +62,7 @@ function RouteComponent() {
         <m.div
           animate="visible"
           className="grid gap-4 sm:grid-cols-2"
-          initial="hidden"
+          initial={false}
           variants={containerVariants}
         >
           {collections.map((collection: Collection) => (

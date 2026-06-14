@@ -144,14 +144,14 @@ function RouteComponent() {
     <>
       <article className="relative lg:gap-10 xl:grid xl:max-w-6xl xl:grid-cols-[1fr_280px] 2xl:max-w-7xl">
         <div className="w-full min-w-0">
-          <m.div animate={{ opacity: 1, y: 0 }} className="animate-in fade-in slide-in-from-bottom-4 duration-500" initial={false} transition={{ duration: 0.5 }}>
+          <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5 }}>
             <BreadcrumbNavigation pageTitle={article.title} />
           </m.div>
 
           {/* Hero Section */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            className="relative animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100 fill-mode-both"
+            className="relative"
             initial={false}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
@@ -207,7 +207,7 @@ function RouteComponent() {
             {/* Author section with enhanced styling */}
             <m.div
               animate={{ opacity: 1, y: 0 }}
-              className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 fill-mode-both"
+              className="mt-6"
               initial={false}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
@@ -219,7 +219,7 @@ function RouteComponent() {
           {article.imageUrl && (
             <m.div
               animate={{ opacity: 1, scale: 1 }}
-              className="relative my-8 sm:my-10 animate-in fade-in zoom-in-95 duration-700 delay-300 fill-mode-both"
+              className="relative my-8 sm:my-10"
               initial={false}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
@@ -245,7 +245,6 @@ function RouteComponent() {
           {/* Article content */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500 fill-mode-both"
             initial={false}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
@@ -260,7 +259,7 @@ function RouteComponent() {
           <m.div
             animate={{ opacity: 1, y: 0 }}
             className="mt-12 border-border/50 border-t pt-8"
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             transition={{ duration: 0.5, delay: 0.5 }}
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -288,7 +287,7 @@ function RouteComponent() {
           <m.div
             animate={{ opacity: 1, y: 0 }}
             className="mt-12"
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
             <ArticleComment articleId={article.id} articleSlug={article.slug} />
@@ -300,7 +299,7 @@ function RouteComponent() {
           <m.div
             animate={{ opacity: 1, x: 0 }}
             className="hidden text-sm xl:block"
-            initial={{ opacity: 0, x: 20 }}
+            initial={false}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <div className="sticky top-20 -mt-10 pt-10">

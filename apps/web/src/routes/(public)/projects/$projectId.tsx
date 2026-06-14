@@ -109,14 +109,14 @@ function RouteComponent() {
     <article className="relative lg:gap-10 xl:grid xl:max-w-6xl xl:grid-cols-[1fr_280px] 2xl:max-w-7xl">
       <div className="w-full min-w-0">
         {/* Breadcrumb */}
-        <m.div animate={{ opacity: 1, y: 0 }} className="animate-in fade-in slide-in-from-bottom-4 duration-500" initial={false} transition={{ duration: 0.5 }}>
+        <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5 }}>
           <BreadcrumbNavigation pageTitle={title} section={{ label: 'Projects', href: '/projects' }} />
         </m.div>
 
         {/* Hero Section */}
         <m.div
           animate={{ opacity: 1, y: 0 }}
-          className="relative animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100 fill-mode-both"
+          className="relative"
           initial={false}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
@@ -155,7 +155,7 @@ function RouteComponent() {
               <m.div
                 animate={{ opacity: 1, y: 0 }}
                 className="flex flex-wrap items-center gap-3"
-                initial={{ opacity: 0, y: 20 }}
+                initial={false}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
@@ -185,7 +185,7 @@ function RouteComponent() {
             <m.div
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center gap-3"
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               transition={{ duration: 0.5, delay: 0.25 }}
             >
               {githubUrl && (
@@ -199,7 +199,7 @@ function RouteComponent() {
         {/* Featured image with glow effect */}
         <m.div
           animate={{ opacity: 1, scale: 1 }}
-          className="relative my-10 animate-in fade-in zoom-in-95 duration-700 delay-200 fill-mode-both"
+          className="relative my-10"
           initial={false}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
@@ -215,7 +215,7 @@ function RouteComponent() {
         {content && (
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            className="mt-12 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 fill-mode-both"
+            className="mt-12"
             initial={false}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
@@ -233,7 +233,7 @@ function RouteComponent() {
         <m.div
           animate={{ opacity: 1, x: 0 }}
           className="hidden text-sm xl:block"
-          initial={{ opacity: 0, x: 20 }}
+          initial={false}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <div className="sticky top-20 -mt-10 pt-10">
