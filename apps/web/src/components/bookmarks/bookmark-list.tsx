@@ -1,5 +1,5 @@
 import { type Bookmark } from '@xbrk/types';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import BookmarkCard from '@/components/bookmarks/bookmark-card';
 import LoadMore from '@/components/bookmarks/load-more';
 import { PAGE_SIZE } from '@/lib/integrations/raindrop';
@@ -33,13 +33,13 @@ export default function BookmarkList({ id, initialBookmarks }: Readonly<Bookmark
 
   return (
     <div className="space-y-8">
-      <motion.div animate="visible" className="grid gap-4 sm:grid-cols-2" initial="hidden" variants={containerVariants}>
+      <m.div animate="visible" className="grid gap-4 sm:grid-cols-2" initial="hidden" variants={containerVariants}>
         {initialBookmarks.map((bookmark) => (
-          <motion.div key={bookmark._id} variants={itemVariants}>
+          <m.div key={bookmark._id} variants={itemVariants}>
             <BookmarkCard bookmark={bookmark} />
-          </motion.div>
+          </m.div>
         ))}
-      </motion.div>
+      </m.div>
 
       {isLoadMoreEnabled && <LoadMore id={id} />}
     </div>

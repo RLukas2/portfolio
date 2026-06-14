@@ -6,7 +6,7 @@ import { LazyImage } from '@xbrk/ui/lazy-image';
 import { NotFound } from '@xbrk/ui/not-found';
 import { Spinner } from '@xbrk/ui/spinner';
 import { calculateReadingTime, formatDate } from '@xbrk/utils';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Calendar, Clock, Eye, Heart, MessageCircle, Tag } from 'lucide-react';
 import { Suspense, useEffect, useRef } from 'react';
 import SignInModal from '@/components/auth/sign-in-modal';
@@ -144,12 +144,12 @@ function RouteComponent() {
     <>
       <article className="relative lg:gap-10 xl:grid xl:max-w-6xl xl:grid-cols-[1fr_280px] 2xl:max-w-7xl">
         <div className="w-full min-w-0">
-          <motion.div animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} transition={{ duration: 0.5 }}>
+          <m.div animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} transition={{ duration: 0.5 }}>
             <BreadcrumbNavigation pageTitle={article.title} />
-          </motion.div>
+          </m.div>
 
           {/* Hero Section */}
-          <motion.div
+          <m.div
             animate={{ opacity: 1, y: 0 }}
             className="relative"
             initial={{ opacity: 0, y: 30 }}
@@ -205,19 +205,19 @@ function RouteComponent() {
             </div>
 
             {/* Author section with enhanced styling */}
-            <motion.div
+            <m.div
               animate={{ opacity: 1, y: 0 }}
               className="mt-6"
               initial={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <ArticleAuthor article={article} />
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* Featured image with glow effect */}
           {article.imageUrl && (
-            <motion.div
+            <m.div
               animate={{ opacity: 1, scale: 1 }}
               className="relative my-8 sm:my-10"
               initial={{ opacity: 0, scale: 0.98 }}
@@ -239,11 +239,11 @@ function RouteComponent() {
                   width={832}
                 />
               </div>
-            </motion.div>
+            </m.div>
           )}
 
           {/* Article content */}
-          <motion.div
+          <m.div
             animate={{ opacity: 1, y: 0 }}
             initial={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -253,10 +253,10 @@ function RouteComponent() {
                 <Markdown source={article.content ?? ''} />
               </article>
             </Suspense>
-          </motion.div>
+          </m.div>
 
           {/* Tags and share section */}
-          <motion.div
+          <m.div
             animate={{ opacity: 1, y: 0 }}
             className="mt-12 border-border/50 border-t pt-8"
             initial={{ opacity: 0, y: 20 }}
@@ -281,22 +281,22 @@ function RouteComponent() {
                 url={`${siteConfig.url}/blog/${articleId}`}
               />
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Comments section */}
-          <motion.div
+          <m.div
             animate={{ opacity: 1, y: 0 }}
             className="mt-12"
             initial={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
             <ArticleComment articleId={article.id} articleSlug={article.slug} />
-          </motion.div>
+          </m.div>
         </div>
 
         {/* Table of contents - enhanced sticky sidebar */}
         {article.toc && (
-          <motion.div
+          <m.div
             animate={{ opacity: 1, x: 0 }}
             className="hidden text-sm xl:block"
             initial={{ opacity: 0, x: 20 }}
@@ -305,7 +305,7 @@ function RouteComponent() {
             <div className="sticky top-20 -mt-10 pt-10">
               <TableOfContents toc={article.toc} />
             </div>
-          </motion.div>
+          </m.div>
         )}
       </article>
       <SignInModal />

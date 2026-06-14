@@ -9,7 +9,7 @@ import { NotFound } from '@xbrk/ui/not-found';
 import { Spinner } from '@xbrk/ui/spinner';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@xbrk/ui/tooltip';
 import ZoomImage from '@xbrk/ui/zoom-image';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Code2, ExternalLink, Sparkles } from 'lucide-react';
 import { Suspense } from 'react';
 import { siGithub } from 'simple-icons';
@@ -109,12 +109,12 @@ function RouteComponent() {
     <article className="relative lg:gap-10 xl:grid xl:max-w-6xl xl:grid-cols-[1fr_280px] 2xl:max-w-7xl">
       <div className="w-full min-w-0">
         {/* Breadcrumb */}
-        <motion.div animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} transition={{ duration: 0.5 }}>
+        <m.div animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} transition={{ duration: 0.5 }}>
           <BreadcrumbNavigation pageTitle={title} section={{ label: 'Projects', href: '/projects' }} />
-        </motion.div>
+        </m.div>
 
         {/* Hero Section */}
-        <motion.div
+        <m.div
           animate={{ opacity: 1, y: 0 }}
           className="relative"
           initial={{ opacity: 0, y: 30 }}
@@ -152,7 +152,7 @@ function RouteComponent() {
           <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
             {/* Tech stack */}
             {stacks && stacks.length > 0 && (
-              <motion.div
+              <m.div
                 animate={{ opacity: 1, y: 0 }}
                 className="flex flex-wrap items-center gap-3"
                 initial={{ opacity: 0, y: 20 }}
@@ -178,11 +178,11 @@ function RouteComponent() {
                     </TooltipProvider>
                   ))}
                 </div>
-              </motion.div>
+              </m.div>
             )}
 
             {/* Project links */}
-            <motion.div
+            <m.div
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center gap-3"
               initial={{ opacity: 0, y: 20 }}
@@ -192,12 +192,12 @@ function RouteComponent() {
                 <ProjectLink icon={<Icon className="h-4 w-4" icon={siGithub} />} title="Source Code" url={githubUrl} />
               )}
               {demoUrl && <ProjectLink icon={<ExternalLink className="h-4 w-4" />} title="Live Demo" url={demoUrl} />}
-            </motion.div>
+            </m.div>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Featured image with glow effect */}
-        <motion.div
+        <m.div
           animate={{ opacity: 1, scale: 1 }}
           className="relative my-10"
           initial={{ opacity: 0, scale: 0.98 }}
@@ -209,11 +209,11 @@ function RouteComponent() {
           <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-white/5 to-white/2 p-1.5 shadow-2xl">
             <ZoomImage alt={title} className="w-full rounded-xl" height={630} src={thumbnailUrl} width={1200} />
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Project content */}
         {content && (
-          <motion.div
+          <m.div
             animate={{ opacity: 1, y: 0 }}
             className="mt-12"
             initial={{ opacity: 0, y: 20 }}
@@ -224,13 +224,13 @@ function RouteComponent() {
                 <Markdown source={content} />
               </div>
             </Suspense>
-          </motion.div>
+          </m.div>
         )}
       </div>
 
       {/* Table of contents - sticky sidebar */}
       {toc && toc.length > 0 && (
-        <motion.div
+        <m.div
           animate={{ opacity: 1, x: 0 }}
           className="hidden text-sm xl:block"
           initial={{ opacity: 0, x: 20 }}
@@ -239,7 +239,7 @@ function RouteComponent() {
           <div className="sticky top-20 -mt-10 pt-10">
             <TableOfContents toc={toc} />
           </div>
-        </motion.div>
+        </m.div>
       )}
     </article>
   );

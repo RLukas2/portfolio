@@ -1,5 +1,5 @@
 import { Button } from '@xbrk/ui/button';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 import { lazy, Suspense, useCallback, useState } from 'react';
 
@@ -13,7 +13,7 @@ export function Chatbot() {
 
   return (
     <>
-      <motion.div
+      <m.div
         animate={{ scale: 1 }}
         className="fixed right-6 bottom-6 z-50"
         initial={{ scale: 0 }}
@@ -31,7 +31,7 @@ export function Chatbot() {
         >
           <MessageCircle className="h-16 w-16 text-primary-foreground" />
         </Button>
-      </motion.div>
+      </m.div>
 
       <AnimatePresence>
         {isOpen ? (

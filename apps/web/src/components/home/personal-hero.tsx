@@ -3,7 +3,7 @@ import { cn } from '@xbrk/ui';
 import { buttonVariants } from '@xbrk/ui/button';
 import Icon from '@xbrk/ui/icon';
 import { LazyImage } from '@xbrk/ui/lazy-image';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { ChevronDownIcon } from 'lucide-react';
 import Link from '@/components/shared/link';
 
@@ -42,10 +42,10 @@ const PersonalHero = () => (
     {/* Main content - uses direct Tailwind flex classes instead of Container component */}
     <div className="flex min-h-[calc(100vh-80px)] flex-col items-center justify-center gap-8 py-8 sm:py-16 lg:flex-row lg:gap-16">
       {/* Left side - Content */}
-      <motion.div
+      <m.div
         animate={{ opacity: 1, x: 0 }}
-        className="flex max-w-2xl flex-col gap-6 text-center lg:w-1/2 lg:text-left"
-        initial={{ opacity: 0, x: -30 }}
+        className="flex max-w-2xl flex-col gap-6 text-center lg:w-1/2 lg:text-left animate-in fade-in slide-in-from-left-8 duration-700"
+        initial={false}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
         {/* Greeting + Name */}
@@ -64,10 +64,10 @@ const PersonalHero = () => (
         </p>
 
         {/* CTAs - Call-to-action buttons for navigation */}
-        <motion.div
+        <m.div
           animate={{ opacity: 1, y: 0 }}
-          className="mt-2 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start"
-          initial={{ opacity: 0, y: 20 }}
+        className="mt-2 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both"
+        initial={false}
           transition={{ delay: 0.4 }}
         >
           <Link className={cn(buttonVariants({ size: 'lg', variant: 'shadow' }), 'group')} to="/#featured-projects">
@@ -77,13 +77,13 @@ const PersonalHero = () => (
           <Link className={buttonVariants({ size: 'lg', variant: 'outline' })} to="/about">
             More About Me
           </Link>
-        </motion.div>
+        </m.div>
 
         {/* Social links - Links to social media profiles */}
-        <motion.div
+        <m.div
           animate={{ opacity: 1 }}
-          className="flex justify-center gap-2 lg:justify-start"
-          initial={{ opacity: 0 }}
+        className="flex justify-center gap-2 lg:justify-start animate-in fade-in duration-700 delay-500 fill-mode-both"
+        initial={false}
           transition={{ delay: 0.6 }}
         >
           {socialConfig.map((social) => (
@@ -101,14 +101,14 @@ const PersonalHero = () => (
               <span className="sr-only">{social.name}</span>
             </a>
           ))}
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
 
       {/* Right side - Avatar with decorative effects */}
-      <motion.div
+      <m.div
         animate={{ opacity: 1, scale: 1 }}
-        className="relative hidden lg:block lg:w-2/5"
-        initial={{ opacity: 0, scale: 0.9 }}
+        className="relative hidden lg:block lg:w-2/5 animate-in fade-in zoom-in-90 duration-700 delay-200 fill-mode-both"
+        initial={false}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
         {/* Glow effect - Optional decorative gradient glow behind avatar */}
@@ -127,7 +127,7 @@ const PersonalHero = () => (
             />
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   </section>
 );

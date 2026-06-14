@@ -1,6 +1,6 @@
 import { Slot } from '@radix-ui/react-slot';
 import { cn } from '@xbrk/ui';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { useMemo } from 'react';
 
@@ -57,21 +57,21 @@ const PageHeading = ({
 
         <div className={cn('relative space-y-3', { 'text-center': centered })}>
           {hasMotion ? (
-            <motion.h1
+            <m.h1
               animate={animation.show}
               className="font-bold text-4xl tracking-tight md:text-5xl lg:text-6xl"
               initial={animation.hide}
               transition={{ delay: 0.1 }}
             >
               {title}
-            </motion.h1>
+            </m.h1>
           ) : (
             <h1 className="font-bold text-3xl tracking-tight md:text-4xl lg:text-5xl">{title}</h1>
           )}
 
           {description &&
             (hasMotion ? (
-              <motion.p
+              <m.p
                 animate={animation.show}
                 className={cn(
                   'text-muted-foreground leading-relaxed md:text-lg',
@@ -81,7 +81,7 @@ const PageHeading = ({
                 transition={{ delay: 0.2 }}
               >
                 {description}
-              </motion.p>
+              </m.p>
             ) : (
               <p
                 className={cn(
@@ -95,14 +95,14 @@ const PageHeading = ({
 
           {children &&
             (hasMotion ? (
-              <motion.div
+              <m.div
                 animate={animation.show}
                 className="pointer-events-auto pt-3"
                 initial={animation.hide}
                 transition={{ delay: 0.3 }}
               >
                 {children}
-              </motion.div>
+              </m.div>
             ) : (
               <div className="pointer-events-auto pt-3">{children}</div>
             ))}

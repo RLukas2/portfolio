@@ -3,7 +3,7 @@ import { siteConfig } from '@xbrk/config';
 import { Markdown } from '@xbrk/md';
 import type { TOC } from '@xbrk/types';
 import { Skeleton } from '@xbrk/ui/skeleton';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Suspense } from 'react';
 import TableOfContents from '@/components/blog/toc';
 import PageHeading from '@/components/shared/page-heading';
@@ -66,7 +66,7 @@ function RouteComponent() {
           </div>
         </div>
         {toc.length > 0 && (
-          <motion.div
+          <m.div
             animate={{ opacity: 1, x: 0 }}
             className="hidden text-sm xl:block"
             initial={{ opacity: 0, x: 20 }}
@@ -75,7 +75,7 @@ function RouteComponent() {
             <div className="sticky top-20 -mt-10 pt-10">
               <TableOfContents toc={toc} />
             </div>
-          </motion.div>
+          </m.div>
         )}
       </div>
     </>

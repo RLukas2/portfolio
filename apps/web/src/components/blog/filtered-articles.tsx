@@ -1,7 +1,7 @@
 import type { ArticleType } from '@xbrk/types';
 import { Input } from '@xbrk/ui/input';
 import { Label } from '@xbrk/ui/label';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { FileText, Search } from 'lucide-react';
 import { type ChangeEvent, useState } from 'react';
 import { containerVariants, itemVariants } from '@/lib/constants/framer-motion-variants';
@@ -47,18 +47,18 @@ export default function FilteredArticles({ articles }: Readonly<FilteredArticles
       </div>
 
       {filteredArticles.length ? (
-        <motion.div
+        <m.div
           animate="visible"
           className="grid gap-6 sm:grid-cols-2"
           initial="hidden"
           variants={containerVariants}
         >
           {filteredArticles.map((article) => (
-            <motion.div key={article.slug} variants={itemVariants}>
+            <m.div key={article.slug} variants={itemVariants}>
               <ArticleCard article={article} />
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">

@@ -1,7 +1,7 @@
 import type { SnippetType } from '@xbrk/types';
 import { Badge } from '@xbrk/ui/badge';
 import { formatDate } from '@xbrk/utils';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { ArrowUpRight, Calendar, Code2 } from 'lucide-react';
 import Link from '@/components/shared/link';
 import { containerVariants, itemVariants } from '@/lib/constants/framer-motion-variants';
@@ -17,9 +17,9 @@ export default function Snippets({ snippets }: Readonly<SnippetsProps>) {
   }
 
   return (
-    <motion.div animate="visible" className="grid gap-4 sm:grid-cols-2" initial="hidden" variants={containerVariants}>
+    <m.div animate="visible" className="grid gap-4 sm:grid-cols-2" initial="hidden" variants={containerVariants}>
       {snippets.map((snippet) => (
-        <motion.div key={snippet.slug} variants={itemVariants}>
+        <m.div key={snippet.slug} variants={itemVariants}>
           <Link
             className="group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-card p-5 transition-all duration-300 hover:border-foreground/20 hover:shadow-xl"
             params={{
@@ -62,8 +62,8 @@ export default function Snippets({ snippets }: Readonly<SnippetsProps>) {
               </div>
             </div>
           </Link>
-        </motion.div>
+        </m.div>
       ))}
-    </motion.div>
+    </m.div>
   );
 }

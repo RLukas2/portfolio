@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
 import { Button } from '@xbrk/ui/button';
 import { LazyImage } from '@xbrk/ui/lazy-image';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { DownloadIcon, FileTextIcon } from 'lucide-react';
 import Biography from '@/components/about/biography';
 import CareerJourney from '@/components/about/career-journey';
@@ -50,7 +50,7 @@ function RouteComponent() {
 
       <div className="items-start space-y-2 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:space-y-0">
         {/* Sidebar - Avatar, Name, Buttons with motion animation */}
-        <motion.div
+        <m.div
           animate={{ opacity: 1, x: 0 }}
           className="group flex flex-col items-center xl:sticky xl:top-24"
           initial={{ opacity: 0, x: -30 }}
@@ -85,31 +85,31 @@ function RouteComponent() {
               </Link>
             </Button>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Main Content - Each section animates individually */}
         <div className="prose prose-neutral dark:prose-invert max-w-none xl:col-span-3">
           {/* Biography section */}
-          <motion.div
+          <m.div
             animate={{ opacity: 1, y: 0 }}
             initial={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
           >
             <Biography />
-          </motion.div>
+          </m.div>
 
           {/* Tech Stack section */}
-          <motion.div
+          <m.div
             animate={{ opacity: 1, y: 0 }}
             initial={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
           >
             <h2 className="font-cal text-3xl">Tech Stack</h2>
             <TechStacks />
-          </motion.div>
+          </m.div>
 
           {/* Career Journey section */}
-          <motion.div
+          <m.div
             animate={{ opacity: 1, y: 0 }}
             initial={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.6 }}
@@ -117,7 +117,7 @@ function RouteComponent() {
             <h2 className="font-cal text-3xl">Career Journey</h2>
             <p className="m-0! text-muted-foreground">A timeline of my professional experience and education.</p>
             <CareerJourney header={true} />
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </>

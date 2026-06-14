@@ -1,4 +1,4 @@
-import { motion, type Variants } from 'framer-motion';
+import { m, type Variants } from 'framer-motion';
 import type { HTMLAttributes, ReactNode } from 'react';
 
 interface AnimatedDivProps extends HTMLAttributes<HTMLDivElement> {
@@ -9,7 +9,7 @@ interface AnimatedDivProps extends HTMLAttributes<HTMLDivElement> {
 
 export default function AnimatedDiv({ variants, className, children, loop }: AnimatedDivProps) {
   return (
-    <motion.div
+    <m.div
       className={className}
       initial="hidden"
       transition={{ staggerChildren: 0.5 }}
@@ -18,6 +18,6 @@ export default function AnimatedDiv({ variants, className, children, loop }: Ani
       whileInView="visible"
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
