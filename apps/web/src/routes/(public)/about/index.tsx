@@ -92,7 +92,6 @@ function RouteComponent() {
           {/* Biography section */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 fill-mode-both"
             initial={false}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
           >
@@ -102,7 +101,6 @@ function RouteComponent() {
           {/* Tech Stack section */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both"
             initial={false}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
           >
@@ -113,7 +111,6 @@ function RouteComponent() {
           {/* Career Journey section */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 fill-mode-both"
             initial={false}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.6 }}
           >

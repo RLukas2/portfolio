@@ -47,6 +47,8 @@ export default function Services() {
           className="flex flex-col gap-4 sm:gap-8"
           initial={false}
           variants={containerVariantsFast}
+          viewport={{ once: true }}
+          whileInView="visible"
         >
           {services.map((service) => (
             <m.div key={service.slug} variants={itemVariantsDown}>

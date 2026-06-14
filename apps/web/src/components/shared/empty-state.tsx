@@ -20,7 +20,6 @@ const EmptyState = ({ message }: EmptyStateProps) => {
     >
       <m.div
         animate={{ opacity: 1, scale: 1 }}
-        className="animate-in fade-in zoom-in-75 duration-500 delay-100 fill-mode-both"
         initial={false}
         transition={{ duration: 0.4, delay: 0.1, ease: 'backOut' }}
       >
