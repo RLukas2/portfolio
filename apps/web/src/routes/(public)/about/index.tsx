@@ -52,8 +52,8 @@ function RouteComponent() {
         {/* Sidebar - Avatar, Name, Buttons with motion animation */}
         <m.div
           animate={{ opacity: 1, x: 0 }}
-          className="group flex flex-col items-center xl:sticky xl:top-24"
-          initial={{ opacity: 0, x: -30 }}
+          className="group flex flex-col items-center xl:sticky xl:top-24 animate-in fade-in slide-in-from-left-8 duration-700"
+          initial={false}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <LazyImage
@@ -92,7 +92,8 @@ function RouteComponent() {
           {/* Biography section */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 20 }}
+            className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 fill-mode-both"
+            initial={false}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
           >
             <Biography />
@@ -101,7 +102,8 @@ function RouteComponent() {
           {/* Tech Stack section */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 20 }}
+            className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both"
+            initial={false}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
           >
             <h2 className="font-cal text-3xl">Tech Stack</h2>
@@ -111,7 +113,8 @@ function RouteComponent() {
           {/* Career Journey section */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 20 }}
+            className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 fill-mode-both"
+            initial={false}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.6 }}
           >
             <h2 className="font-cal text-3xl">Career Journey</h2>

@@ -144,15 +144,15 @@ function RouteComponent() {
     <>
       <article className="relative lg:gap-10 xl:grid xl:max-w-6xl xl:grid-cols-[1fr_280px] 2xl:max-w-7xl">
         <div className="w-full min-w-0">
-          <m.div animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} transition={{ duration: 0.5 }}>
+          <m.div animate={{ opacity: 1, y: 0 }} className="animate-in fade-in slide-in-from-bottom-4 duration-500" initial={false} transition={{ duration: 0.5 }}>
             <BreadcrumbNavigation pageTitle={article.title} />
           </m.div>
 
           {/* Hero Section */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            className="relative"
-            initial={{ opacity: 0, y: 30 }}
+            className="relative animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100 fill-mode-both"
+            initial={false}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             {/* Background glow effect */}
@@ -207,8 +207,8 @@ function RouteComponent() {
             {/* Author section with enhanced styling */}
             <m.div
               animate={{ opacity: 1, y: 0 }}
-              className="mt-6"
-              initial={{ opacity: 0, y: 20 }}
+              className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 fill-mode-both"
+              initial={false}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <ArticleAuthor article={article} />
@@ -219,8 +219,8 @@ function RouteComponent() {
           {article.imageUrl && (
             <m.div
               animate={{ opacity: 1, scale: 1 }}
-              className="relative my-8 sm:my-10"
-              initial={{ opacity: 0, scale: 0.98 }}
+              className="relative my-8 sm:my-10 animate-in fade-in zoom-in-95 duration-700 delay-300 fill-mode-both"
+              initial={false}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               {/* Glow effect behind image */}
@@ -245,7 +245,8 @@ function RouteComponent() {
           {/* Article content */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 20 }}
+            className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500 fill-mode-both"
+            initial={false}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Suspense fallback={<Spinner className="size-6" />}>
