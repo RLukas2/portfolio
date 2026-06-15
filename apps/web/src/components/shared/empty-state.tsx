@@ -14,7 +14,7 @@ const EmptyState = ({ message }: EmptyStateProps) => {
   return (
     <m.div
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      className="my-4 flex flex-col items-center justify-center space-y-3 py-8 animate-in fade-in zoom-in-95 duration-500"
+      className="fade-in zoom-in-95 my-4 flex animate-in flex-col items-center justify-center space-y-3 py-8 duration-500"
       initial={false}
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
@@ -27,7 +27,7 @@ const EmptyState = ({ message }: EmptyStateProps) => {
       </m.div>
       <m.p
         animate={{ opacity: 1, y: 0 }}
-        className="text-center text-muted-foreground animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200 fill-mode-both"
+        className="fade-in slide-in-from-bottom-2 animate-in fill-mode-both text-center text-muted-foreground delay-200 duration-500"
         initial={false}
         transition={{ duration: 0.4, delay: 0.2 }}
       >

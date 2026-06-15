@@ -51,6 +51,7 @@
     "./select": "./src/select.tsx",
     "./separator": "./src/separator.tsx",
     "./sidebar": "./src/sidebar.tsx",
+    "./sheet": "./src/sheet.tsx",
     "./sign-in-button": "./src/sign-in-button.tsx",
     "./skeleton": "./src/skeleton.tsx",
     "./sonner": "./src/sonner.tsx",

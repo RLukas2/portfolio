@@ -1,0 +1,37 @@
+--- apps/web/src/routes/(public)/blog/$articleId.tsx
++++ apps/web/src/routes/(public)/blog/$articleId.tsx
+@@ -10,7 +10,8 @@
+ import { NotFound } from '@xbrk/ui/not-found';
+ import { Spinner } from '@xbrk/ui/spinner';
++import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@xbrk/ui/sheet';
+ import { calculateReadingTime, formatDate } from '@xbrk/utils';
+ import { m } from 'framer-motion';
+-import { Calendar, Clock, Eye, Heart, MessageCircle, Tag } from 'lucide-react';
++import { Calendar, Clock, Eye, Heart, List, MessageCircle, Tag } from 'lucide-react';
+ import { Suspense, useEffect, useRef } from 'react';
+ import SignInModal from '@/components/auth/sign-in-modal';
+@@ -237,6 +238,24 @@
+             </div>
+           </m.div>
+         )}
++
++        {/* Mobile Floating ToC Button */}
++        {article.toc && (
++          <div className="fixed right-6 bottom-6 z-40 xl:hidden">
++            <Sheet>
++              <SheetTrigger asChild>
++                <button className="flex size-14 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xl transition-transform hover:scale-105 active:scale-95" aria-label="Table of Contents">
++                  <List className="size-6" />
++                </button>
++              </SheetTrigger>
++              <SheetContent side="bottom" className="max-h-[85vh] rounded-t-2xl pb-8">
++                <SheetHeader className="pb-4 pt-2">
++                  <SheetTitle className="text-left text-lg">Table of Contents</SheetTitle>
++                </SheetHeader>
++                <TableOfContents toc={article.toc} isMobile />
++              </SheetContent>
++            </Sheet>
++          </div>
++        )}
+       </article>
+       <SignInModal />

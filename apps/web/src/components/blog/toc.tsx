@@ -6,12 +6,15 @@ import { useMemo } from 'react';
 import useActiveItem from '@/hooks/use-active-item';
 import useMounted from '@/hooks/use-mounted';
 
+const HASH_REGEX = /^#/;
+
 interface TableOfContentProps {
+  isMobile?: boolean;
   toc: TOC[];
 }
 
-export default function TableOfContents({ toc }: Readonly<TableOfContentProps>) {
-  const itemIds = useMemo(() => toc.map((item) => item.url.replace('/^#/', '')), [toc]);
+export default function TableOfContents({ toc, isMobile }: Readonly<TableOfContentProps>) {
+  const itemIds = useMemo(() => toc.map((item) => item.url.replace(HASH_REGEX, '')), [toc]);
 
   const mounted = useMounted();
   const activeHeading = useActiveItem(itemIds);
@@ -21,13 +24,20 @@ export default function TableOfContents({ toc }: Readonly<TableOfContentProps>) 
   }
 
   return (
-    <div className="flex max-h-[calc(100vh-10rem)] flex-col rounded-2xl border border-border/50 bg-card/50 p-5 backdrop-blur-sm">
-      <div className="flex shrink-0 items-center gap-2 pb-4">
-        <List className="h-4 w-4 text-muted-foreground" />
-        <p className="font-medium text-sm">On This Page</p>
-      </div>
+    <div
+      className={cn(
+        'flex flex-col',
+        isMobile ? '' : 'max-h-[calc(100vh-10rem)] rounded-2xl border border-border/50 bg-card/50 p-5 backdrop-blur-sm',
+      )}
+    >
+      {!isMobile && (
+        <div className="flex shrink-0 items-center gap-2 pb-4">
+          <List className="h-4 w-4 text-muted-foreground" />
+          <p className="font-medium text-sm">On This Page</p>
+        </div>
+      )}
       <ScrollArea className="w-full">
-        <div className="max-h-[calc(100vh-15rem)]">
+        <div className={isMobile ? 'max-h-[60vh] pr-4' : 'max-h-[calc(100vh-15rem)]'}>
           <Tree activeItem={activeHeading} tree={toc} />
         </div>
       </ScrollArea>
@@ -52,7 +62,7 @@ function Tree({ tree, activeItem }: TreeProps) {
           <a
             className={cn(
               'block rounded-lg py-1.5 text-sm no-underline transition-all',
-              item.url.replace('/^#/', '') === activeItem
+              item.url.replace(HASH_REGEX, '') === activeItem
                 ? 'bg-primary/10 font-medium text-primary'
                 : 'text-muted-foreground hover:bg-muted hover:text-foreground',
             )}

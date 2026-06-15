@@ -7,10 +7,10 @@ import { ThemeProvider, useTheme } from '@xbrk/shared/theme-provider';
 import { Toaster } from '@xbrk/ui/sonner';
 import posthog from 'posthog-js';
 import { CookieBanner } from '@/components/analytics/cookie-banner';
+import { MotionProvider } from '@/components/providers/motion-provider';
 import { RouteProgress } from '@/components/shared/route-progress';
 import { type AuthQueryResult, authQueryOptions } from '@/lib/auth/queries';
 import { env } from '@/lib/env/client';
-import { MotionProvider } from '@/components/providers/motion-provider';
 import printCss from '@/print.css?url';
 import appCss from '@/style.css?url';
 

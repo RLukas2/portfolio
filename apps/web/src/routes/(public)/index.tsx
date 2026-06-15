@@ -58,37 +58,41 @@ function Home() {
       <PersonalHero />
 
       <div className="flex flex-col items-center gap-8">
-        <Suspense fallback={
-          <div className="w-full">
-            <div className="my-8 flex flex-col items-center px-1 py-4 text-center sm:mb-10">
-              <div className="mb-3 h-5 w-24 animate-pulse rounded-md bg-muted" />
-              <div className="h-10 w-64 animate-pulse rounded-md bg-muted" />
-              <div className="mt-3 h-6 w-96 max-w-full animate-pulse rounded-md bg-muted" />
+        <Suspense
+          fallback={
+            <div className="w-full">
+              <div className="my-8 flex flex-col items-center px-1 py-4 text-center sm:mb-10">
+                <div className="mb-3 h-5 w-24 animate-pulse rounded-md bg-muted" />
+                <div className="h-10 w-64 animate-pulse rounded-md bg-muted" />
+                <div className="mt-3 h-6 w-96 max-w-full animate-pulse rounded-md bg-muted" />
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+                {[1, 2, 3, 4].map((i) => (
+                  <ProjectCardSkeleton key={i} />
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-              {[1, 2, 3, 4].map((i) => (
-                <ProjectCardSkeleton key={i} />
-              ))}
-            </div>
-          </div>
-        }>
+          }
+        >
           <FeaturedProjects />
         </Suspense>
         <SectionDivider />
-        <Suspense fallback={
-          <div className="w-full">
-            <div className="mb-6 flex flex-col items-center px-1 py-4 text-center sm:mb-10">
-              <div className="mb-3 h-5 w-32 animate-pulse rounded-md bg-muted" />
-              <div className="h-10 w-48 animate-pulse rounded-md bg-muted" />
-              <div className="mt-3 h-6 w-80 max-w-full animate-pulse rounded-md bg-muted" />
+        <Suspense
+          fallback={
+            <div className="w-full">
+              <div className="mb-6 flex flex-col items-center px-1 py-4 text-center sm:mb-10">
+                <div className="mb-3 h-5 w-32 animate-pulse rounded-md bg-muted" />
+                <div className="h-10 w-48 animate-pulse rounded-md bg-muted" />
+                <div className="mt-3 h-6 w-80 max-w-full animate-pulse rounded-md bg-muted" />
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+                {[1, 2, 3].map((i) => (
+                  <ArticleCardSkeleton key={i} />
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-              {[1, 2, 3].map((i) => (
-                <ArticleCardSkeleton key={i} />
-              ))}
-            </div>
-          </div>
-        }>
+          }
+        >
           <RecentPosts />
         </Suspense>
         <SectionDivider />

@@ -17,7 +17,7 @@ export default function Services() {
       <div className="mb-6 flex flex-col items-center px-1 text-center sm:mb-10">
         <m.span
           animate={{ opacity: 1 }}
-          className="mb-3 font-medium text-primary text-sm uppercase tracking-widest animate-in fade-in duration-500 delay-100 fill-mode-both"
+          className="fade-in mb-3 animate-in fill-mode-both font-medium text-primary text-sm uppercase tracking-widest delay-100 duration-500"
           initial={false}
           transition={{ delay: 0.1 }}
         >
@@ -25,7 +25,7 @@ export default function Services() {
         </m.span>
         <m.h2
           animate={{ opacity: 1, y: 0 }}
-          className="font-bold text-3xl tracking-tight sm:text-4xl animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 fill-mode-both"
+          className="fade-in slide-in-from-bottom-4 animate-in fill-mode-both font-bold text-3xl tracking-tight delay-200 duration-500 sm:text-4xl"
           initial={false}
           transition={{ delay: 0.2 }}
         >
@@ -33,7 +33,7 @@ export default function Services() {
         </m.h2>
         <m.p
           animate={{ opacity: 1, y: 0 }}
-          className="mt-3 max-w-2xl text-muted-foreground animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 fill-mode-both"
+          className="fade-in slide-in-from-bottom-4 mt-3 max-w-2xl animate-in fill-mode-both text-muted-foreground delay-300 duration-500"
           initial={false}
           transition={{ delay: 0.3 }}
         >

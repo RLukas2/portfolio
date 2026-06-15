@@ -18,7 +18,7 @@ const Footer = () => (
     <div className="container py-12 lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl">
       <m.div
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8 grid grid-cols-2 gap-8 md:grid-cols-4 animate-in fade-in slide-in-from-bottom-4 duration-500"
+        className="fade-in slide-in-from-bottom-4 mb-8 grid animate-in grid-cols-2 gap-8 duration-500 md:grid-cols-4"
         initial={false}
         transition={{ duration: 0.5 }}
       >

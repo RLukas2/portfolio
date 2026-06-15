@@ -52,7 +52,7 @@ function RouteComponent() {
         {/* Sidebar - Avatar, Name, Buttons with motion animation */}
         <m.div
           animate={{ opacity: 1, x: 0 }}
-          className="group flex flex-col items-center xl:sticky xl:top-24 animate-in fade-in slide-in-from-left-8 duration-700"
+          className="group fade-in slide-in-from-left-8 flex animate-in flex-col items-center duration-700 xl:sticky xl:top-24"
           initial={false}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
