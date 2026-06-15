@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute, defer, ErrorComponent, notFound } from '@tanstack/react-router';
+import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
 import { Markdown } from '@xbrk/md';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 import { NotFound } from '@xbrk/ui/not-found';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@xbrk/ui/sheet';
-import { Spinner } from '@xbrk/ui/spinner';
 import { calculateReadingTime, formatDate } from '@xbrk/utils';
 import { m } from 'framer-motion';
 import { Calendar, Clock, Eye, Heart, List, MessageCircle, Tag } from 'lucide-react';
@@ -21,7 +20,7 @@ import SocialShare from '@/components/shared/social-share';
 import { ArticleContentSkeleton } from '@/components/skeletons/article-content-skeleton';
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
-import { $getAllComments, $getArticleBySlug, $viewArticle } from '@/lib/server';
+import { $getArticleBySlug, $viewArticle } from '@/lib/server';
 import { generateStructuredDataGraph, getBlogPostSchemas } from '@/lib/structured-data';
 import { getBaseUrl } from '@/lib/utils';
 
@@ -32,10 +31,6 @@ export const Route = createFileRoute('/(public)/blog/$articleId')({
         queryKey: queryKeys.blog.detail(articleId),
         queryFn: () => $getArticleBySlug({ data: { slug: articleId } }),
       });
-      const comments = queryClient.ensureQueryData({
-        queryKey: queryKeys.comment.byArticle(data?.id),
-        queryFn: () => $getAllComments({ data: { articleId: data?.id } }),
-      });
       return {
         title: data?.title,
         description: data?.description,
@@ -44,7 +39,6 @@ export const Route = createFileRoute('/(public)/blog/$articleId')({
         slug: data?.slug,
         createdAt: data?.createdAt,
         updatedAt: data?.updatedAt,
-        comments: defer(comments),
       };
     } catch (error) {
       if (
@@ -290,15 +284,7 @@ function RouteComponent() {
             initial={false}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <Suspense
-              fallback={
-                <div className="flex min-h-20 items-center justify-center">
-                  <Spinner className="size-6" />
-                </div>
-              }
-            >
-              <ArticleComment articleId={article.id} articleSlug={article.slug} />
-            </Suspense>
+            <ArticleComment articleId={article.id} articleSlug={article.slug} />
           </m.div>
 
           {/* Related Articles section */}
