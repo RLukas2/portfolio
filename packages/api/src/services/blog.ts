@@ -142,12 +142,13 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
 
       relatedArticles = allOtherArticles
         .map((a) => ({
-          ...a,
+          article: a,
           matchCount: a.tags ? a.tags.filter((t) => article.tags?.includes(t)).length : 0,
         }))
         .filter((a) => a.matchCount > 0)
         .sort((a, b) => b.matchCount - a.matchCount)
-        .slice(0, 3);
+        .slice(0, 3)
+        .map((a) => a.article);
     }
 
     if (relatedArticles.length < 3) {
