@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
+import { createFileRoute, defer, ErrorComponent, notFound } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
 import { Markdown } from '@xbrk/md';
 import { LazyImage } from '@xbrk/ui/lazy-image';
@@ -31,7 +31,7 @@ export const Route = createFileRoute('/(public)/blog/$articleId')({
         queryKey: queryKeys.blog.detail(articleId),
         queryFn: () => $getArticleBySlug({ data: { slug: articleId } }),
       });
-      await queryClient.ensureQueryData({
+      const comments = queryClient.ensureQueryData({
         queryKey: queryKeys.comment.byArticle(data?.id),
         queryFn: () => $getAllComments({ data: { articleId: data?.id } }),
       });
@@ -43,6 +43,7 @@ export const Route = createFileRoute('/(public)/blog/$articleId')({
         slug: data?.slug,
         createdAt: data?.createdAt,
         updatedAt: data?.updatedAt,
+        comments: defer(comments),
       };
     } catch (error) {
       if (
@@ -246,7 +247,7 @@ function RouteComponent() {
 
           {/* Article content */}
           <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5, delay: 0.4 }}>
-            <Suspense fallback={<ArticleContentSkeleton />}>
+            <Suspense fallback={<Spinner className="size-6" />}>
               <article className="prose prose-slate dark:prose-invert mt-8 max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
                 <Markdown source={article.content ?? ''} />
               </article>
@@ -288,7 +289,15 @@ function RouteComponent() {
             initial={false}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <ArticleComment articleId={article.id} articleSlug={article.slug} />
+            <Suspense
+              fallback={
+                <div className="flex min-h-20 items-center justify-center">
+                  <Spinner className="size-6" />
+                </div>
+              }
+            >
+              <ArticleComment articleId={article.id} articleSlug={article.slug} />
+            </Suspense>
           </m.div>
 
           {/* Related Articles section */}
