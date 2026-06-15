@@ -20,7 +20,7 @@ import SocialShare from '@/components/shared/social-share';
 import { ArticleContentSkeleton } from '@/components/skeletons/article-content-skeleton';
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
-import { $getAllComments, $getArticleBySlug, $viewArticle } from '@/lib/server';
+import { $getArticleBySlug, $viewArticle } from '@/lib/server';
 import { generateStructuredDataGraph, getBlogPostSchemas } from '@/lib/structured-data';
 import { getBaseUrl } from '@/lib/utils';
 
@@ -30,10 +30,6 @@ export const Route = createFileRoute('/(public)/blog/$articleId')({
       const data = await queryClient.ensureQueryData({
         queryKey: queryKeys.blog.detail(articleId),
         queryFn: () => $getArticleBySlug({ data: { slug: articleId } }),
-      });
-      await queryClient.prefetchQuery({
-        queryKey: queryKeys.comment.byArticle(data?.id),
-        queryFn: () => $getAllComments({ data: { articleId: data?.id } }),
       });
       return {
         title: data?.title,

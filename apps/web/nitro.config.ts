@@ -77,6 +77,21 @@ export default defineNitroConfig({
       headers: SECURITY_HEADERS,
     },
 
+    // ISR — detail pages (1 hour)
+    '/blog/$articleId': { isr: 3600 },
+    '/projects/$projectId': { isr: 3600 },
+    '/snippets/$snippetId': { isr: 3600 },
+    '/services/$serviceId': { isr: 3600 },
+    '/bookmarks': { isr: 3600 },
+    '/bookmarks/$bookmarkId': { isr: 3600 },
+    '/changelog': { isr: 3600 },
+
+    // ISR — list pages (5 minutes)
+    '/': { isr: 300 },
+    '/blog': { isr: 300 },
+    '/projects': { isr: 300 },
+    '/snippets': { isr: 300 },
+
     // Stricter CSP for API routes — no scripts or styles needed
     '/api/**': {
       headers: {

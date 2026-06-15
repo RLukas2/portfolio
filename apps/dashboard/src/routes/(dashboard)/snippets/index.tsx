@@ -6,7 +6,7 @@ import { buttonVariants } from '@xbrk/ui/button';
 import { Card } from '@xbrk/ui/card';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import { Plus } from 'lucide-react';
-import { Suspense } from 'react';
+
 import { DataTable } from '@/components/data-table/data-table';
 import { snippetColumns } from '@/components/snippets/columns';
 import { queryKeys } from '@/lib/query-keys';
@@ -15,7 +15,7 @@ import { $getAllSnippets } from '@/lib/server/snippet';
 export const Route = createFileRoute('/(dashboard)/snippets/')({
   component: Snippets,
   loader: async ({ context: { queryClient } }) =>
-    await queryClient.prefetchQuery({
+    await queryClient.ensureQueryData({
       queryKey: queryKeys.snippet.listAll(),
       queryFn: () => $getAllSnippets(),
     }),
@@ -93,9 +93,7 @@ function Snippets() {
         </Link>
       </div>
       <ErrorBoundary fallback={<SnippetsError />}>
-        <Suspense fallback={<SnippetsLoading />}>
-          <SnippetsContent />
-        </Suspense>
+        <SnippetsContent />
       </ErrorBoundary>
     </>
   );

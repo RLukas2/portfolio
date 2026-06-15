@@ -2,7 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateSnippetSchema, snippet, UpdateSnippetSchema } from '@xbrk/db/schema';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 
 type DbClient = typeof DB;
@@ -37,9 +37,12 @@ export async function getAllPublic(db: DbClient) {
 /** Returns a single snippet by ID. */
 export async function getById(db: DbClient, input: { id: string }) {
   try {
-    return await db.query.snippet.findFirst({
-      where: eq(snippet.id, input.id),
-    });
+    const query = db.query.snippet
+      .findFirst({
+        where: eq(snippet.id, sql.placeholder('id')),
+      })
+      .prepare('get_snippet_by_id');
+    return await query.execute({ id: input.id });
   } catch (error) {
     Sentry.captureException(error);
     console.error('[snippet.getById] Database error:', error);
@@ -54,9 +57,12 @@ export async function getById(db: DbClient, input: { id: string }) {
  */
 export async function getBySlug(db: DbClient, input: { slug: string }, session?: { user: { role: string } } | null) {
   try {
-    const result = await db.query.snippet.findFirst({
-      where: eq(snippet.slug, input.slug),
-    });
+    const query = db.query.snippet
+      .findFirst({
+        where: eq(snippet.slug, sql.placeholder('slug')),
+      })
+      .prepare('get_snippet_by_slug');
+    const result = await query.execute({ slug: input.slug });
 
     if (!result) {
       throw new Error('Snippet not found');

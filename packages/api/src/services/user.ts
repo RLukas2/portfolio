@@ -9,7 +9,16 @@ type DbClient = typeof DB;
  */
 export async function getAll(db: DbClient) {
   try {
-    return await db.query.user.findMany();
+    return await db.query.user.findMany({
+      columns: {
+        id: true,
+        name: true,
+        email: true,
+        image: true,
+        role: true,
+        createdAt: true,
+      },
+    });
   } catch (error) {
     Sentry.captureException(error);
     console.error('[user.getAll] Database error:', error);

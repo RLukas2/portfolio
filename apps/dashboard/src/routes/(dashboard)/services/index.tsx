@@ -6,7 +6,7 @@ import { buttonVariants } from '@xbrk/ui/button';
 import { Card } from '@xbrk/ui/card';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import { Plus } from 'lucide-react';
-import { Suspense } from 'react';
+
 import { DataTable } from '@/components/data-table/data-table';
 import { serviceColumns } from '@/components/services/columns';
 import { queryKeys } from '@/lib/query-keys';
@@ -15,7 +15,7 @@ import { $getAllServices } from '@/lib/server/service';
 export const Route = createFileRoute('/(dashboard)/services/')({
   component: Services,
   loader: async ({ context: { queryClient } }) =>
-    await queryClient.prefetchQuery({
+    await queryClient.ensureQueryData({
       queryKey: queryKeys.service.listAll(),
       queryFn: () => $getAllServices(),
     }),
@@ -93,9 +93,7 @@ function Services() {
         </Link>
       </div>
       <ErrorBoundary fallback={<ServicesError />}>
-        <Suspense fallback={<ServicesLoading />}>
-          <ServicesContent />
-        </Suspense>
+        <ServicesContent />
       </ErrorBoundary>
     </>
   );

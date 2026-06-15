@@ -6,7 +6,7 @@ import { buttonVariants } from '@xbrk/ui/button';
 import { Card } from '@xbrk/ui/card';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import { Plus } from 'lucide-react';
-import { Suspense } from 'react';
+
 import { DataTable } from '@/components/data-table/data-table';
 import { projectColumns } from '@/components/projects/columns';
 import { queryKeys } from '@/lib/query-keys';
@@ -15,7 +15,7 @@ import { $getAllProjects } from '@/lib/server/project';
 export const Route = createFileRoute('/(dashboard)/projects/')({
   component: Projects,
   loader: async ({ context: { queryClient } }) =>
-    await queryClient.prefetchQuery({
+    await queryClient.ensureQueryData({
       queryKey: queryKeys.project.listAll(),
       queryFn: () => $getAllProjects(),
     }),
@@ -93,9 +93,7 @@ function Projects() {
         </Link>
       </div>
       <ErrorBoundary fallback={<ProjectsError />}>
-        <Suspense fallback={<ProjectsLoading />}>
-          <ProjectsContent />
-        </Suspense>
+        <ProjectsContent />
       </ErrorBoundary>
     </>
   );
