@@ -46,7 +46,7 @@
     "@types/ws": "^8.18.1",
     "@xbrk/tsconfig": "workspace:*",
     "drizzle-kit": "^0.31.10",
-    "tsx": "^4.19.2",
+    "tsx": "catalog:",
     "typescript": "catalog:"
   }
 }

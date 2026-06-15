@@ -2,7 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateProjectSchema, project, UpdateProjectSchema } from '@xbrk/db/schema';
-import { getTOC } from '@xbrk/utils';
+import { getTOCFromHast, markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
 import { desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 import { handleImageUpdate, handleImageUpload } from '../lib/base-service';
@@ -59,7 +59,7 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
       throw new Error('Project is not public');
     }
 
-    const toc = getTOC(result.content ?? '');
+    const toc = getTOCFromHast(result.contentRendering);
 
     return { ...result, toc };
   } catch (error) {
@@ -116,7 +116,13 @@ export async function create(db: DbClient, input: z.infer<typeof CreateProjectSc
       projectData.imageUrl = imageUrl;
     }
 
-    return db.insert(project).values(projectData);
+    const contentRendering = projectData.content ? await markdownToHastJson(projectData.content) : null;
+
+    return db.insert(project).values({
+      ...projectData,
+      contentRendering,
+      contentRenderingVersion: RENDERING_VERSION,
+    });
   } catch (error) {
     Sentry.captureException(error);
     console.error('[project.create] Database error:', error);
@@ -151,7 +157,14 @@ export async function update(db: DbClient, input: z.infer<typeof UpdateProjectSc
         }
       }
 
-      await tx.update(project).set(projectData).where(eq(project.id, id));
+      const setData: Record<string, unknown> = { ...projectData };
+
+      if (projectData.content !== undefined) {
+        setData.contentRendering = projectData.content ? await markdownToHastJson(projectData.content) : null;
+        setData.contentRenderingVersion = RENDERING_VERSION;
+      }
+
+      await tx.update(project).set(setData).where(eq(project.id, id));
     });
   } catch (error) {
     Sentry.captureException(error);

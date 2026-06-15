@@ -15,6 +15,8 @@ export const snippet = pgTable('snippet', (t) => ({
   description: t.varchar({ length: 255 }),
   category: t.varchar({ length: 255 }),
   code: t.text(),
+  contentRendering: t.text(),
+  contentRenderingVersion: t.integer().notNull().default(1),
   isDraft: t.boolean().notNull().default(false),
   createdAt: t.timestamp().defaultNow().notNull(),
   updatedAt: t.timestamp({ mode: 'date', withTimezone: true }).$onUpdate(() => new Date()),

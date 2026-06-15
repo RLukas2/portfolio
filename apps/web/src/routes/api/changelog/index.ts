@@ -3,21 +3,21 @@ import { join } from 'node:path';
 import { createFileRoute } from '@tanstack/react-router';
 import { createSuccessResponse, handleApiError } from '@xbrk/api';
 import { NotFoundError } from '@xbrk/errors';
-import { getTOC } from '@xbrk/utils';
+import { getTOCFromHast, markdownToHastJson } from '@xbrk/md/processor';
 
 /**
  * Changelog API Route
  *
- * Provides changelog content and table of contents for the site.
+ * Provides pre-rendered HAST and table of contents for the site.
  * Content is cached for 1 hour to improve performance.
  *
- * @returns JSON response with changelog content and table of contents
+ * @returns JSON response with HAST rendering and table of contents
  * @example
  * GET /api/changelog
  * Response:
  * {
  *   "data": {
- *     "content": "# Changelog\n\n## v1.0.0...",
+ *     "rendering": "{\"type\":\"root\",\"children\":[...]}",
  *     "toc": [{ "id": "v1-0-0", "text": "v1.0.0", "level": 2 }]
  *   }
  * }
@@ -25,13 +25,14 @@ import { getTOC } from '@xbrk/utils';
 export const Route = createFileRoute('/api/changelog/')({
   server: {
     handlers: {
-      GET: ({ request }) => {
+      GET: async ({ request }) => {
         try {
           const changelogPath = join(process.cwd(), 'changelog.md');
           const content = readFileSync(changelogPath, 'utf-8');
-          const toc = getTOC(content ?? '');
+          const rendering = await markdownToHastJson(content);
+          const toc = getTOCFromHast(rendering);
 
-          return createSuccessResponse({ content, toc }, undefined, 200, {
+          return createSuccessResponse({ rendering, toc }, undefined, 200, {
             'Cache-Control': 'public, max-age=3600, s-maxage=3600',
           });
         } catch (error) {

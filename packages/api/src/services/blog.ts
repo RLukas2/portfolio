@@ -9,7 +9,7 @@ import {
   type CreateArticleSchema,
   type UpdateArticleSchema,
 } from '@xbrk/db/schema';
-import { getTOC } from '@xbrk/utils';
+import { getTOCFromHast, markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
 import { and, desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 import { env } from '../../env';
@@ -58,6 +58,8 @@ export async function getAllPublic(db: DbClient) {
         isDraft: articles.isDraft,
         authorId: articles.authorId,
         content: articles.content,
+        contentRendering: articles.contentRendering,
+        contentRenderingVersion: articles.contentRenderingVersion,
         tags: articles.tags,
         likesCount: sql<number>`(
           SELECT COUNT(*)::int 
@@ -130,7 +132,7 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
       limit: 1,
     });
 
-    const toc = getTOC(article.content ?? '');
+    const toc = getTOCFromHast(article.contentRendering);
 
     // Get 3 related articles based on sharing the same tags
     let relatedArticles: (typeof result)[0]['article'][] = [];
@@ -201,27 +203,33 @@ export async function getById(db: DbClient, input: { id: string }) {
 /**
  * Creates a new article. If a thumbnail is provided (base64 or URL),
  * it will be uploaded to storage and the resulting URL saved to `imageUrl`.
+ * Markdown content is pre-compiled to a HAST tree and cached in `contentRendering`.
  */
-export function create(db: DbClient, input: z.infer<typeof CreateArticleSchema>) {
+export async function create(db: DbClient, input: z.infer<typeof CreateArticleSchema>) {
   const { thumbnail, ...articleData } = input;
 
-  return (async () => {
-    if (thumbnail) {
-      try {
-        const imageUrl = await uploadImage('articles', thumbnail, input.slug);
-        articleData.imageUrl = imageUrl;
-      } catch (error) {
-        Sentry.captureException(error);
-      }
+  if (thumbnail) {
+    try {
+      const imageUrl = await uploadImage('articles', thumbnail, input.slug);
+      articleData.imageUrl = imageUrl;
+    } catch (error) {
+      Sentry.captureException(error);
     }
+  }
 
-    return db.insert(articles).values(articleData);
-  })();
+  const contentRendering = articleData.content ? await markdownToHastJson(articleData.content) : null;
+
+  return db.insert(articles).values({
+    ...articleData,
+    contentRendering,
+    contentRenderingVersion: RENDERING_VERSION,
+  });
 }
 
 /**
  * Updates an article. If a new thumbnail is provided, uploads it and deletes the old one.
  * Old image is only deleted after the new upload succeeds.
+ * If content is updated, markdown is re-compiled to HAST and cached.
  */
 export function update(db: DbClient, input: z.infer<typeof UpdateArticleSchema>) {
   const { thumbnail, id, ...articleData } = input;
@@ -245,7 +253,14 @@ export function update(db: DbClient, input: z.infer<typeof UpdateArticleSchema>)
       }
     }
 
-    return tx.update(articles).set(articleData).where(eq(articles.id, id));
+    const setData: Record<string, unknown> = { ...articleData };
+
+    if (articleData.content !== undefined) {
+      setData.contentRendering = articleData.content ? await markdownToHastJson(articleData.content) : null;
+      setData.contentRenderingVersion = RENDERING_VERSION;
+    }
+
+    return tx.update(articles).set(setData).where(eq(articles.id, id));
   });
 }
 

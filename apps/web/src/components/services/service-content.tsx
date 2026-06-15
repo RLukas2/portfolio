@@ -1,8 +1,6 @@
-import { Markdown } from '@xbrk/md';
+import { RenderedMarkdown } from '@xbrk/md';
 import type { ServiceType } from '@xbrk/types';
-import { Spinner } from '@xbrk/ui/spinner';
 import ZoomImage from '@xbrk/ui/zoom-image';
-import { Suspense } from 'react';
 import TechStacks from '../shared/tech-stacks';
 import ServiceContact from './service-contact';
 
@@ -11,7 +9,7 @@ interface ServiceContentProps {
 }
 
 export default function ServiceContent({ service }: Readonly<ServiceContentProps>) {
-  const { stacks, imageUrl, title, content } = service;
+  const { stacks, imageUrl, title, contentRendering } = service;
   const thumbnailUrl = imageUrl ?? `https://placehold.co/1000x600/darkgray/white/png?text=${encodeURIComponent(title)}`;
 
   return (
@@ -36,13 +34,11 @@ export default function ServiceContent({ service }: Readonly<ServiceContentProps
         />
       </div>
 
-      {content && (
+      {contentRendering && (
         <div className="mt-5 space-y-6 leading-[1.8] dark:text-neutral-300">
-          <Suspense fallback={<Spinner className="size-6" />}>
-            <article className="prose prose-slate dark:prose-invert !max-w-none">
-              <Markdown source={content} />
-            </article>
-          </Suspense>
+          <article className="prose prose-slate dark:prose-invert !max-w-none">
+            <RenderedMarkdown rendering={contentRendering} />
+          </article>
         </div>
       )}
 
