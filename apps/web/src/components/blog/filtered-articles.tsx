@@ -79,6 +79,7 @@ export default function FilteredArticles({ articles }: Readonly<FilteredArticles
             const isSelected = selectedTags.includes(tag);
             return (
               <button
+                aria-pressed={isSelected}
                 className={cn(
                   'inline-flex w-fit shrink-0 cursor-pointer items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full border px-3 py-1.5 font-medium text-xs transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
                   isSelected
