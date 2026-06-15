@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateServiceSchema, service, UpdateServiceSchema } from '@xbrk/db/schema';
+import { markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
 import { desc, eq } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 import { handleImageUpdate, handleImageUpload } from '../lib/base-service';
@@ -86,23 +87,27 @@ export async function getById(db: DbClient, input: { id: string }) {
  * Creates a new service. If a thumbnail is provided, it is uploaded to storage
  * and saved as `imageUrl`.
  */
-export function create(db: DbClient, input: z.infer<typeof CreateServiceSchema>) {
-  return (async () => {
-    try {
-      const { thumbnail, ...serviceData } = input;
+export async function create(db: DbClient, input: z.infer<typeof CreateServiceSchema>) {
+  try {
+    const { thumbnail, ...serviceData } = input;
 
-      const imageUrl = await handleImageUpload('services', thumbnail, input.slug, 'service');
-      if (imageUrl) {
-        serviceData.imageUrl = imageUrl;
-      }
-
-      return db.insert(service).values(serviceData);
-    } catch (error) {
-      Sentry.captureException(error);
-      console.error('[service.create] Database error:', error);
-      throw new Error('Failed to create service');
+    const imageUrl = await handleImageUpload('services', thumbnail, input.slug, 'service');
+    if (imageUrl) {
+      serviceData.imageUrl = imageUrl;
     }
-  })();
+
+    const contentRendering = serviceData.content ? await markdownToHastJson(serviceData.content) : null;
+
+    return db.insert(service).values({
+      ...serviceData,
+      contentRendering,
+      contentRenderingVersion: RENDERING_VERSION,
+    });
+  } catch (error) {
+    Sentry.captureException(error);
+    console.error('[service.create] Database error:', error);
+    throw new Error('Failed to create service');
+  }
 }
 
 /**
@@ -132,7 +137,14 @@ export function update(db: DbClient, input: z.infer<typeof UpdateServiceSchema>)
         }
       }
 
-      return tx.update(service).set(serviceData).where(eq(service.id, id));
+      const setData: Record<string, unknown> = { ...serviceData };
+
+      if (serviceData.content !== undefined) {
+        setData.contentRendering = serviceData.content ? await markdownToHastJson(serviceData.content) : null;
+        setData.contentRenderingVersion = RENDERING_VERSION;
+      }
+
+      return tx.update(service).set(setData).where(eq(service.id, id));
     } catch (error) {
       Sentry.captureException(error);
       console.error('[service.update] Database error:', error);

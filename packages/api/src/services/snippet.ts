@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateSnippetSchema, snippet, UpdateSnippetSchema } from '@xbrk/db/schema';
+import { markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
 import { desc, eq } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 
@@ -82,7 +83,13 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
 
 export async function create(db: DbClient, input: z.infer<typeof CreateSnippetSchema>) {
   try {
-    await db.insert(snippet).values(input);
+    const contentRendering = input.code ? await markdownToHastJson(input.code) : null;
+
+    await db.insert(snippet).values({
+      ...input,
+      contentRendering,
+      contentRenderingVersion: RENDERING_VERSION,
+    });
   } catch (error) {
     Sentry.captureException(error);
     console.error('[snippet.create] Database error:', error);
@@ -92,7 +99,15 @@ export async function create(db: DbClient, input: z.infer<typeof CreateSnippetSc
 
 export async function update(db: DbClient, input: z.infer<typeof UpdateSnippetSchema>) {
   try {
-    await db.update(snippet).set(input).where(eq(snippet.id, input.id));
+    const { id, ...updateData } = input;
+    const setData: Record<string, unknown> = { ...updateData };
+
+    if (input.code !== undefined) {
+      setData.contentRendering = input.code ? await markdownToHastJson(input.code) : null;
+      setData.contentRenderingVersion = RENDERING_VERSION;
+    }
+
+    await db.update(snippet).set(setData).where(eq(snippet.id, id));
   } catch (error) {
     Sentry.captureException(error);
     console.error('[snippet.update] Database error:', error);
