@@ -31,7 +31,7 @@ export const Route = createFileRoute('/(public)/blog/$articleId')({
         queryKey: queryKeys.blog.detail(articleId),
         queryFn: () => $getArticleBySlug({ data: { slug: articleId } }),
       });
-      await queryClient.prefetchQuery({
+      await queryClient.ensureQueryData({
         queryKey: queryKeys.comment.byArticle(data?.id),
         queryFn: () => $getAllComments({ data: { articleId: data?.id } }),
       });

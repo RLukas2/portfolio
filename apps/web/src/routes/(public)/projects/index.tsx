@@ -13,7 +13,7 @@ import { getBaseUrl } from '@/lib/utils';
 export const Route = createFileRoute('/(public)/projects/')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) =>
-    await queryClient.prefetchQuery({
+    await queryClient.ensureQueryData({
       queryKey: queryKeys.project.listPublic(),
       queryFn: () => $getAllPublicProjects(),
     }),

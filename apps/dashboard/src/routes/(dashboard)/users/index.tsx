@@ -4,8 +4,8 @@ import { createServerFn } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';
 import type { UserType } from '@xbrk/types';
 import { Card } from '@xbrk/ui/card';
-import { Skeleton } from '@xbrk/ui/skeleton';
-import { Suspense } from 'react';
+
+
 import { DataTable } from '@/components/data-table/data-table';
 import { userColumns } from '@/components/users/columns';
 import { auth } from '@/lib/auth/server';
@@ -35,17 +35,6 @@ export const Route = createFileRoute('/(dashboard)/users/')({
   }),
 });
 
-function UsersLoading() {
-  return (
-    <div className="space-y-3">
-      <Skeleton className="h-8 w-[250px]" />
-      <Skeleton className="h-4 w-[350px]" />
-      <div className="mt-6">
-        <Skeleton className="h-[400px] w-full rounded-md" />
-      </div>
-    </div>
-  );
-}
 
 function UsersError() {
   return (
@@ -74,9 +63,7 @@ function Users() {
         </div>
       </div>
       <ErrorBoundary fallback={<UsersError />}>
-        <Suspense fallback={<UsersLoading />}>
-          <UsersContent />
-        </Suspense>
+        <UsersContent />
       </ErrorBoundary>
     </>
   );

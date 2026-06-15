@@ -16,7 +16,7 @@ import { getBaseUrl } from '@/lib/utils';
 export const Route = createFileRoute('/(public)/guestbook/')({
   component: RouteComponent,
   loader: async ({ context: { queryClient, user } }) => {
-    await queryClient.prefetchQuery({
+    await queryClient.ensureQueryData({
       queryKey: queryKeys.guestbook.list(),
       queryFn: () => $getAllGuestbookEntries(),
     });
