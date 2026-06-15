@@ -16,8 +16,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@xbrk/types": "workspace:*",
-    "marked": "^17.0.4"
+    "@xbrk/types": "workspace:*"
   },
   "devDependencies": {
     "@xbrk/tsconfig": "workspace:*",

@@ -1,6 +1,3 @@
-import { type TOC } from '@xbrk/types';
-import { marked, type Tokens } from 'marked';
-
 /**
  * Formats a date value into a human-readable string (e.g. "January 1, 2025").
  * Uses `en-US` locale with long month, numeric day and year.
@@ -30,17 +27,6 @@ export const generateSlug = (title: string): string => {
 };
 
 /**
- * Estimates reading time for a given content string.
- * Assumes an average reading speed of 200 words per minute.
- * Returns the result rounded up to the nearest minute.
- */
-export const calculateReadingTime = (content: string) => {
-  const wordsPerMinute = 200;
-  const numberOfWords = content.split(/\s/g).length;
-  return Math.ceil(numberOfWords / wordsPerMinute);
-};
-
-/**
  * Strips common Markdown syntax from a string, returning plain text.
  * Handles: links, inline code, bold/italic, strikethrough, and HTML tags.
  */
@@ -64,26 +50,12 @@ export const stripMarkdown = (text: string): string => {
 };
 
 /**
- * Parses markdown content and extracts a table of contents from heading tokens.
- * Each heading is converted to a `TOC` entry with its depth, plain-text title,
- * and a slug-based URL anchor generated via `generateSlug`.
+ * Estimates reading time for a given content string.
+ * Assumes an average reading speed of 200 words per minute.
+ * Returns the result rounded up to the nearest minute.
  */
-export const getTOC = (content: string): TOC[] => {
-  const toc: TOC[] = [];
-
-  const tokens = marked.lexer(content, {});
-  const headings = tokens.filter((token) => token.type === 'heading') as Tokens.Heading[];
-
-  for (const heading of headings) {
-    const level = heading.depth;
-    const title = stripMarkdown(heading.text);
-    const id = generateSlug(title);
-    toc.push({
-      title,
-      url: id,
-      depth: level,
-    });
-  }
-
-  return toc;
+export const calculateReadingTime = (content: string) => {
+  const wordsPerMinute = 200;
+  const numberOfWords = content.split(/\s/g).length;
+  return Math.ceil(numberOfWords / wordsPerMinute);
 };
