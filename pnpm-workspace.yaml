@@ -27,6 +27,7 @@ catalog:
   "happy-dom": "^20.8.9"
 
   # Utilities (Zod, Prettier,...)
+  "tsx": "^4.21.0"
   "@sentry/node": "^10.19.0"
   "@t3-oss/env-core": "^0.13.11"
   "@tailwindcss/postcss": "^4.2.1"
