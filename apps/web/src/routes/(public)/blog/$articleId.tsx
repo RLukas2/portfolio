@@ -5,7 +5,6 @@ import { Markdown } from '@xbrk/md';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 import { NotFound } from '@xbrk/ui/not-found';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@xbrk/ui/sheet';
-import { Spinner } from '@xbrk/ui/spinner';
 import { calculateReadingTime, formatDate } from '@xbrk/utils';
 import { m } from 'framer-motion';
 import { Calendar, Clock, Eye, Heart, List, MessageCircle, Tag } from 'lucide-react';
@@ -18,6 +17,7 @@ import LikeButton from '@/components/blog/like-button';
 import TableOfContents from '@/components/blog/toc';
 import BreadcrumbNavigation from '@/components/shared/breadcrumb-navigation';
 import SocialShare from '@/components/shared/social-share';
+import { ArticleContentSkeleton } from '@/components/skeletons/article-content-skeleton';
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
 import { $getAllComments, $getArticleBySlug, $viewArticle } from '@/lib/server';
@@ -246,7 +246,7 @@ function RouteComponent() {
 
           {/* Article content */}
           <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5, delay: 0.4 }}>
-            <Suspense fallback={<Spinner className="size-6" />}>
+            <Suspense fallback={<ArticleContentSkeleton />}>
               <article className="prose prose-slate dark:prose-invert mt-8 max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
                 <Markdown source={article.content ?? ''} />
               </article>

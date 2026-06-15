@@ -133,23 +133,31 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
     const toc = getTOC(article.content ?? '');
 
     // Get 3 related articles based on sharing the same tags
-    let relatedArticles: any[] = [];
+    let relatedArticles: (typeof result[0]['article'])[] = [];
     if (article.tags && article.tags.length > 0) {
       const allOtherArticles = await db.query.articles.findMany({
         where: and(eq(articles.isDraft, false), sql`${articles.id} != ${article.id}`),
         orderBy: desc(articles.createdAt),
       });
 
-      relatedArticles = allOtherArticles.map(a => ({
-        ...a,
-        matchCount: a.tags ? a.tags.filter(t => article.tags!.includes(t)).length : 0
-      })).filter(a => a.matchCount > 0).sort((a, b) => b.matchCount - a.matchCount).slice(0, 3);
+      relatedArticles = allOtherArticles
+        .map((a) => ({
+          ...a,
+          matchCount: a.tags ? a.tags.filter((t) => article.tags?.includes(t)).length : 0,
+        }))
+        .filter((a) => a.matchCount > 0)
+        .sort((a, b) => b.matchCount - a.matchCount)
+        .slice(0, 3);
     }
 
     if (relatedArticles.length < 3) {
-        const recentArticles = await db.query.articles.findMany({where: and(eq(articles.isDraft, false), sql`${articles.id} != ${article.id}`), orderBy: desc(articles.createdAt), limit: 3 - relatedArticles.length});
-        const existingIds = relatedArticles.map(a => a.id);
-        relatedArticles = [...relatedArticles, ...recentArticles.filter(a => !existingIds.includes(a.id))];
+      const recentArticles = await db.query.articles.findMany({
+        where: and(eq(articles.isDraft, false), sql`${articles.id} != ${article.id}`),
+        orderBy: desc(articles.createdAt),
+        limit: 3 - relatedArticles.length,
+      });
+      const existingIds = relatedArticles.map((a) => a.id);
+      relatedArticles = [...relatedArticles, ...recentArticles.filter((a) => !existingIds.includes(a.id))];
     }
 
     return {
