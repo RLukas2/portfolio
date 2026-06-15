@@ -12,7 +12,7 @@ import { getBaseUrl } from '@/lib/utils';
 export const Route = createFileRoute('/(public)/snippets/')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) =>
-    await queryClient.prefetchQuery({
+    await queryClient.ensureQueryData({
       queryKey: queryKeys.snippet.listPublic(),
       queryFn: () => $getAllPublicSnippets(),
     }),

@@ -8,11 +8,11 @@ export const Route = createFileRoute('/(dashboard)/')({
   component: DashboardIndex,
   loader: async ({ context: { queryClient } }) => {
     await Promise.all([
-      queryClient.prefetchQuery({
+      queryClient.ensureQueryData({
         queryKey: queryKeys.stats.monthlyBlogViews(6),
         queryFn: () => $getMonthlyBlogViews({ data: { months: 6 } }),
       }),
-      queryClient.prefetchQuery({
+      queryClient.ensureQueryData({
         queryKey: queryKeys.stats.monthlyUsers(6),
         queryFn: () => $getMonthlyUsers({ data: { months: 6 } }),
       }),

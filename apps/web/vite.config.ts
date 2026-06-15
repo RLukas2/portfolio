@@ -76,10 +76,10 @@ const config = defineConfig({
   optimizeDeps: {
     entries: ['src/**/*.{ts,tsx}'],
     include: ['react', 'react-dom', '@tanstack/react-router', '@tanstack/react-query'],
-    exclude: ['posthog-js', '@posthog/react', 'framer-motion', 'shiki', '@shikijs/rehype', '@shikijs/transformers'],
+    exclude: ['posthog-js', '@posthog/react', 'shiki', '@shikijs/rehype', '@shikijs/transformers'],
   },
   ssr: {
-    noExternal: [],
+    noExternal: ['framer-motion'],
     external: ['shiki', '@shikijs/rehype', '@shikijs/transformers'],
   },
   server: {

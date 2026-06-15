@@ -6,7 +6,7 @@ import { buttonVariants } from '@xbrk/ui/button';
 import { Card } from '@xbrk/ui/card';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import { Plus } from 'lucide-react';
-import { Suspense } from 'react';
+
 import { blogColumns } from '@/components/blog/columns';
 import { DataTable } from '@/components/data-table/data-table';
 import { queryKeys } from '@/lib/query-keys';
@@ -15,7 +15,7 @@ import { $getAllArticles } from '@/lib/server/blog';
 export const Route = createFileRoute('/(dashboard)/blog/')({
   component: Articles,
   loader: async ({ context: { queryClient } }) =>
-    await queryClient.prefetchQuery({
+    await queryClient.ensureQueryData({
       queryKey: queryKeys.blog.listAll(),
       queryFn: () => $getAllArticles(),
     }),
@@ -86,9 +86,7 @@ function Articles() {
         </Link>
       </div>
       <ErrorBoundary fallback={<ArticlesError />}>
-        <Suspense fallback={<ArticlesLoading />}>
-          <ArticlesContent />
-        </Suspense>
+        <ArticlesContent />
       </ErrorBoundary>
     </>
   );

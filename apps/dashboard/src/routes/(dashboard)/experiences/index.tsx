@@ -6,7 +6,7 @@ import { buttonVariants } from '@xbrk/ui/button';
 import { Card } from '@xbrk/ui/card';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import { Plus } from 'lucide-react';
-import { Suspense } from 'react';
+
 import { DataTable } from '@/components/data-table/data-table';
 import { experienceColumns } from '@/components/experiences/columns';
 import { queryKeys } from '@/lib/query-keys';
@@ -15,7 +15,7 @@ import { $getAllExperiences } from '@/lib/server/experience';
 export const Route = createFileRoute('/(dashboard)/experiences/')({
   component: Experiences,
   loader: async ({ context: { queryClient } }) =>
-    await queryClient.prefetchQuery({
+    await queryClient.ensureQueryData({
       queryKey: queryKeys.experience.listAll(),
       queryFn: () => $getAllExperiences(),
     }),
@@ -93,9 +93,7 @@ function Experiences() {
         </Link>
       </div>
       <ErrorBoundary fallback={<ExperiencesError />}>
-        <Suspense fallback={<ExperiencesLoading />}>
-          <ExperiencesContent />
-        </Suspense>
+        <ExperiencesContent />
       </ErrorBoundary>
     </>
   );
