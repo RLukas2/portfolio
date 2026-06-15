@@ -17,6 +17,9 @@ const config = defineConfig({
   build: {
     sourcemap: true,
     target: 'es2022',
+    rollupOptions: {
+      external: [/\.wasm$/],
+    },
   },
   resolve: {
     tsconfigPaths: true,
