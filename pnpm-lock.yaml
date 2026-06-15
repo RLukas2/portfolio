@@ -6,96 +6,9 @@ settings:
 
 catalogs:
   default:
-    '@better-auth/cli':
-      specifier: 1.4.21
-      version: 1.4.21
-    '@sentry/node':
-      specifier: ^10.19.0
-      version: 10.47.0
-    '@t3-oss/env-core':
-      specifier: ^0.13.11
-      version: 0.13.11
-    '@tailwindcss/postcss':
-      specifier: ^4.2.1
-      version: 4.2.2
-    '@tailwindcss/vite':
-      specifier: ^4.2.2
-      version: 4.2.2
-    '@tanstack/devtools-vite':
-      specifier: ^0.6.0
-      version: 0.6.0
-    '@tanstack/react-devtools':
-      specifier: ^0.10.1
-      version: 0.10.1
-    '@tanstack/react-form':
-      specifier: ^1.28.6
-      version: 1.28.6
-    '@tanstack/react-query':
-      specifier: ^5.96.1
-      version: 5.96.1
-    '@tanstack/react-query-devtools':
-      specifier: ^5.96.1
-      version: 5.96.1
-    '@tanstack/react-router':
-      specifier: ^1.168.10
-      version: 1.168.10
-    '@tanstack/react-router-devtools':
-      specifier: ^1.166.11
-      version: 1.166.11
-    '@tanstack/react-router-ssr-query':
-      specifier: ^1.166.10
-      version: 1.166.10
-    '@tanstack/react-start':
-      specifier: ^1.167.16
-      version: 1.167.16
-    '@types/node':
-      specifier: ^25.5.0
-      version: 25.5.0
-    '@types/react':
-      specifier: ^19.2.14
-      version: 19.2.14
-    '@types/react-dom':
-      specifier: ^19.2.3
-      version: 19.2.3
-    '@vitest/ui':
-      specifier: ^3.2.0
-      version: 3.2.4
-    autoprefixer:
-      specifier: ^10.4.27
-      version: 10.4.27
-    better-auth:
-      specifier: 1.5.5
-      version: 1.5.5
-    happy-dom:
-      specifier: ^20.8.9
-      version: 20.8.9
-    lucide-react:
-      specifier: ^1.7.0
-      version: 1.7.0
-    react:
-      specifier: ^19.2.4
-      version: 19.2.4
-    react-dom:
-      specifier: ^19.2.4
-      version: 19.2.4
-    simple-icons:
-      specifier: ^13.21.0
-      version: 13.21.0
-    tailwindcss:
-      specifier: ^4.2.1
-      version: 4.2.2
     typescript:
       specifier: ^5.9.3
       version: 5.9.3
-    vite:
-      specifier: ^8.0.3
-      version: 8.0.3
-    vitest:
-      specifier: ^3.2.0
-      version: 3.2.4
-    zod:
-      specifier: ^4.3.6
-      version: 4.3.6
 
 importers:
 
@@ -125,9 +38,6 @@ importers:
       shadcn:
         specifier: ^4.1.1
         version: 4.1.2(@types/node@25.5.0)(typescript@5.9.3)
-      tsx:
-        specifier: ^4.21.0
-        version: 4.21.0
       turbo:
         specifier: ^2.9.1
         version: 2.9.3
