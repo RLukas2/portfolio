@@ -1,0 +1,96 @@
+--- apps/web/src/components/blog/filtered-articles.tsx
++++ apps/web/src/components/blog/filtered-articles.tsx
+@@ -2,10 +2,12 @@
+ import { Input } from '@xbrk/ui/input';
+ import { Label } from '@xbrk/ui/label';
++import { Badge } from '@xbrk/ui/badge';
++import { cn } from '@xbrk/ui';
+ import { m } from 'framer-motion';
+ import { FileText, Search } from 'lucide-react';
+-import { type ChangeEvent, useState } from 'react';
++import { type ChangeEvent, useState, useMemo } from 'react';
+ import { containerVariants, itemVariants } from '@/lib/constants/framer-motion-variants';
+ import EmptyState from '../shared/empty-state';
+ import ArticleCard from './article-card';
+
+@@ -16,10 +18,29 @@
+ export default function FilteredArticles({ articles }: Readonly<FilteredArticlesProps>) {
+   const [searchValue, setSearchValue] = useState('');
++  const [selectedTags, setSelectedTags] = useState<string[]>([]);
++
++  const allTags = useMemo(() => {
++    const tags = new Set<string>();
++    articles.forEach((article) => {
++      if (article.tags) {
++        article.tags.forEach((tag) => tags.add(tag));
++      }
++    });
++    return Array.from(tags).sort();
++  }, [articles]);
+
+-  const filteredArticles = articles.filter((article) =>
+-    article.title.toLowerCase().includes(searchValue.toLowerCase()),
+-  );
++  const filteredArticles = articles.filter((article) => {
++    const matchesSearch = article.title.toLowerCase().includes(searchValue.toLowerCase());
++
++    if (selectedTags.length === 0) {
++      return matchesSearch;
++    }
++
++    const articleTags = article.tags || [];
++    const matchesTags = selectedTags.some((tag) => articleTags.includes(tag));
++
++    return matchesSearch && matchesTags;
++  });
+
+   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+@@ -28,6 +49,14 @@
+   };
+
++  const toggleTag = (tag: string) => {
++    setSelectedTags((prev) =>
++      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
++    );
++  };
++
+   // If no articles at all, show empty state without search
+   if (articles.length === 0) {
+     return <EmptyState message="The posts are playing hide and seek – we just can't find them!" />;
+   }
+
+   return (
+     <>
+       {/* Search box */}
+-      <div className="relative mb-8">
++      <div className="relative mb-4">
+         <Input
+           aria-label="Search articles"
+@@ -42,6 +71,27 @@
+           <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+         </Label>
+       </div>
++
++      {allTags.length > 0 && (
++        <div className="mb-8 flex flex-wrap gap-2">
++          {allTags.map((tag) => {
++            const isSelected = selectedTags.includes(tag);
++            return (
++              <button
++                key={tag}
++                onClick={() => toggleTag(tag)}
++                className={cn(
++                  "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full border px-3 py-1.5 font-medium text-xs transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 cursor-pointer",
++                  isSelected
++                    ? "border-transparent bg-primary text-primary-foreground hover:bg-primary/90"
++                    : "text-foreground bg-background hover:bg-accent hover:text-accent-foreground"
++                )}
++              >
++                {tag}
++              </button>
++            );
++          })}
++        </div>
++      )}
+
+       {filteredArticles.length ? (

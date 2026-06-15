@@ -40,12 +40,10 @@ const PageHeading = ({
     [centered],
   );
 
-  const motionProps = hasMotion
-    ? { animate: animation.show, initial: false, transition: { duration: 0.5 } }
-    : {};
+  const motionProps = hasMotion ? { animate: animation.show, initial: false, transition: { duration: 0.5 } } : {};
 
   return (
-    <Comp {...motionProps} className={cn('py-16 animate-in fade-in slide-in-from-left-4 duration-500', className)}>
+    <Comp {...motionProps} className={cn('fade-in slide-in-from-left-4 animate-in py-16 duration-500', className)}>
       <div className={cn('relative', { 'flex flex-col items-center': centered })}>
         {/* Decorative gradient */}
         <div

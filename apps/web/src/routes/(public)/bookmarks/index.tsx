@@ -59,12 +59,7 @@ function RouteComponent() {
       {collections.length === 0 ? (
         <EmptyState message="No bookmarks found yet. We are discovering favorite discoveries!" />
       ) : (
-        <m.div
-          animate="visible"
-          className="grid gap-4 sm:grid-cols-2"
-          initial={false}
-          variants={containerVariants}
-        >
+        <m.div animate="visible" className="grid gap-4 sm:grid-cols-2" initial={false} variants={containerVariants}>
           {collections.map((collection: Collection) => (
             <m.div key={collection._id} variants={itemVariants}>
               <Link

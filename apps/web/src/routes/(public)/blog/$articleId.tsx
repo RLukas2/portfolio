@@ -4,10 +4,11 @@ import { siteConfig } from '@xbrk/config';
 import { Markdown } from '@xbrk/md';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 import { NotFound } from '@xbrk/ui/not-found';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@xbrk/ui/sheet';
 import { Spinner } from '@xbrk/ui/spinner';
 import { calculateReadingTime, formatDate } from '@xbrk/utils';
 import { m } from 'framer-motion';
-import { Calendar, Clock, Eye, Heart, MessageCircle, Tag } from 'lucide-react';
+import { Calendar, Clock, Eye, Heart, List, MessageCircle, Tag } from 'lucide-react';
 import { Suspense, useEffect, useRef } from 'react';
 import SignInModal from '@/components/auth/sign-in-modal';
 import ArticleComment from '@/components/blog/article-comment';
@@ -243,11 +244,7 @@ function RouteComponent() {
           )}
 
           {/* Article content */}
-          <m.div
-            animate={{ opacity: 1, y: 0 }}
-            initial={false}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
+          <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5, delay: 0.4 }}>
             <Suspense fallback={<Spinner className="size-6" />}>
               <article className="prose prose-slate dark:prose-invert mt-8 max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
                 <Markdown source={article.content ?? ''} />
@@ -306,6 +303,29 @@ function RouteComponent() {
               <TableOfContents toc={article.toc} />
             </div>
           </m.div>
+        )}
+
+        {/* Mobile Floating ToC Button */}
+        {article.toc && (
+          <div className="fixed right-6 bottom-6 z-40 xl:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <button
+                  aria-label="Table of Contents"
+                  className="flex size-14 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xl transition-transform hover:scale-105 active:scale-95"
+                  type="button"
+                >
+                  <List className="size-6" />
+                </button>
+              </SheetTrigger>
+              <SheetContent className="max-h-[85vh] rounded-t-2xl pb-8" side="bottom">
+                <SheetHeader className="pt-2 pb-4">
+                  <SheetTitle className="text-left text-lg">Table of Contents</SheetTitle>
+                </SheetHeader>
+                <TableOfContents isMobile toc={article.toc} />
+              </SheetContent>
+            </Sheet>
+          </div>
         )}
       </article>
       <SignInModal />

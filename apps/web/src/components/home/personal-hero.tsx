@@ -44,7 +44,7 @@ const PersonalHero = () => (
       {/* Left side - Content */}
       <m.div
         animate={{ opacity: 1, x: 0 }}
-        className="flex max-w-2xl flex-col gap-6 text-center lg:w-1/2 lg:text-left animate-in fade-in slide-in-from-left-8 duration-700"
+        className="fade-in slide-in-from-left-8 flex max-w-2xl animate-in flex-col gap-6 text-center duration-700 lg:w-1/2 lg:text-left"
         initial={false}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
@@ -66,8 +66,8 @@ const PersonalHero = () => (
         {/* CTAs - Call-to-action buttons for navigation */}
         <m.div
           animate={{ opacity: 1, y: 0 }}
-        className="mt-2 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both"
-        initial={false}
+          className="fade-in slide-in-from-bottom-4 mt-2 flex animate-in flex-col items-center justify-center gap-4 fill-mode-both delay-300 duration-700 sm:flex-row lg:justify-start"
+          initial={false}
           transition={{ delay: 0.4 }}
         >
           <Link className={cn(buttonVariants({ size: 'lg', variant: 'shadow' }), 'group')} to="/#featured-projects">
@@ -82,8 +82,8 @@ const PersonalHero = () => (
         {/* Social links - Links to social media profiles */}
         <m.div
           animate={{ opacity: 1 }}
-        className="flex justify-center gap-2 lg:justify-start animate-in fade-in duration-700 delay-500 fill-mode-both"
-        initial={false}
+          className="fade-in flex animate-in justify-center gap-2 fill-mode-both delay-500 duration-700 lg:justify-start"
+          initial={false}
           transition={{ delay: 0.6 }}
         >
           {socialConfig.map((social) => (
@@ -107,7 +107,7 @@ const PersonalHero = () => (
       {/* Right side - Avatar with decorative effects */}
       <m.div
         animate={{ opacity: 1, scale: 1 }}
-        className="relative hidden lg:block lg:w-2/5 animate-in fade-in zoom-in-90 duration-700 delay-200 fill-mode-both"
+        className="fade-in zoom-in-90 relative hidden animate-in fill-mode-both delay-200 duration-700 lg:block lg:w-2/5"
         initial={false}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
