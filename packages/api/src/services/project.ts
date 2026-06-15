@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateProjectSchema, project, UpdateProjectSchema } from '@xbrk/db/schema';
 import { getTOCFromHast, markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 import { handleImageUpdate, handleImageUpload } from '../lib/base-service';
 import { deleteFile } from '../storage';
@@ -44,9 +44,12 @@ export async function getAllPublic(db: DbClient) {
  */
 export async function getBySlug(db: DbClient, input: { slug: string }, session?: { user: { role: string } } | null) {
   try {
-    const result = await db.query.project.findFirst({
-      where: eq(project.slug, input.slug),
-    });
+    const query = db.query.project
+      .findFirst({
+        where: eq(project.slug, sql.placeholder('slug')),
+      })
+      .prepare('get_project_by_slug');
+    const result = await query.execute({ slug: input.slug });
 
     if (!result) {
       throw new Error('Project not found');
@@ -78,9 +81,12 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
  */
 export async function getById(db: DbClient, input: { id: string }) {
   try {
-    const result = await db.query.project.findFirst({
-      where: eq(project.id, input.id),
-    });
+    const query = db.query.project
+      .findFirst({
+        where: eq(project.id, sql.placeholder('id')),
+      })
+      .prepare('get_project_by_id');
+    const result = await query.execute({ id: input.id });
 
     if (!result) {
       throw new Error('Project not found');

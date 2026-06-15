@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateServiceSchema, service, UpdateServiceSchema } from '@xbrk/db/schema';
 import { markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 import { handleImageUpdate, handleImageUpload } from '../lib/base-service';
 import { deleteFile } from '../storage';
@@ -43,9 +43,12 @@ export async function getAllPublic(db: DbClient) {
  */
 export async function getBySlug(db: DbClient, input: { slug: string }, session?: { user: { role: string } } | null) {
   try {
-    const serviceResult = await db.query.service.findFirst({
-      where: eq(service.slug, input.slug),
-    });
+    const query = db.query.service
+      .findFirst({
+        where: eq(service.slug, sql.placeholder('slug')),
+      })
+      .prepare('get_service_by_slug');
+    const serviceResult = await query.execute({ slug: input.slug });
 
     if (!serviceResult) {
       throw new Error('Service not found');
@@ -73,9 +76,12 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
 /** Returns a single service by ID. */
 export async function getById(db: DbClient, input: { id: string }) {
   try {
-    return await db.query.service.findFirst({
-      where: eq(service.id, input.id),
-    });
+    const query = db.query.service
+      .findFirst({
+        where: eq(service.id, sql.placeholder('id')),
+      })
+      .prepare('get_service_by_id');
+    return await query.execute({ id: input.id });
   } catch (error) {
     Sentry.captureException(error);
     console.error('[service.getById] Database error:', error);

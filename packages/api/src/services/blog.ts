@@ -187,9 +187,12 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
 /** Returns a single article by ID. */
 export async function getById(db: DbClient, input: { id: string }) {
   try {
-    return await db.query.articles.findFirst({
-      where: eq(articles.id, input.id),
-    });
+    const query = db.query.articles
+      .findFirst({
+        where: eq(articles.id, sql.placeholder('id')),
+      })
+      .prepare('get_article_by_id');
+    return await query.execute({ id: input.id });
   } catch (error) {
     Sentry.captureException(error);
     console.error('[blog.getById] Database error:', error);
@@ -294,9 +297,12 @@ export async function like(
   session?: { user: { role: string } } | null,
 ): Promise<void> {
   try {
-    const article = await db.query.articles.findFirst({
-      where: eq(articles.slug, input.slug),
-    });
+    const query = db.query.articles
+      .findFirst({
+        where: eq(articles.slug, sql.placeholder('slug')),
+      })
+      .prepare('get_article_by_slug');
+    const article = await query.execute({ slug: input.slug });
 
     if (!article) {
       throw new Error('Article not found');
@@ -348,9 +354,12 @@ export async function like(
  */
 export async function isLiked(db: DbClient, input: { slug: string }, headers: Headers): Promise<boolean> {
   try {
-    const article = await db.query.articles.findFirst({
-      where: eq(articles.slug, input.slug),
-    });
+    const query = db.query.articles
+      .findFirst({
+        where: eq(articles.slug, sql.placeholder('slug')),
+      })
+      .prepare('get_article_by_slug');
+    const article = await query.execute({ slug: input.slug });
 
     if (!article) {
       return false;
@@ -377,9 +386,12 @@ export async function isLiked(db: DbClient, input: { slug: string }, headers: He
  */
 export async function view(db: DbClient, input: { slug: string }): Promise<void> {
   try {
-    const article = await db.query.articles.findFirst({
-      where: eq(articles.slug, input.slug),
-    });
+    const query = db.query.articles
+      .findFirst({
+        where: eq(articles.slug, sql.placeholder('slug')),
+      })
+      .prepare('get_article_by_slug');
+    const article = await query.execute({ slug: input.slug });
 
     if (!article) {
       throw new Error('Article not found');

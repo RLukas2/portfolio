@@ -2,7 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateExperienceSchema, experience, UpdateExperienceSchema } from '@xbrk/db/schema';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 import { handleImageUpdate, handleImageUpload } from '../lib/base-service';
 import { createSlug } from '../lib/validation';
@@ -40,9 +40,12 @@ export async function getAllPublic(db: DbClient) {
 /** Returns a single experience by ID. */
 export async function getById(db: DbClient, input: { id: string }) {
   try {
-    return await db.query.experience.findFirst({
-      where: eq(experience.id, input.id),
-    });
+    const query = db.query.experience
+      .findFirst({
+        where: eq(experience.id, sql.placeholder('id')),
+      })
+      .prepare('get_experience_by_id');
+    return await query.execute({ id: input.id });
   } catch (error) {
     Sentry.captureException(error);
     console.error('[experience.getById] Database error:', error);

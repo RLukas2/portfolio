@@ -15,6 +15,13 @@
       "when": 1781540319475,
       "tag": "0001_robust_puff_adder",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781544124609,
+      "tag": "0002_pretty_veda",
+      "breakpoints": true
     }
   ]
 }

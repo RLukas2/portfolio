@@ -1,4 +1,4 @@
-import { pgTable } from 'drizzle-orm/pg-core';
+import { index, pgTable } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createUpdateSchema } from 'drizzle-zod';
 import { z } from 'zod/v4';
 import { validators } from '../lib/validation';
@@ -8,19 +8,27 @@ import { validators } from '../lib/validation';
  * `category` groups snippets for filtering (e.g. "React", "CSS").
  * `code` stores raw source code as plain text.
  */
-export const snippet = pgTable('snippet', (t) => ({
-  id: t.uuid().notNull().primaryKey().defaultRandom(),
-  title: t.varchar({ length: 255 }).notNull(),
-  slug: t.varchar({ length: 255 }).notNull().unique(),
-  description: t.varchar({ length: 255 }),
-  category: t.varchar({ length: 255 }),
-  code: t.text(),
-  contentRendering: t.text(),
-  contentRenderingVersion: t.integer().notNull().default(1),
-  isDraft: t.boolean().notNull().default(false),
-  createdAt: t.timestamp().defaultNow().notNull(),
-  updatedAt: t.timestamp({ mode: 'date', withTimezone: true }).$onUpdate(() => new Date()),
-}));
+export const snippet = pgTable(
+  'snippet',
+  (t) => ({
+    id: t.uuid().notNull().primaryKey().defaultRandom(),
+    title: t.varchar({ length: 255 }).notNull(),
+    slug: t.varchar({ length: 255 }).notNull().unique(),
+    description: t.varchar({ length: 255 }),
+    category: t.varchar({ length: 255 }),
+    code: t.text(),
+    contentRendering: t.text(),
+    contentRenderingVersion: t.integer().notNull().default(1),
+    isDraft: t.boolean().notNull().default(false),
+    createdAt: t.timestamp().defaultNow().notNull(),
+    updatedAt: t.timestamp({ mode: 'date', withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (t) => [
+    index('snippet_category_idx').on(t.category),
+    index('snippet_is_draft_idx').on(t.isDraft),
+    index('snippet_created_at_idx').on(t.createdAt),
+  ],
+);
 
 export const SnippetBaseSchema = z.object({
   title: validators.title,
