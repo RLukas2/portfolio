@@ -302,7 +302,14 @@ function RouteComponent() {
               <h2 className="mb-6 font-bold font-heading text-2xl tracking-tight">Related Posts</h2>
               <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {article.relatedArticles.map((relatedArticle: Parameters<typeof ArticleCard>[0]['article']) => (
-                  <ArticleCard article={relatedArticle} key={relatedArticle.slug} />
+                  <ArticleCard
+                    article={{
+                      ...relatedArticle,
+                      viewCount: relatedArticle.viewCount ?? 0,
+                      likesCount: relatedArticle.likesCount ?? 0,
+                    }}
+                    key={relatedArticle.slug}
+                  />
                 ))}
               </div>
             </m.div>
