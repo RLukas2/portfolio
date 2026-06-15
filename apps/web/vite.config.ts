@@ -18,11 +18,27 @@ const config = defineConfig({
     sourcemap: true,
     target: 'es2022',
     rollupOptions: {
-      // Keep shiki and its sub-packages external so Rolldown never tries to bundle the .wasm file
-      external: [/^shiki/, /^@shikijs\//, /\.wasm$/],
-      // manualChunks intentionally omitted: split chunks break CJS-ESM interop
-      // in TanStack Start's SSR environment (Rolldown wraps CommonJS lazy getters
-      // instead of calling them, causing "__toESM(...).default" to be undefined).
+      external: [/\.wasm$/],
+      output: {
+        manualChunks(id) {
+          // Separate vendor chunks for better caching
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
+            }
+            if (
+              id.includes('@tanstack/react-router') ||
+              id.includes('@tanstack/react-query') ||
+              id.includes('@tanstack/react-start')
+            ) {
+              return 'tanstack-vendor';
+            }
+            if (id.includes('framer-motion') || id.includes('lucide-react')) {
+              return 'ui-vendor';
+            }
+          }
+        },
+      },
     },
     // Increase chunk size warning limit for vendor chunks
     chunkSizeWarningLimit: 1000,
@@ -76,11 +92,10 @@ const config = defineConfig({
   optimizeDeps: {
     entries: ['src/**/*.{ts,tsx}'],
     include: ['react', 'react-dom', '@tanstack/react-router', '@tanstack/react-query'],
-    exclude: ['posthog-js', '@posthog/react', 'shiki', '@shikijs/rehype', '@shikijs/transformers'],
+    exclude: ['posthog-js', '@posthog/react'],
   },
   ssr: {
     noExternal: ['framer-motion'],
-    external: ['shiki', '@shikijs/rehype', '@shikijs/transformers'],
   },
   server: {
     allowedHosts: process.env.ALLOWED_HOSTS?.split(',') || [],
