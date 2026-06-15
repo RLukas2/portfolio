@@ -5,36 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1775485461256,
-      "tag": "0000_crazy_puppet_master",
+      "when": 1781539071949,
+      "tag": "0000_curved_ravenous",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1776010052248,
-      "tag": "0001_serious_punisher",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1776009240783,
-      "tag": "0002_add_audit_ip_useragent",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1776266229419,
-      "tag": "0003_purple_skrulls",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1776310395511,
-      "tag": "0004_nebulous_felicia_hardy",
+      "when": 1781540319475,
+      "tag": "0001_robust_puff_adder",
       "breakpoints": true
     }
   ]
