@@ -133,7 +133,7 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
     const toc = getTOC(article.content ?? '');
 
     // Get 3 related articles based on sharing the same tags
-    let relatedArticles: (typeof result[0]['article'])[] = [];
+    let relatedArticles: (typeof result)[0]['article'][] = [];
     if (article.tags && article.tags.length > 0) {
       const allOtherArticles = await db.query.articles.findMany({
         where: and(eq(articles.isDraft, false), sql`${articles.id} != ${article.id}`),

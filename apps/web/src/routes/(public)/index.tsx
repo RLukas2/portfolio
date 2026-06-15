@@ -7,7 +7,6 @@ import PersonalHero from '@/components/home/personal-hero';
 import RecentPosts from '@/components/home/recent-posts';
 import SectionDivider from '@/components/shared/section-divider';
 
-
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
 import { $getAllPublicArticles, $getAllPublicProjects } from '@/lib/server';
