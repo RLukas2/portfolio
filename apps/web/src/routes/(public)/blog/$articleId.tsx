@@ -11,6 +11,7 @@ import { m } from 'framer-motion';
 import { Calendar, Clock, Eye, Heart, List, MessageCircle, Tag } from 'lucide-react';
 import { Suspense, useEffect, useRef } from 'react';
 import SignInModal from '@/components/auth/sign-in-modal';
+import ArticleCard from '@/components/blog/article-card';
 import ArticleComment from '@/components/blog/article-comment';
 import ArticleAuthor from '@/components/blog/author';
 import LikeButton from '@/components/blog/like-button';
@@ -289,6 +290,23 @@ function RouteComponent() {
           >
             <ArticleComment articleId={article.id} articleSlug={article.slug} />
           </m.div>
+
+          {/* Related Articles section */}
+          {article.relatedArticles && article.relatedArticles.length > 0 && (
+            <m.div
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-12 border-border/50 border-t pt-8"
+              initial={false}
+              transition={{ duration: 0.5, delay: 0.7 }}
+            >
+              <h2 className="mb-6 font-bold font-heading text-2xl tracking-tight">Related Posts</h2>
+              <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+                {article.relatedArticles.map((relatedArticle: Parameters<typeof ArticleCard>[0]['article']) => (
+                  <ArticleCard article={relatedArticle} key={relatedArticle.slug} />
+                ))}
+              </div>
+            </m.div>
+          )}
         </div>
 
         {/* Table of contents - enhanced sticky sidebar */}

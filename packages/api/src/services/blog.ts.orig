@@ -60,13 +60,13 @@ export async function getAllPublic(db: DbClient) {
         content: articles.content,
         tags: articles.tags,
         likesCount: sql<number>`(
-          SELECT COUNT(*)::int 
-          FROM article_likes 
+          SELECT COUNT(*)::int
+          FROM article_likes
           WHERE article_likes.article_id = articles.id
         )`,
         viewCount: sql<number>`(
-          SELECT COUNT(*)::int 
-          FROM article_views 
+          SELECT COUNT(*)::int
+          FROM article_views
           WHERE article_views.article_id = articles.id
         )`,
       })
@@ -95,13 +95,13 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
       .select({
         article: articles,
         viewCount: sql<number>`(
-          SELECT COUNT(*)::int 
-          FROM article_views 
+          SELECT COUNT(*)::int
+          FROM article_views
           WHERE article_views.article_id = articles.id
         )`,
         likesCount: sql<number>`(
-          SELECT COUNT(*)::int 
-          FROM article_likes 
+          SELECT COUNT(*)::int
+          FROM article_likes
           WHERE article_likes.article_id = articles.id
         )`,
       })
@@ -131,26 +131,6 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
     });
 
     const toc = getTOC(article.content ?? '');
-
-    // Get 3 related articles based on sharing the same tags
-    let relatedArticles: any[] = [];
-    if (article.tags && article.tags.length > 0) {
-      const allOtherArticles = await db.query.articles.findMany({
-        where: and(eq(articles.isDraft, false), sql`${articles.id} != ${article.id}`),
-        orderBy: desc(articles.createdAt),
-      });
-
-      relatedArticles = allOtherArticles.map(a => ({
-        ...a,
-        matchCount: a.tags ? a.tags.filter(t => article.tags!.includes(t)).length : 0
-      })).filter(a => a.matchCount > 0).sort((a, b) => b.matchCount - a.matchCount).slice(0, 3);
-    }
-
-    if (relatedArticles.length < 3) {
-        const recentArticles = await db.query.articles.findMany({where: and(eq(articles.isDraft, false), sql`${articles.id} != ${article.id}`), orderBy: desc(articles.createdAt), limit: 3 - relatedArticles.length});
-        const existingIds = relatedArticles.map(a => a.id);
-        relatedArticles = [...relatedArticles, ...recentArticles.filter(a => !existingIds.includes(a.id))];
-    }
 
     return {
       ...article,
