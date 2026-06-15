@@ -1,10 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import { Markdown } from '@xbrk/md';
+import { RenderedMarkdown } from '@xbrk/md';
 import type { TOC } from '@xbrk/types';
-import { Skeleton } from '@xbrk/ui/skeleton';
 import { m } from 'framer-motion';
-import { Suspense } from 'react';
 import TableOfContents from '@/components/blog/toc';
 import PageHeading from '@/components/shared/page-heading';
 import { seo } from '@/lib/seo';
@@ -18,8 +16,8 @@ export const Route = createFileRoute('/(public)/changelog/')({
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData?.error?.message || 'Failed to load changelog');
     }
-    const result = (await response.json()) as { data: { content: string; toc: TOC[] } };
-    return { content: result.data.content, toc: result.data.toc ?? [] };
+    const result = (await response.json()) as { data: { rendering: string; toc: TOC[] } };
+    return { rendering: result.data.rendering, toc: result.data.toc ?? [] };
   },
   head: () => {
     const keywords = [...siteConfig.keywords.split(',').map((k) => k.trim()), 'changelog', 'updates', 'releases'].join(
@@ -42,7 +40,7 @@ export const Route = createFileRoute('/(public)/changelog/')({
 });
 
 function RouteComponent() {
-  const { content, toc } = Route.useLoaderData();
+  const { rendering, toc } = Route.useLoaderData();
 
   return (
     <>
@@ -51,18 +49,7 @@ function RouteComponent() {
       <div className="relative lg:gap-10 xl:grid xl:max-w-6xl xl:grid-cols-[1fr_250px] 2xl:max-w-7xl">
         <div className="w-full min-w-0">
           <div className="prose prose-slate dark:prose-invert max-w-none">
-            <Suspense
-              fallback={
-                <div className="space-y-4">
-                  <Skeleton className="h-8 w-3/4" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-2/3" />
-                </div>
-              }
-            >
-              <Markdown source={content} />
-            </Suspense>
+            <RenderedMarkdown rendering={rendering} />
           </div>
         </div>
         {toc.length > 0 && (
