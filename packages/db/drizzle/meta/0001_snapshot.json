@@ -1,76 +1,9 @@
 {
-  "id": "9fd06226-7bbc-4cac-877f-9ad68b2fda5a",
-  "prevId": "e431fdc9-74c3-4546-b73b-e1a2354128e5",
+  "id": "e83f17be-0b55-4b4f-8e88-d75737022180",
+  "prevId": "f280e686-7c68-4818-9567-58d31349ab09",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.audit_logs": {
-      "name": "audit_logs",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "action": {
-          "name": "action",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "resource": {
-          "name": "resource",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "resource_id": {
-          "name": "resource_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "actor_id": {
-          "name": "actor_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "metadata": {
-          "name": "metadata",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "audit_logs_actor_id_user_id_fk": {
-          "name": "audit_logs_actor_id_user_id_fk",
-          "tableFrom": "audit_logs",
-          "tableTo": "user",
-          "columnsFrom": ["actor_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.article_likes": {
       "name": "article_likes",
       "schema": "",
@@ -197,6 +130,19 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "content_rendering": {
+          "name": "content_rendering",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content_rendering_version": {
+          "name": "content_rendering_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
         },
         "image_url": {
           "name": "image_url",
@@ -924,6 +870,19 @@
           "primaryKey": false,
           "notNull": false
         },
+        "content_rendering": {
+          "name": "content_rendering",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content_rendering_version": {
+          "name": "content_rendering_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
         "image_url": {
           "name": "image_url",
           "type": "varchar(255)",
@@ -1025,6 +984,19 @@
           "primaryKey": false,
           "notNull": false
         },
+        "content_rendering": {
+          "name": "content_rendering",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content_rendering_version": {
+          "name": "content_rendering_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
         "image_url": {
           "name": "image_url",
           "type": "varchar(255)",
@@ -1112,6 +1084,19 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "content_rendering": {
+          "name": "content_rendering",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content_rendering_version": {
+          "name": "content_rendering_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
         },
         "is_draft": {
           "name": "is_draft",
