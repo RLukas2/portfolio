@@ -19,7 +19,7 @@ export const SnippetsForm = withForm({
   ...snippetFormOpts,
   render({ form }) {
     return (
-      <div className="grid gap-6 lg:grid-cols-3 lg:grid-flow-dense lg:gap-8">
+      <div className="grid gap-6 lg:grid-flow-dense lg:grid-cols-3 lg:gap-8">
         <div className="flex flex-col gap-6 lg:col-span-2">
           <Card>
             <CardHeader>
