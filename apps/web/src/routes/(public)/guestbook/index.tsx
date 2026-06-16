@@ -12,6 +12,7 @@ import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
 import { $getAllGuestbookEntries } from '@/lib/server';
 import { getBaseUrl } from '@/lib/utils';
+import { cn } from '@xbrk/ui';
 
 export const Route = createFileRoute('/(public)/guestbook/')({
   component: RouteComponent,
@@ -41,21 +42,16 @@ export const Route = createFileRoute('/(public)/guestbook/')({
 
 function GuestbookSkeleton() {
   return (
-    <div className="mt-10 flex flex-col gap-6">
+    <div className="flex flex-col gap-6 pb-32">
       {Array.from({ length: 5 }).map((_, i) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: valid use case
-        <div className="flex gap-3 px-3" key={i}>
-          <Skeleton className="size-10 rounded-full" />
-          <div className="flex-1 space-y-2">
+        <div className={cn("flex gap-3", i % 2 === 0 ? "self-start" : "self-end flex-row-reverse")} key={i}>
+          <Skeleton className="size-10 rounded-full shrink-0" />
+          <div className={cn("flex flex-col gap-2 max-w-[80%]", i % 2 === 0 ? "items-start" : "items-end")}>
             <div className="flex items-center gap-1.5">
-              <Skeleton className="h-5 w-20" />
-              <Skeleton className="h-5 w-8" />
               <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-3 w-12" />
             </div>
-
-            <div className="flex min-h-8 items-center gap-4">
-              <Skeleton className="h-5 w-1/2" />
-            </div>
+            <Skeleton className={cn("h-16 rounded-2xl", i % 2 === 0 ? "rounded-tl-sm w-[300px]" : "rounded-tr-sm w-[250px]")} />
           </div>
         </div>
       ))}
@@ -75,12 +71,21 @@ function RouteComponent() {
   const { user } = Route.useLoaderData();
 
   return (
-    <>
-      <PageHeading description={'A place for you to leave your comments and feedback.'} title={'Guestbook'} />
+    <div className="relative min-h-[calc(100vh-10rem)] flex flex-col">
+      <div className="flex-1 pb-32 pt-8 flex flex-col justify-end">
+        <PageHeading description={'A place for you to leave your comments and feedback.'} title={'Guestbook'} />
+        {isLoading || isFetching ? <GuestbookSkeleton /> : <Messages messages={messages} />}
+      </div>
 
-      {user ? <MessageForm user={user as UserType} /> : <SignInButton />}
-      {isLoading || isFetching ? <GuestbookSkeleton /> : <Messages messages={messages} />}
+      <div className="fixed bottom-0 left-0 right-0 z-30 p-4 pb-6 sm:pb-8 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none">
+        <div className="container mx-auto lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl pointer-events-auto">
+          <div className="max-w-3xl mx-auto glass-panel p-4 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-center">
+            {user ? <MessageForm user={user as UserType} /> : <SignInButton />}
+          </div>
+        </div>
+      </div>
+
       <SignInModal />
-    </>
+    </div>
   );
 }

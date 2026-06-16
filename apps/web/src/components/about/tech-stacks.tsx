@@ -10,9 +10,9 @@ const marqueeRows = [
 
 function TechStackBadge({ name, color, path, title }: { name: string; color: string; path: string; title: string }) {
   return (
-    <div className="flex items-center gap-3 rounded-full border bg-card px-4 py-2 shadow-sm transition-shadow hover:shadow-md">
+    <div className="flex items-center gap-3 rounded-full border border-white/5 bg-background/50 backdrop-blur-md px-5 py-2.5 shadow-sm transition-all duration-300 hover:shadow-[0_8px_32px_0_rgba(255,255,255,0.05)] hover:-translate-y-1 hover:border-white/20 hover:bg-background/80 group">
       <svg
-        className="h-5 w-5"
+        className="h-5 w-5 transition-transform duration-300 group-hover:scale-110"
         fill="currentColor"
         role="img"
         style={{ color }}
@@ -22,7 +22,7 @@ function TechStackBadge({ name, color, path, title }: { name: string; color: str
         <title>{title}</title>
         <path d={path} />
       </svg>
-      <span className="font-medium text-sm">{name}</span>
+      <span className="font-medium text-sm tracking-tight text-foreground/80 group-hover:text-foreground transition-colors">{name}</span>
     </div>
   );
 }
@@ -32,9 +32,9 @@ function TechStackBadge({ name, color, path, title }: { name: string; color: str
  */
 export function TechStacks() {
   return (
-    <div className="space-y-4 overflow-hidden">
+    <div className="space-y-6 overflow-hidden py-4 mask-edges">
       {marqueeRows.map((row) => (
-        <Marquee fade key={`marquee-${row.id}`} pauseOnHover reverse={row.reverse}>
+        <Marquee fade key={`marquee-${row.id}`} pauseOnHover reverse={row.reverse} className="gap-4">
           {row.stacks.map((stack) => (
             <TechStackBadge
               color={stack.color}
