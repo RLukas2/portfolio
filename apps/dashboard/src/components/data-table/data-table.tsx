@@ -1,7 +1,7 @@
 'use no memo';
 
 import { type RankingInfo, rankItem } from '@tanstack/match-sorter-utils';
-import type { ColumnDef, ColumnFiltersState, FilterFn, SortingState } from '@tanstack/react-table';
+import type { ColumnDef, ColumnFiltersState, FilterFn, PaginationState, SortingState } from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
@@ -51,6 +51,10 @@ export function DataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState('');
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: DEFAULT_PAGE_SIZE,
+  });
 
   const table = useReactTable({
     data,
@@ -58,23 +62,20 @@ export function DataTable<TData, TValue>({
     filterFns: {
       fuzzy: fuzzyFilter,
     },
-    initialState: {
-      pagination: {
-        pageIndex: 0,
-        pageSize: DEFAULT_PAGE_SIZE,
-      },
-    },
     state: {
+      pagination,
       sorting,
       globalFilter,
       columnFilters,
       rowSelection,
     },
+    onPaginationChange: setPagination,
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: 'fuzzy',
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onRowSelectionChange: setRowSelection,
+    autoResetPageIndex: false,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -126,7 +127,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="py-4">
-        <DataTablePagination table={table} />
+        <DataTablePagination pagination={pagination} table={table} />
       </div>
     </div>
   );
