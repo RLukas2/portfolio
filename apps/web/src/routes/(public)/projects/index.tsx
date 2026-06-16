@@ -12,11 +12,18 @@ import { getBaseUrl } from '@/lib/utils';
 
 export const Route = createFileRoute('/(public)/projects/')({
   component: RouteComponent,
-  loader: async ({ context: { queryClient } }) =>
-    await queryClient.ensureQueryData({
+  loader: async ({ context: { queryClient } }) => {
+    const projects = await queryClient.ensureQueryData({
       queryKey: queryKeys.project.listPublic(),
       queryFn: () => $getAllPublicProjects(),
-    }),
+    });
+
+    // Server-side sorting/filtering for the UI to consume directly
+    const featuredProjects = projects.filter((p) => p.isFeatured);
+    const regularProjects = projects.filter((p) => !p.isFeatured);
+
+    return { featuredProjects, regularProjects };
+  },
   head: () => {
     const seoData = seo({
       title: `Projects | ${siteConfig.title}`,
@@ -63,13 +70,19 @@ function RouteComponent() {
     queryFn: () => $getAllPublicProjects(),
   });
 
+  const { featuredProjects, regularProjects } = Route.useLoaderData();
+
   return (
     <>
       <PageHeading
         description={'Several projects that I have worked on, both private and open source.'}
         title={'Projects'}
       />
-      {isLoading || isFetching ? <ProjectsSkeleton /> : <Projects projects={projects} />}
+      {isLoading || isFetching ? (
+        <ProjectsSkeleton />
+      ) : (
+        <Projects featuredProjects={featuredProjects} projects={projects} regularProjects={regularProjects} />
+      )}
     </>
   );
 }

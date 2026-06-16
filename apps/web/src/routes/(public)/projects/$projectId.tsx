@@ -7,7 +7,6 @@ import { STACKS } from '@xbrk/shared/stack';
 import Icon from '@xbrk/ui/icon';
 import { NotFound } from '@xbrk/ui/not-found';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@xbrk/ui/tooltip';
-import ZoomImage from '@xbrk/ui/zoom-image';
 import { m } from 'framer-motion';
 import { Code2, ExternalLink, Sparkles } from 'lucide-react';
 import { siGithub } from 'simple-icons';
@@ -111,101 +110,82 @@ function RouteComponent() {
           <BreadcrumbNavigation pageTitle={title} section={{ label: 'Projects', href: '/projects' }} />
         </m.div>
 
-        {/* Hero Section */}
+        {/* Immersive Header */}
         <m.div
           animate={{ opacity: 1, y: 0 }}
-          className="relative"
+          className="relative my-8 flex min-h-[50vh] flex-col justify-end overflow-hidden rounded-2xl p-8 sm:p-12"
           initial={false}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          {/* Background glow effect */}
-          <div className="pointer-events-none absolute -top-20 left-1/2 -z-10 h-64 w-full max-w-2xl -translate-x-1/2">
-            <div
-              className="absolute inset-0"
-              style={{
-                background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 70%)',
-              }}
-            />
+          {/* Background Image / Gradient */}
+          <div className="absolute inset-0 -z-20 bg-muted">
+            <img alt={title} className="h-full w-full object-cover" height={600} src={thumbnailUrl} width={1200} />
           </div>
+          {/* Gradient Overlay defined by design system */}
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-background via-background/80 to-transparent" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-purple-500/10 mix-blend-overlay" />
 
           {/* Title section */}
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex flex-col gap-6">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <h1 className="font-heading text-3xl leading-tight tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+                <h1 className="max-w-[20ch] font-heading text-4xl text-foreground leading-tight tracking-tight sm:text-5xl lg:text-7xl">
+                  {title}
+                </h1>
                 {isFeatured && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-linear-to-r from-amber-500 to-orange-500 px-3 py-1 font-medium text-white text-xs shadow-lg">
+                  <span className="mt-2 inline-flex items-center gap-1.5 self-start rounded-full bg-linear-to-r from-amber-500 to-orange-500 px-3 py-1 font-medium text-white text-xs shadow-lg sm:mt-0 sm:self-center">
                     <Sparkles size={12} />
                     Featured
                   </span>
                 )}
               </div>
               {description && (
-                <p className="max-w-2xl text-muted-foreground leading-relaxed md:text-lg">{description}</p>
+                <p className="max-w-2xl font-light text-lg text-muted-foreground leading-relaxed sm:text-xl">
+                  {description}
+                </p>
               )}
             </div>
-          </div>
 
-          {/* Tech stack and links bar */}
-          <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-            {/* Tech stack */}
-            {stacks && stacks.length > 0 && (
-              <m.div
-                animate={{ opacity: 1, y: 0 }}
-                className="flex flex-wrap items-center gap-3"
-                initial={false}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
-                  <Code2 className="size-3.5" />
-                  Tech Stack
-                </span>
-                <div className="flex flex-wrap items-center gap-2">
-                  {stacks.map((stack) => (
-                    <TooltipProvider delayDuration={200} key={stack}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all hover:scale-110 hover:border-foreground/20 hover:bg-muted hover:shadow-lg">
-                            {STACKS[stack] && <Icon className="h-4 w-4" icon={STACKS[stack]} />}
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <span className="font-medium">{stack}</span>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  ))}
+            {/* Tech stack and links bar */}
+            <div className="flex flex-col gap-6 border-border/20 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
+              {/* Tech stack */}
+              {stacks && stacks.length > 0 && (
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
+                    <Code2 className="size-3.5" />
+                    Tech Stack
+                  </span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {stacks.map((stack) => (
+                      <TooltipProvider delayDuration={200} key={stack}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-border/50 bg-background/50 backdrop-blur-sm transition-all hover:scale-110 hover:border-foreground/20 hover:bg-muted hover:shadow-lg">
+                              {STACKS[stack] && <Icon className="h-4 w-4" icon={STACKS[stack]} />}
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <span className="font-medium">{stack}</span>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ))}
+                  </div>
                 </div>
-              </m.div>
-            )}
-
-            {/* Project links */}
-            <m.div
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-3"
-              initial={false}
-              transition={{ duration: 0.5, delay: 0.25 }}
-            >
-              {githubUrl && (
-                <ProjectLink icon={<Icon className="h-4 w-4" icon={siGithub} />} title="Source Code" url={githubUrl} />
               )}
-              {demoUrl && <ProjectLink icon={<ExternalLink className="h-4 w-4" />} title="Live Demo" url={demoUrl} />}
-            </m.div>
-          </div>
-        </m.div>
 
-        {/* Featured image with glow effect */}
-        <m.div
-          animate={{ opacity: 1, scale: 1 }}
-          className="relative my-10"
-          initial={false}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          {/* Glow effect behind image */}
-          <div className="absolute -inset-3 rounded-3xl bg-linear-to-br from-violet-500/10 via-fuchsia-500/5 to-cyan-500/10 blur-xl" />
-
-          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-white/5 to-white/2 p-1.5 shadow-2xl">
-            <ZoomImage alt={title} className="w-full rounded-xl" height={630} src={thumbnailUrl} width={1200} />
+              {/* Project links */}
+              <div className="flex items-center gap-3">
+                {githubUrl && (
+                  <ProjectLink
+                    icon={<Icon className="h-4 w-4" icon={siGithub} />}
+                    title="Source Code"
+                    url={githubUrl}
+                  />
+                )}
+                {demoUrl && <ProjectLink icon={<ExternalLink className="h-4 w-4" />} title="Live Demo" url={demoUrl} />}
+              </div>
+            </div>
           </div>
         </m.div>
 
@@ -217,22 +197,22 @@ function RouteComponent() {
             initial={false}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <div className="prose prose-slate dark:prose-invert max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
+            <div className="prose dark:prose-invert mt-12 max-w-none prose-headings:font-heading prose-a:text-primary prose-headings:tracking-tight prose-a:no-underline hover:prose-a:underline">
               <RenderedMarkdown rendering={contentRendering} />
             </div>
           </m.div>
         )}
       </div>
 
-      {/* Table of contents - sticky sidebar */}
+      {/* Table of contents - subtle sticky sidebar */}
       {toc && toc.length > 0 && (
         <m.div
           animate={{ opacity: 1, x: 0 }}
-          className="hidden text-sm xl:block"
+          className="hidden text-sm opacity-60 transition-opacity hover:opacity-100 xl:block"
           initial={false}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <div className="sticky top-20 -mt-10 pt-10">
+          <div className="sticky top-24 pt-8">
             <TableOfContents toc={toc} />
           </div>
         </m.div>

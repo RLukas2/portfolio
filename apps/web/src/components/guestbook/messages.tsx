@@ -26,7 +26,7 @@ export default function Messages({ messages }: Readonly<MessageProps>) {
   }
 
   return (
-    <m.div animate="visible" className="mt-8 space-y-2" initial="hidden" variants={containerVariants}>
+    <m.div animate="visible" className="mt-8 space-y-4" initial="hidden" variants={containerVariants}>
       {messages.map((message) => (
         <m.div key={message.id} variants={itemVariants}>
           <Message message={message} />

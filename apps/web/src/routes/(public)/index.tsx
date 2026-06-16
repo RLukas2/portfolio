@@ -5,7 +5,6 @@ import ConnectSection from '@/components/home/connect-section';
 import FeaturedProjects from '@/components/home/featured-projects';
 import PersonalHero from '@/components/home/personal-hero';
 import RecentPosts from '@/components/home/recent-posts';
-import SectionDivider from '@/components/shared/section-divider';
 
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
@@ -16,8 +15,7 @@ import { getBaseUrl } from '@/lib/utils';
 export const Route = createFileRoute('/(public)/')({
   component: Home,
   loader: async ({ context: { queryClient } }) => {
-    // Prefetch both projects and articles data for the home page
-    await Promise.all([
+    const [projects] = await Promise.all([
       queryClient.ensureQueryData({
         queryKey: queryKeys.project.listPublic(),
         queryFn: () => $getAllPublicProjects(),
@@ -27,6 +25,11 @@ export const Route = createFileRoute('/(public)/')({
         queryFn: () => $getAllPublicArticles(),
       }),
     ]);
+
+    const featured = projects.filter((p) => p.isFeatured).slice(0, 4);
+    const featuredProjects = featured.length > 0 ? featured : projects.slice(0, 4);
+
+    return { featuredProjects };
   },
   head: () => {
     const seoData = seo({
@@ -52,15 +55,15 @@ export const Route = createFileRoute('/(public)/')({
 });
 
 function Home() {
+  const { featuredProjects } = Route.useLoaderData();
+
   return (
     <>
       <PersonalHero />
 
-      <div className="flex flex-col items-center gap-8">
-        <FeaturedProjects />
-        <SectionDivider />
+      <div className="flex flex-col items-center gap-16 sm:gap-32">
+        <FeaturedProjects featuredProjects={featuredProjects} />
         <RecentPosts />
-        <SectionDivider />
         <ConnectSection />
       </div>
     </>

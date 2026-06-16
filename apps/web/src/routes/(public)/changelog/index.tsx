@@ -55,11 +55,11 @@ function RouteComponent() {
         {toc.length > 0 && (
           <m.div
             animate={{ opacity: 1, x: 0 }}
-            className="hidden text-sm xl:block"
+            className="hidden text-sm opacity-60 transition-opacity hover:opacity-100 xl:block"
             initial={false}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <div className="sticky top-20 -mt-10 pt-10">
+            <div className="sticky top-24 pt-8">
               <TableOfContents toc={toc} />
             </div>
           </m.div>

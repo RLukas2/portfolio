@@ -2,12 +2,12 @@ import type { ArticleType } from '@xbrk/types';
 import { cn } from '@xbrk/ui';
 import { Input } from '@xbrk/ui/input';
 import { Label } from '@xbrk/ui/label';
-import { m } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { FileText, Search } from 'lucide-react';
 import { type ChangeEvent, useMemo, useState } from 'react';
+import Link from '@/components/shared/link';
 import { containerVariants, itemVariants } from '@/lib/constants/framer-motion-variants';
 import EmptyState from '../shared/empty-state';
-import ArticleCard from './article-card';
 
 interface FilteredArticlesProps {
   articles: (ArticleType & { viewCount: number; likesCount: number })[];
@@ -16,6 +16,9 @@ interface FilteredArticlesProps {
 export default function FilteredArticles({ articles }: Readonly<FilteredArticlesProps>) {
   const [searchValue, setSearchValue] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [hoveredArticle, setHoveredArticle] = useState<
+    (ArticleType & { viewCount: number; likesCount: number }) | null
+  >(null);
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
@@ -101,13 +104,105 @@ export default function FilteredArticles({ articles }: Readonly<FilteredArticles
       )}
 
       {filteredArticles.length ? (
-        <m.div animate="visible" className="grid gap-6 sm:grid-cols-2" initial={false} variants={containerVariants}>
-          {filteredArticles.map((article) => (
-            <m.div key={article.slug} variants={itemVariants}>
-              <ArticleCard article={article} />
-            </m.div>
-          ))}
-        </m.div>
+        <div className="relative flex flex-col gap-8 lg:flex-row">
+          {/* List Content */}
+          <m.div
+            animate="visible"
+            className="flex w-full flex-col gap-12 lg:w-1/2"
+            initial={false}
+            variants={containerVariants}
+          >
+            {Object.entries(
+              filteredArticles.reduce(
+                (acc, article) => {
+                  const year = new Date(article.createdAt || new Date()).getFullYear();
+                  if (!acc[year]) {
+                    acc[year] = [];
+                  }
+                  acc[year].push(article);
+                  return acc;
+                },
+                {} as Record<number, typeof filteredArticles>,
+              ),
+            )
+              .sort(([a], [b]) => Number(b) - Number(a))
+              .map(([year, yearArticles]) => (
+                <div className="flex flex-col gap-6" key={year}>
+                  <h2 className="font-heading text-3xl text-foreground">{year}</h2>
+                  <div className="flex flex-col gap-4">
+                    {yearArticles.map((article) => (
+                      <m.div key={article.slug} variants={itemVariants}>
+                        <Link
+                          className="group flex flex-col gap-2 border-border/50 border-b py-4 no-underline last:border-0"
+                          onMouseEnter={() => setHoveredArticle(article)}
+                          onMouseLeave={() => setHoveredArticle(null)}
+                          params={{ articleId: article.slug }}
+                          to="/blog/$articleId"
+                        >
+                          <h3 className="font-heading text-2xl transition-colors group-hover:text-primary">
+                            {article.title}
+                          </h3>
+                          <p className="line-clamp-2 text-lg text-muted-foreground">{article.description}</p>
+                        </Link>
+                      </m.div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+          </m.div>
+
+          {/* Hover Preview Panel (Sticky on right) */}
+          <div className="glassmorphism pointer-events-none sticky top-24 hidden h-[calc(100vh-120px)] overflow-hidden rounded-2xl p-2 lg:block lg:w-1/2">
+            <AnimatePresence mode="wait">
+              {hoveredArticle ? (
+                <m.div
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="relative flex h-full w-full flex-col overflow-hidden rounded-xl bg-background/50"
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  key={hoveredArticle.slug}
+                  transition={{ duration: 0.3 }}
+                >
+                  {hoveredArticle.imageUrl ? (
+                    <div className="relative w-full flex-1">
+                      <img
+                        alt={hoveredArticle.title}
+                        className="absolute inset-0 h-full w-full object-cover"
+                        height={800}
+                        src={hoveredArticle.imageUrl}
+                        width={800}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                      <div className="absolute right-0 bottom-0 left-0 flex flex-col gap-2 p-8">
+                        <h3 className="font-heading text-3xl text-foreground">{hoveredArticle.title}</h3>
+                        <p className="line-clamp-3 text-lg text-muted-foreground">{hoveredArticle.description}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex h-full w-full flex-col justify-center gap-6 p-10">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <FileText className="h-5 w-5" />
+                        <span className="font-medium text-sm uppercase tracking-wider">Preview</span>
+                      </div>
+                      <h3 className="font-heading text-4xl text-foreground leading-tight">{hoveredArticle.title}</h3>
+                      <p className="text-muted-foreground text-xl leading-relaxed">{hoveredArticle.description}</p>
+                    </div>
+                  )}
+                </m.div>
+              ) : (
+                <m.div
+                  animate={{ opacity: 1 }}
+                  className="flex h-full w-full items-center justify-center rounded-xl border-2 border-border/50 border-dashed bg-muted/20"
+                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0 }}
+                  key="empty"
+                >
+                  <span className="font-medium text-lg text-muted-foreground">Hover over an article to preview</span>
+                </m.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">

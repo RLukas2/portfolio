@@ -2,17 +2,15 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
 import { RenderedMarkdown } from '@xbrk/md';
-import { LazyImage } from '@xbrk/ui/lazy-image';
 import { NotFound } from '@xbrk/ui/not-found';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@xbrk/ui/sheet';
 import { calculateReadingTime, formatDate } from '@xbrk/utils';
 import { m } from 'framer-motion';
-import { Calendar, Clock, Eye, Heart, List, MessageCircle, Tag } from 'lucide-react';
+import { List, Tag } from 'lucide-react';
 import { Suspense, useEffect, useRef } from 'react';
 import SignInModal from '@/components/auth/sign-in-modal';
 import ArticleCard from '@/components/blog/article-card';
 import ArticleComment from '@/components/blog/article-comment';
-import ArticleAuthor from '@/components/blog/author';
 import LikeButton from '@/components/blog/like-button';
 import TableOfContents from '@/components/blog/toc';
 import BreadcrumbNavigation from '@/components/shared/breadcrumb-navigation';
@@ -146,104 +144,57 @@ function RouteComponent() {
             <BreadcrumbNavigation pageTitle={article.title} />
           </m.div>
 
-          {/* Hero Section */}
+          {/* Immersive Header */}
           <m.div
             animate={{ opacity: 1, y: 0 }}
-            className="relative"
+            className="relative my-8 flex min-h-[40vh] flex-col justify-end overflow-hidden rounded-2xl p-8 sm:p-12"
             initial={false}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            {/* Background glow effect */}
-            <div className="pointer-events-none absolute -top-20 left-1/2 -z-10 h-64 w-full max-w-2xl -translate-x-1/2">
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 70%)',
-                }}
-              />
+            {/* Background Image / Gradient */}
+            {article.imageUrl ? (
+              <>
+                <div className="absolute inset-0 -z-20 bg-muted">
+                  <img
+                    alt={article.title}
+                    className="h-full w-full object-cover"
+                    height={600}
+                    src={article.imageUrl}
+                    width={1200}
+                  />
+                </div>
+                {/* Gradient Overlay defined by design system */}
+                <div className="absolute inset-0 -z-10 bg-gradient-to-t from-background via-background/80 to-transparent" />
+                <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-purple-500/10 mix-blend-overlay" />
+              </>
+            ) : (
+              <div className="absolute inset-0 -z-20 bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-purple-500/10" />
+            )}
+
+            {/* Simplified Metadata */}
+            <div className="mb-4 flex items-center gap-4 text-muted-foreground text-sm">
+              {article.createdAt && (
+                <time dateTime={article.createdAt.toISOString()}>{formatDate(article.createdAt)}</time>
+              )}
+              <span>•</span>
+              <span>{readingTime} min read</span>
             </div>
 
-            {/* Title and like button */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <h1 className="mt-2 font-heading text-3xl leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+            {/* Large Title */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <h1 className="max-w-[20ch] font-heading text-4xl text-foreground leading-tight tracking-tight sm:text-5xl lg:text-6xl">
                 {article.title}
               </h1>
-              <div className="sm:mt-3 sm:shrink-0">
+              <div className="flex items-center gap-4 sm:shrink-0">
                 <LikeButton article={article} />
               </div>
             </div>
-
-            {/* Modern metrics bar */}
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              {article.createdAt && (
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
-                  <Calendar className="size-3.5" />
-                  <time dateTime={article.createdAt.toISOString()}>{formatDate(article.createdAt)}</time>
-                </div>
-              )}
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
-                <Clock className="size-3.5" />
-                <span>{readingTime} min read</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
-                <Eye className="size-3.5" />
-                <span>{article.viewCount.toLocaleString()} views</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-rose-200/50 bg-rose-50/50 px-3 py-1.5 text-rose-600 text-xs backdrop-blur-sm dark:border-rose-800/50 dark:bg-rose-950/30 dark:text-rose-400">
-                <Heart className="size-3.5" />
-                <span>{article.likesCount} likes</span>
-              </div>
-              {article.comments && article.comments.length > 0 && (
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
-                  <MessageCircle className="size-3.5" />
-                  <span>{article.comments.length} comments</span>
-                </div>
-              )}
-            </div>
-
-            {/* Author section with enhanced styling */}
-            <m.div
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-6"
-              initial={false}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <ArticleAuthor article={article} />
-            </m.div>
           </m.div>
-
-          {/* Featured image with glow effect */}
-          {article.imageUrl && (
-            <m.div
-              animate={{ opacity: 1, scale: 1 }}
-              className="relative my-8 sm:my-10"
-              initial={false}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              {/* Glow effect behind image */}
-              <div className="absolute -inset-2 rounded-3xl bg-linear-to-br from-violet-500/10 via-fuchsia-500/5 to-cyan-500/10 blur-xl" />
-
-              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-white/5 to-white/2 p-1.5 shadow-2xl">
-                <LazyImage
-                  alt={article.title}
-                  className="w-full"
-                  fill
-                  height={500}
-                  imageClassName="rounded-xl object-cover"
-                  priority={true}
-                  sizes="(max-width: 832px) 100vw, (max-width: 1280px) 75vw, 832px"
-                  src={article.imageUrl}
-                  width={832}
-                />
-              </div>
-            </m.div>
-          )}
 
           {/* Article content */}
           <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5, delay: 0.4 }}>
             <Suspense fallback={<ArticleContentSkeleton />}>
-              <article className="prose prose-slate dark:prose-invert mt-8 max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
+              <article className="prose dark:prose-invert mt-12 max-w-none prose-headings:font-heading prose-a:text-primary prose-headings:tracking-tight prose-a:no-underline hover:prose-a:underline">
                 <RenderedMarkdown rendering={article.contentRendering} />
               </article>
             </Suspense>
@@ -312,22 +263,22 @@ function RouteComponent() {
           )}
         </div>
 
-        {/* Table of contents - enhanced sticky sidebar */}
+        {/* Table of contents - subtle sticky sidebar */}
         {article.toc && (
           <m.div
             animate={{ opacity: 1, x: 0 }}
-            className="hidden text-sm xl:block"
+            className="hidden text-sm opacity-60 transition-opacity hover:opacity-100 xl:block"
             initial={false}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <div className="sticky top-20 -mt-10 pt-10">
+            <div className="sticky top-24 pt-8">
               <TableOfContents toc={article.toc} />
             </div>
           </m.div>
         )}
 
         {/* Mobile Floating ToC Button */}
-        {article.toc && (
+        {article.toc && article.toc.length > 0 && (
           <div className="fixed right-6 bottom-6 z-40 xl:hidden">
             <Sheet>
               <SheetTrigger asChild>

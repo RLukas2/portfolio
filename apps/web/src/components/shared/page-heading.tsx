@@ -48,25 +48,23 @@ const PageHeading = ({
         {/* Decorative gradient */}
         <div
           className={cn(
-            'pointer-events-none absolute -top-4 h-24 w-24 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 blur-2xl',
-            centered ? '-left-1/2' : '-left-4',
+            'gradient-glow h-[400px] w-[400px]',
+            centered ? 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20' : 'top-0 -left-20 opacity-20',
           )}
         />
 
-        <div className={cn('relative space-y-3', { 'text-center': centered })}>
+        <div className={cn('relative space-y-4', { 'text-center': centered })}>
           {hasMotion ? (
             <m.h1
               animate={animation.show}
-              className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text font-bold text-4xl text-transparent tracking-tight md:text-5xl lg:text-6xl"
+              className="font-heading text-5xl text-foreground tracking-tight sm:text-6xl lg:text-7xl"
               initial={false}
               transition={{ delay: 0.1 }}
             >
               {title}
             </m.h1>
           ) : (
-            <h1 className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text font-bold text-3xl text-transparent tracking-tight md:text-4xl lg:text-5xl">
-              {title}
-            </h1>
+            <h1 className="font-heading text-4xl text-foreground tracking-tight sm:text-5xl lg:text-6xl">{title}</h1>
           )}
 
           {description &&
@@ -74,7 +72,7 @@ const PageHeading = ({
               <m.p
                 animate={animation.show}
                 className={cn(
-                  'text-muted-foreground leading-relaxed md:text-lg',
+                  'text-lg text-muted-foreground leading-relaxed sm:text-xl',
                   centered ? 'mx-auto max-w-2xl' : 'max-w-2xl',
                 )}
                 initial={false}
@@ -85,7 +83,7 @@ const PageHeading = ({
             ) : (
               <p
                 className={cn(
-                  'text-muted-foreground leading-relaxed md:text-lg',
+                  'text-lg text-muted-foreground leading-relaxed sm:text-xl',
                   centered ? 'mx-auto max-w-2xl' : 'max-w-2xl',
                 )}
               >
