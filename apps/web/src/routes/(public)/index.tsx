@@ -5,7 +5,6 @@ import ConnectSection from '@/components/home/connect-section';
 import FeaturedProjects from '@/components/home/featured-projects';
 import PersonalHero from '@/components/home/personal-hero';
 import RecentPosts from '@/components/home/recent-posts';
-import SectionDivider from '@/components/shared/section-divider';
 
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
@@ -56,11 +55,9 @@ function Home() {
     <>
       <PersonalHero />
 
-      <div className="flex flex-col items-center gap-8">
+      <div className="flex flex-col items-center gap-16 sm:gap-32">
         <FeaturedProjects />
-        <SectionDivider />
         <RecentPosts />
-        <SectionDivider />
         <ConnectSection />
       </div>
     </>

@@ -25,7 +25,7 @@ export default function Services() {
         </m.span>
         <m.h2
           animate={{ opacity: 1, y: 0 }}
-          className="fade-in slide-in-from-bottom-4 animate-in fill-mode-both font-bold text-3xl tracking-tight delay-200 duration-500 sm:text-4xl"
+          className="fade-in slide-in-from-bottom-4 animate-in fill-mode-both font-heading text-4xl tracking-tight delay-200 duration-500 sm:text-5xl"
           initial={false}
           transition={{ delay: 0.2 }}
         >

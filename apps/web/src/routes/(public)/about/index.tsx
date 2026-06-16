@@ -46,39 +46,45 @@ export const Route = createFileRoute('/(public)/about/')({
 function RouteComponent() {
   return (
     <>
+      {/* Decorative gradient glow */}
+      <div className="gradient-glow top-0 left-0 h-[600px] w-[600px] opacity-10" />
+
       <PageHeading description="A short story of me." title="About" />
 
-      <div className="items-start space-y-2 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:space-y-0">
-        {/* Sidebar - Avatar, Name, Buttons with motion animation */}
+      <div className="relative mt-8 flex flex-col items-start gap-12 lg:flex-row lg:gap-16">
+        {/* Left Sticky Visual container */}
         <m.div
           animate={{ opacity: 1, x: 0 }}
-          className="group fade-in slide-in-from-left-8 flex animate-in flex-col items-center duration-700 xl:sticky xl:top-24"
+          className="sticky top-24 z-10 flex w-full shrink-0 flex-col gap-6 lg:w-[320px]"
           initial={false}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <LazyImage
-            alt={siteConfig.author.name}
-            height={256}
-            imageClassName="rounded-full object-cover transition-all duration-300 hover:scale-105 xl:rounded-lg"
-            priority={true}
-            src="/images/avatar.jpg"
-            width={256}
-          />
-          <div className="m-0 flex flex-col items-center py-2">
-            <h3 className="m-0 font-cal text-xl">{siteConfig.author.name}</h3>
-            <h4 className="m-0 text-muted-foreground">{siteConfig.author.jobTitle}</h4>
+          <div className="glassmorphism overflow-hidden rounded-2xl p-2">
+            <LazyImage
+              alt={siteConfig.author.name}
+              height={400}
+              imageClassName="rounded-xl object-cover transition-all duration-700 hover:scale-105 w-full aspect-square"
+              priority={true}
+              src="/images/avatar.jpg"
+              width={400}
+            />
           </div>
+          <div className="flex flex-col gap-1">
+            <h3 className="font-heading text-2xl text-foreground tracking-tight">{siteConfig.author.name}</h3>
+            <h4 className="text-lg text-muted-foreground">{siteConfig.author.jobTitle}</h4>
+          </div>
+
           <OpenForHire status={siteConfig.hiringStatus ?? 'off'} />
 
-          <div className="my-4 flex flex-col gap-4">
-            <Button asChild className="gap-x-2 shadow-lg" variant="shadow">
+          <div className="flex flex-col gap-3">
+            <Button asChild className="w-full justify-start gap-x-2" size="lg" variant="default">
               <a href="/share/resume.pdf" rel="noopener noreferrer" target="_blank">
                 <DownloadIcon className="size-4" />
                 Download CV
               </a>
             </Button>
 
-            <Button asChild className="gap-x-1 shadow-lg" variant="shadow">
+            <Button asChild className="w-full justify-start gap-x-2" size="lg" variant="outline">
               <Link to="/resume">
                 <FileTextIcon className="size-4" />
                 View Resume
@@ -87,37 +93,46 @@ function RouteComponent() {
           </div>
         </m.div>
 
-        {/* Main Content - Each section animates individually */}
-        <div className="prose prose-neutral dark:prose-invert max-w-none xl:col-span-3">
-          {/* Biography section */}
-          <m.div
+        {/* Right Content Sections */}
+        <div className="flex w-full flex-col gap-16 lg:gap-24">
+          <m.section
             animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col gap-6"
             initial={false}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
           >
-            <Biography />
-          </m.div>
+            <h2 className="font-heading text-4xl text-foreground tracking-tight">Who I am</h2>
+            <div className="prose prose-lg dark:prose-invert max-w-[65ch] text-muted-foreground">
+              <Biography />
+            </div>
+          </m.section>
 
-          {/* Tech Stack section */}
-          <m.div
+          <m.section
             animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col gap-6"
             initial={false}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
           >
-            <h2 className="font-cal text-3xl">Tech Stack</h2>
-            <TechStacks />
-          </m.div>
+            <h2 className="font-heading text-4xl text-foreground tracking-tight">What I build</h2>
+            <div className="prose prose-lg dark:prose-invert max-w-[65ch] text-muted-foreground">
+              <TechStacks />
+            </div>
+          </m.section>
 
-          {/* Career Journey section */}
-          <m.div
+          <m.section
             animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col gap-6"
             initial={false}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.6 }}
           >
-            <h2 className="font-cal text-3xl">Career Journey</h2>
-            <p className="m-0! text-muted-foreground">A timeline of my professional experience and education.</p>
-            <CareerJourney header={true} />
-          </m.div>
+            <div className="flex flex-col gap-2">
+              <h2 className="font-heading text-4xl text-foreground tracking-tight">What I've done</h2>
+              <p className="text-lg text-muted-foreground">A timeline of my professional experience and education.</p>
+            </div>
+            <div className="prose prose-lg dark:prose-invert max-w-[65ch]">
+              <CareerJourney header={false} />
+            </div>
+          </m.section>
         </div>
       </div>
     </>
