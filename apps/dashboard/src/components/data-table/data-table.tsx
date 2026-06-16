@@ -50,10 +50,6 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState('');
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: DEFAULT_PAGE_SIZE,
-  });
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
@@ -62,17 +58,21 @@ export function DataTable<TData, TValue>({
     filterFns: {
       fuzzy: fuzzyFilter,
     },
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: DEFAULT_PAGE_SIZE,
+      },
+    },
     state: {
       sorting,
       globalFilter,
-      pagination,
       columnFilters,
       rowSelection,
     },
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: 'fuzzy',
     onSortingChange: setSorting,
-    onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
