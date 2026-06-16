@@ -1,13 +1,23 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { BlogViewsStats } from '@/components/stats/blog';
+import { OverviewCards } from '@/components/stats/overview-cards';
+import { RecentActivity } from '@/components/stats/recent-activity';
 import { UsersStats } from '@/components/stats/users';
 import { queryKeys } from '@/lib/query-keys';
-import { $getMonthlyBlogViews, $getMonthlyUsers } from '@/lib/server/stats';
+import { $getMonthlyBlogViews, $getMonthlyUsers, $getRecentActivity, $getTotalStats } from '@/lib/server/stats';
 
 export const Route = createFileRoute('/(dashboard)/')({
   component: DashboardIndex,
   loader: async ({ context: { queryClient } }) => {
     await Promise.all([
+      queryClient.ensureQueryData({
+        queryKey: queryKeys.stats.total(),
+        queryFn: () => $getTotalStats(),
+      }),
+      queryClient.ensureQueryData({
+        queryKey: queryKeys.stats.recentActivity(10),
+        queryFn: () => $getRecentActivity({ data: { limit: 10 } }),
+      }),
       queryClient.ensureQueryData({
         queryKey: queryKeys.stats.monthlyBlogViews(6),
         queryFn: () => $getMonthlyBlogViews({ data: { months: 6 } }),
@@ -22,12 +32,16 @@ export const Route = createFileRoute('/(dashboard)/')({
 
 function DashboardIndex() {
   return (
-    <div className="flex flex-col gap-1 sm:flex-row">
-      <div className="basis-1/2">
-        <UsersStats />
-      </div>
-      <div className="basis-1/2">
-        <BlogViewsStats />
+    <div className="flex-1 space-y-4">
+      <OverviewCards />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <div className="col-span-4 space-y-4">
+          <UsersStats />
+          <BlogViewsStats />
+        </div>
+        <div className="col-span-3">
+          <RecentActivity />
+        </div>
       </div>
     </div>
   );

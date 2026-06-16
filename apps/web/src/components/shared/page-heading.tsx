@@ -57,14 +57,16 @@ const PageHeading = ({
           {hasMotion ? (
             <m.h1
               animate={animation.show}
-              className="font-bold text-4xl tracking-tight md:text-5xl lg:text-6xl"
+              className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text font-bold text-4xl text-transparent tracking-tight md:text-5xl lg:text-6xl"
               initial={false}
               transition={{ delay: 0.1 }}
             >
               {title}
             </m.h1>
           ) : (
-            <h1 className="font-bold text-3xl tracking-tight md:text-4xl lg:text-5xl">{title}</h1>
+            <h1 className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text font-bold text-3xl text-transparent tracking-tight md:text-4xl lg:text-5xl">
+              {title}
+            </h1>
           )}
 
           {description &&

@@ -14,14 +14,14 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
   return (
     <Link
-      className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:border-foreground/20 hover:shadow-xl sm:rounded-2xl"
+      className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-2xl sm:rounded-2xl dark:hover:shadow-primary/5"
       params={{
         projectId: slug,
       }}
       to="/projects/$projectId"
     >
       {/* Hover gradient overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-pink-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
       {isFeatured && (
         <div className="absolute top-3 left-3 z-[2] flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-2.5 py-0.5 font-medium text-white text-xs shadow-lg sm:top-4 sm:left-4 sm:px-3 sm:py-1">

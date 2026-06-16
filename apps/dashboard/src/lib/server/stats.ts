@@ -20,3 +20,18 @@ export const $getMonthlyBlogViews = createServerFn({ method: 'GET' })
   .handler((ctx) => {
     return statsService.monthlyBlogViews(ctx.context.db, ctx.data);
   });
+
+export const $getTotalStats = createServerFn({ method: 'GET' })
+  .middleware([sentryMiddleware, dbMiddleware, authMiddleware, adminMiddleware])
+  .handler((ctx) => {
+    return statsService.totalStats(ctx.context.db);
+  });
+
+const recentActivityInput = z.object({ limit: z.number().min(1).max(50).default(10) }).optional();
+
+export const $getRecentActivity = createServerFn({ method: 'GET' })
+  .middleware([sentryMiddleware, dbMiddleware, authMiddleware, adminMiddleware])
+  .inputValidator(recentActivityInput)
+  .handler((ctx) => {
+    return statsService.recentActivity(ctx.context.db, ctx.data?.limit);
+  });

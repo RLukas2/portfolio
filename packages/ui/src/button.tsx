@@ -53,6 +53,6 @@ const Button = ({
 
   return <Comp className={cn(buttonVariants({ variant, size, className }))} data-slot="button" {...props} />;
 };
-Button.displayName = "Button";
+Button.displayName = 'Button';
 
 export { Button, buttonVariants };

@@ -62,6 +62,8 @@ export const queryKeys = {
     all: ['stats'] as const,
     monthlyUsers: (months?: number) => [...queryKeys.stats.all, 'monthlyUsers', months ?? 6] as const,
     monthlyBlogViews: (months?: number) => [...queryKeys.stats.all, 'monthlyBlogViews', months ?? 6] as const,
+    total: () => [...queryKeys.stats.all, 'total'] as const,
+    recentActivity: (limit?: number) => [...queryKeys.stats.all, 'recentActivity', limit ?? 10] as const,
   },
   user: {
     all: ['user'] as const,

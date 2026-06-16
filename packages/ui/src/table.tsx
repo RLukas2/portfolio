@@ -8,17 +8,17 @@ const Table = ({ className, ...props }: ComponentProps<'table'>) => (
     {/* @end */}
   </div>
 );
-Table.displayName = "Table";
+Table.displayName = 'Table';
 
 const TableHeader = ({ className, ...props }: ComponentProps<'thead'>) => (
   <thead className={cn('[&_tr]:border-b', className)} data-slot="table-header" {...props} />
 );
-TableHeader.displayName = "TableHeader";
+TableHeader.displayName = 'TableHeader';
 
 const TableBody = ({ className, ...props }: ComponentProps<'tbody'>) => (
   <tbody className={cn('[&_tr:last-child]:border-0', className)} data-slot="table-body" {...props} />
 );
-TableBody.displayName = "TableBody";
+TableBody.displayName = 'TableBody';
 
 const TableFooter = ({ className, ...props }: ComponentProps<'tfoot'>) => (
   <tfoot
@@ -27,7 +27,7 @@ const TableFooter = ({ className, ...props }: ComponentProps<'tfoot'>) => (
     {...props}
   />
 );
-TableFooter.displayName = "TableFooter";
+TableFooter.displayName = 'TableFooter';
 
 const TableRow = ({ className, ...props }: ComponentProps<'tr'>) => (
   <tr
@@ -36,7 +36,7 @@ const TableRow = ({ className, ...props }: ComponentProps<'tr'>) => (
     {...props}
   />
 );
-TableRow.displayName = "TableRow";
+TableRow.displayName = 'TableRow';
 
 const TableHead = ({ className, ...props }: ComponentProps<'th'>) => (
   <th
@@ -48,7 +48,7 @@ const TableHead = ({ className, ...props }: ComponentProps<'th'>) => (
     {...props}
   />
 );
-TableHead.displayName = "TableHead";
+TableHead.displayName = 'TableHead';
 
 const TableCell = ({ className, ...props }: ComponentProps<'td'>) => (
   <td
@@ -60,11 +60,11 @@ const TableCell = ({ className, ...props }: ComponentProps<'td'>) => (
     {...props}
   />
 );
-TableCell.displayName = "TableCell";
+TableCell.displayName = 'TableCell';
 
 const TableCaption = ({ className, ...props }: ComponentProps<'caption'>) => (
   <caption className={cn('mt-4 text-muted-foreground text-sm', className)} data-slot="table-caption" {...props} />
 );
-TableCaption.displayName = "TableCaption";
+TableCaption.displayName = 'TableCaption';
 
 export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };

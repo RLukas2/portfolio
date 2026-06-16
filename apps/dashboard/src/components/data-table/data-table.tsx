@@ -102,7 +102,11 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow data-state={row.getIsSelected() && 'selected'} key={row.id}>
+                <TableRow
+                  className="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  data-state={row.getIsSelected() && 'selected'}
+                  key={row.id}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
@@ -110,8 +114,11 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell className="h-24 text-center" colSpan={columns.length}>
-                  No results.
+                <TableCell className="h-32 text-center text-muted-foreground" colSpan={columns.length}>
+                  <div className="flex flex-col items-center justify-center space-y-1">
+                    <span className="font-medium text-base">No {entityName} found</span>
+                    <span className="text-sm">Try adjusting your search or filters.</span>
+                  </div>
                 </TableCell>
               </TableRow>
             )}

@@ -24,19 +24,20 @@ import Link from '@/components/shared/link';
 const PersonalHero = () => (
   <section aria-label="Hero section" className="relative min-h-[calc(100vh-80px)]" id="hero">
     {/* Background gradient - decorative radial gradients for visual appeal */}
-    <div className="pointer-events-none absolute inset-0 -z-10">
+    <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 opacity-40 dark:opacity-20"
         style={{
-          background: 'radial-gradient(ellipse 70% 60% at 45% 50%, rgba(151, 92, 246, 0.1) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 70% 60% at 45% 40%, rgba(151, 92, 246, 0.15) 0%, transparent 70%)',
         }}
       />
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 opacity-40 dark:opacity-20"
         style={{
-          background: 'radial-gradient(ellipse 50% 50% at 60% 40%, rgba(251, 191, 36, 0.06) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 60% 50% at 60% 60%, rgba(56, 189, 248, 0.15) 0%, transparent 60%)',
         }}
       />
+      <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.02]" />
     </div>
 
     {/* Main content - uses direct Tailwind flex classes instead of Container component */}
@@ -44,17 +45,25 @@ const PersonalHero = () => (
       {/* Left side - Content */}
       <m.div
         animate={{ opacity: 1, x: 0 }}
-        className="fade-in slide-in-from-left-8 flex max-w-2xl animate-in flex-col gap-6 text-center duration-700 lg:w-1/2 lg:text-left"
+        className="fade-in slide-in-from-left-8 z-10 flex max-w-2xl animate-in flex-col gap-6 text-center duration-700 lg:w-1/2 lg:text-left"
         initial={false}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
         {/* Greeting + Name */}
         <div>
+          <m.div
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-3 inline-block rounded-full border border-primary/20 bg-primary/10 px-3 py-1 font-medium text-primary text-sm backdrop-blur-sm"
+            initial={{ opacity: 0, y: 10 }}
+            transition={{ delay: 0.1 }}
+          >
+            Available for new opportunities
+          </m.div>
           <p className="mb-2 text-lg text-muted-foreground">Hey, I'm</p>
-          <h1 className="font-bold font-heading text-4xl leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 bg-clip-text font-bold font-heading text-4xl text-transparent leading-tight tracking-tight sm:text-5xl lg:text-7xl">
             {siteConfig.author.name}
           </h1>
-          <p className="mt-2 font-medium text-2xl text-muted-foreground sm:text-3xl">{siteConfig.author.jobTitle}</p>
+          <p className="mt-3 font-medium text-2xl text-muted-foreground sm:text-3xl">{siteConfig.author.jobTitle}</p>
         </div>
 
         {/* Personal tagline */}
@@ -107,20 +116,20 @@ const PersonalHero = () => (
       {/* Right side - Avatar with decorative effects */}
       <m.div
         animate={{ opacity: 1, scale: 1 }}
-        className="fade-in zoom-in-90 relative hidden animate-in fill-mode-both delay-200 duration-700 lg:block lg:w-2/5"
+        className="fade-in zoom-in-90 relative z-10 hidden animate-in fill-mode-both delay-200 duration-700 lg:block lg:w-2/5"
         initial={false}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
         {/* Glow effect - Optional decorative gradient glow behind avatar */}
-        <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-blue-500/20 via-cyan-500/15 to-sky-400/10 blur-2xl" />
+        <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/10 blur-3xl" />
 
         {/* Main image container - Avatar with border and backdrop blur */}
-        <div className="relative rounded-full border border-black/10 bg-gradient-to-br from-white/10 to-white/5 p-2.5 shadow-2xl backdrop-blur-sm dark:border-white/10 dark:from-white/5 dark:to-white/[0.02]">
-          <div className="overflow-hidden rounded-full">
+        <div className="relative rounded-full border border-border/50 bg-background/50 p-3 shadow-2xl backdrop-blur-md">
+          <div className="overflow-hidden rounded-full border border-border/50 shadow-inner">
             <LazyImage
               alt={siteConfig.author.name}
               height={512}
-              imageClassName="object-cover transition-all duration-500 w-full h-full"
+              imageClassName="object-cover transition-all duration-700 hover:scale-105 w-full h-full"
               priority={true}
               src="/images/avatar.jpg"
               width={512}
