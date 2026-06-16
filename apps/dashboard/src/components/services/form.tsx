@@ -1,6 +1,7 @@
 import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
 import { STACKS } from '@xbrk/shared/stack';
 import type { ServiceType } from '@xbrk/types';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@xbrk/ui/card';
 import { withForm } from '@xbrk/ui/form';
 import Icon from '@xbrk/ui/icon';
 import { generateSlug } from '@xbrk/utils';
@@ -40,37 +41,54 @@ export const ServicesForm = withForm({
   },
   render({ form, service }) {
     return (
-      <>
-        <form.AppField
-          listeners={{
-            onChange: ({ value }) => {
-              const slug = generateSlug(value);
-              form.setFieldValue('slug', slug);
-            },
-          }}
-          name="title"
-        >
-          {(field) => <FormInput field={field} label="Title" placeholder="Portfolio Service" required />}
-        </form.AppField>
+      <div className="grid gap-6 lg:grid-flow-dense lg:grid-cols-3 lg:gap-8">
+        <div className="flex flex-col gap-6 lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Service Details</CardTitle>
+              <CardDescription>Core information about your offering.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <form.AppField
+                listeners={{
+                  onChange: ({ value }) => {
+                    const slug = generateSlug(value);
+                    form.setFieldValue('slug', slug);
+                  },
+                }}
+                name="title"
+              >
+                {(field) => <FormInput field={field} label="Title" placeholder="Portfolio Service" required />}
+              </form.AppField>
 
-        <form.AppField name="slug">
-          {(field) => (
-            <FormSlug field={field} label="Slug" placeholder="portfolio-service" urlPath="/services/your-slug" />
-          )}
-        </form.AppField>
+              <form.AppField name="slug">
+                {(field) => (
+                  <FormSlug field={field} label="Slug" placeholder="portfolio-service" urlPath="/services/your-slug" />
+                )}
+              </form.AppField>
 
-        <form.AppField name="description">
-          {(field) => (
-            <FormTextarea field={field} label="Description" placeholder="A brief description of your service" />
-          )}
-        </form.AppField>
+              <form.AppField name="description">
+                {(field) => (
+                  <FormTextarea field={field} label="Description" placeholder="A brief description of your service" />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
+        </div>
 
-        <form.AppField name="content">
-          {(field) => (
-            <FormMDXEditor
-              field={field}
-              label="Content"
-              placeholder="# Service Details
+        <div className="flex flex-col gap-6 lg:col-span-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>Content</CardTitle>
+              <CardDescription>Provide the full details for this service.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form.AppField name="content">
+                {(field) => (
+                  <FormMDXEditor
+                    field={field}
+                    label=""
+                    placeholder="# Service Details
 ## Overview
 A brief overview of your service.
 ## Features
@@ -78,54 +96,78 @@ A brief overview of your service.
 - Feature 2
 ## Details
 Details about your service."
-            />
-          )}
-        </form.AppField>
+                  />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
+        </div>
 
-        <form.AppField name="thumbnail">
-          {(field) => (
-            <FormImageUpload
-              field={field as FormField}
-              initialPreview={service?.imageUrl}
-              label="Image"
-              name={field.name}
-            />
-          )}
-        </form.AppField>
+        <div className="flex flex-col gap-6 lg:col-span-1">
+          <Card>
+            <CardHeader>
+              <CardTitle>Media</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form.AppField name="thumbnail">
+                {(field) => (
+                  <FormImageUpload
+                    field={field as FormField}
+                    initialPreview={service?.imageUrl}
+                    label="Image"
+                    name={field.name}
+                  />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
 
-        <form.AppField name="stacks">
-          {(field) => (
-            <FormMultiSelect
-              field={field}
-              label="Stacks"
-              options={Object.entries(STACKS).map(([key, value]) => ({
-                label: key,
-                value: key,
-                icon: <Icon className="h-4 w-4" icon={value} />,
-              }))}
-              placeholder="Select technology stacks"
-            />
-          )}
-        </form.AppField>
+          <Card>
+            <CardHeader>
+              <CardTitle>Taxonomy & Settings</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <form.AppField name="stacks">
+                {(field) => (
+                  <FormMultiSelect
+                    field={field}
+                    label="Stacks"
+                    options={Object.entries(STACKS).map(([key, value]) => ({
+                      label: key,
+                      value: key,
+                      icon: <Icon className="h-4 w-4" icon={value} />,
+                    }))}
+                    placeholder="Select technology stacks"
+                  />
+                )}
+              </form.AppField>
 
-        <form.AppField name="isDraft">
-          {(field) => (
-            <FormCheckbox description="This service won't be visible to visitors" field={field} label="Save as Draft" />
-          )}
-        </form.AppField>
+              <form.AppField name="isDraft">
+                {(field) => (
+                  <FormCheckbox
+                    description="This service won't be visible to visitors"
+                    field={field}
+                    label="Save as Draft"
+                  />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
+        </div>
 
-        <div>
+        <div className="hidden">
           <form.Subscribe selector={(formState) => [formState.canSubmit, formState.isSubmitting]}>
             {([canSubmit, isPending, isSubmitting]) => (
               <FormSubmitButton
                 canSubmit={canSubmit ?? false}
+                id="hidden-submit-btn"
                 isPending={isPending ?? false}
                 isSubmitting={isSubmitting ?? false}
               />
             )}
           </form.Subscribe>
         </div>
-      </>
+      </div>
     );
   },
 });

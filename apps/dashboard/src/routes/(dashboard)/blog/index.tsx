@@ -1,16 +1,17 @@
 import { ErrorBoundary } from '@sentry/tanstackstart-react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { cn } from '@xbrk/ui';
 import { buttonVariants } from '@xbrk/ui/button';
 import { Card } from '@xbrk/ui/card';
 import { Skeleton } from '@xbrk/ui/skeleton';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { blogColumns } from '@/components/blog/columns';
 import { DataTable } from '@/components/data-table/data-table';
 import { queryKeys } from '@/lib/query-keys';
-import { $getAllArticles } from '@/lib/server/blog';
+import { $deleteArticle, $getAllArticles } from '@/lib/server/blog';
 
 export const Route = createFileRoute('/(dashboard)/blog/')({
   component: Articles,
@@ -48,6 +49,7 @@ function ArticlesError() {
 }
 
 function ArticlesContent() {
+  const queryClient = useQueryClient();
   const {
     data: articles,
     error,
@@ -58,6 +60,31 @@ function ArticlesContent() {
     queryFn: () => $getAllArticles(),
   });
 
+  const deleteArticleMutation = useMutation({
+    mutationFn: async (ids: string[]) => {
+      await Promise.all(ids.map((id) => $deleteArticle({ data: id })));
+    },
+    onSuccess: async (_, ids) => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.blog.all });
+      toast.success(`Successfully deleted ${ids.length} article${ids.length === 1 ? '' : 's'}.`);
+    },
+    onError: () => {
+      toast.error('Failed to delete selected articles.');
+    },
+  });
+
+  const bulkActions = [
+    {
+      label: 'Delete Selected',
+      icon: <Trash2 className="mr-2 h-4 w-4" />,
+      variant: 'destructive' as const,
+      onClick: (selectedRows: typeof articles) => {
+        const ids = selectedRows.map((row) => row.id);
+        deleteArticleMutation.mutate(ids);
+      },
+    },
+  ];
+
   if (error) {
     return <ArticlesError />;
   }
@@ -66,28 +93,28 @@ function ArticlesContent() {
     return <ArticlesLoading />;
   }
 
-  return <DataTable columns={blogColumns} data={articles} entityName="articles" />;
+  return <DataTable bulkActions={bulkActions} columns={blogColumns} data={articles} entityName="articles" />;
 }
 
 function Articles() {
   return (
-    <>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="font-bold text-2xl tracking-tight">Article List</h2>
-          <p className="text-muted-foreground">Manage your articles here.</p>
+          <h2 className="font-bold text-3xl tracking-tight">Articles</h2>
+          <p className="text-muted-foreground">Manage and organize your blog articles.</p>
         </div>
         <Link
           aria-label="Add new article"
           className={cn(buttonVariants({ variant: 'default' }), 'group')}
           to="/blog/create"
         >
-          <span>Add Article</span> <Plus className="ml-1" size={18} />
+          <Plus className="mr-2" size={16} /> <span>New Article</span>
         </Link>
       </div>
       <ErrorBoundary fallback={<ArticlesError />}>
         <ArticlesContent />
       </ErrorBoundary>
-    </>
+    </div>
   );
 }

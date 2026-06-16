@@ -1,16 +1,17 @@
 import { ErrorBoundary } from '@sentry/tanstackstart-react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { cn } from '@xbrk/ui';
 import { buttonVariants } from '@xbrk/ui/button';
 import { Card } from '@xbrk/ui/card';
 import { Skeleton } from '@xbrk/ui/skeleton';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { DataTable } from '@/components/data-table/data-table';
 import { experienceColumns } from '@/components/experiences/columns';
 import { queryKeys } from '@/lib/query-keys';
-import { $getAllExperiences } from '@/lib/server/experience';
+import { $deleteExperience, $getAllExperiences } from '@/lib/server/experience';
 
 export const Route = createFileRoute('/(dashboard)/experiences/')({
   component: Experiences,
@@ -48,6 +49,7 @@ function ExperiencesError() {
 }
 
 function ExperiencesContent() {
+  const queryClient = useQueryClient();
   const {
     data: experiences,
     error,
@@ -57,6 +59,31 @@ function ExperiencesContent() {
     queryKey: queryKeys.experience.listAll(),
     queryFn: () => $getAllExperiences(),
   });
+
+  const deleteExperienceMutation = useMutation({
+    mutationFn: async (ids: string[]) => {
+      await Promise.all(ids.map((id) => $deleteExperience({ data: id })));
+    },
+    onSuccess: async (_, ids) => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.experience.all });
+      toast.success(`Successfully deleted ${ids.length} experience${ids.length === 1 ? '' : 's'}.`);
+    },
+    onError: () => {
+      toast.error('Failed to delete selected experiences.');
+    },
+  });
+
+  const bulkActions = [
+    {
+      label: 'Delete Selected',
+      icon: <Trash2 className="mr-2 h-4 w-4" />,
+      variant: 'destructive' as const,
+      onClick: (selectedRows: typeof experiences) => {
+        const ids = selectedRows.map((row) => row.id);
+        deleteExperienceMutation.mutate(ids);
+      },
+    },
+  ];
 
   if (error) {
     return (
@@ -73,28 +100,30 @@ function ExperiencesContent() {
     return <ExperiencesLoading />;
   }
 
-  return <DataTable columns={experienceColumns} data={experiences} entityName="experiences" />;
+  return (
+    <DataTable bulkActions={bulkActions} columns={experienceColumns} data={experiences} entityName="experiences" />
+  );
 }
 
 function Experiences() {
   return (
-    <>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="font-bold text-2xl tracking-tight">Experience List</h2>
-          <p className="text-muted-foreground">Manage your experiences here.</p>
+          <h2 className="font-bold text-3xl tracking-tight">Experiences</h2>
+          <p className="text-muted-foreground">Manage and organize your work experiences.</p>
         </div>
         <Link
           aria-label="Add new experience"
           className={cn(buttonVariants({ variant: 'default' }), 'group')}
           to="/experiences/create"
         >
-          <span>Add Experience</span> <Plus className="ml-1" size={18} />
+          <Plus className="mr-2" size={16} /> <span>New Experience</span>
         </Link>
       </div>
       <ErrorBoundary fallback={<ExperiencesError />}>
         <ExperiencesContent />
       </ErrorBoundary>
-    </>
+    </div>
   );
 }

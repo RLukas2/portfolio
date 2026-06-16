@@ -78,7 +78,7 @@ export function DashboardSidebar({ user }: Readonly<{ user: UserType }>) {
   const currentPath = router.location.pathname;
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

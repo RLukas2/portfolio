@@ -24,7 +24,18 @@ declare module '@tanstack/react-table' {
   }
 }
 
+import { Card } from '@xbrk/ui/card';
+import type { ReactNode } from 'react';
+
+export interface BulkAction<TData> {
+  icon?: ReactNode;
+  label: string;
+  onClick: (rows: TData[]) => void;
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+}
+
 interface DataTableProps<TData, TValue> {
+  bulkActions?: BulkAction<TData>[];
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   entityName?: string;
@@ -46,6 +57,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   entityName = 'items',
+  bulkActions,
 }: Readonly<DataTableProps<TData, TValue>>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
@@ -76,6 +88,8 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     onRowSelectionChange: setRowSelection,
     autoResetPageIndex: false,
+    // @ts-expect-error fallback id retrieval
+    getRowId: (row) => row.id || row.slug || Math.random().toString(),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -83,11 +97,17 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className="py-4">
-        <DataTableToolbar entityName={entityName} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+    <Card className="flex flex-col border shadow-sm">
+      <div className="border-b p-4">
+        <DataTableToolbar
+          bulkActions={bulkActions}
+          entityName={entityName}
+          globalFilter={globalFilter}
+          setGlobalFilter={setGlobalFilter}
+          table={table}
+        />
       </div>
-      <div className="rounded-md border">
+      <div className="relative w-full overflow-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -126,9 +146,9 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="py-4">
+      <div className="border-t p-4">
         <DataTablePagination pagination={pagination} table={table} />
       </div>
-    </div>
+    </Card>
   );
 }

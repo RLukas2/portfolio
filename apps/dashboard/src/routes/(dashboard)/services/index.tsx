@@ -1,16 +1,17 @@
 import { ErrorBoundary } from '@sentry/tanstackstart-react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { cn } from '@xbrk/ui';
 import { buttonVariants } from '@xbrk/ui/button';
 import { Card } from '@xbrk/ui/card';
 import { Skeleton } from '@xbrk/ui/skeleton';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { DataTable } from '@/components/data-table/data-table';
 import { serviceColumns } from '@/components/services/columns';
 import { queryKeys } from '@/lib/query-keys';
-import { $getAllServices } from '@/lib/server/service';
+import { $deleteService, $getAllServices } from '@/lib/server/service';
 
 export const Route = createFileRoute('/(dashboard)/services/')({
   component: Services,
@@ -48,6 +49,7 @@ function ServicesError() {
 }
 
 function ServicesContent() {
+  const queryClient = useQueryClient();
   const {
     data: services,
     error,
@@ -57,6 +59,31 @@ function ServicesContent() {
     queryKey: queryKeys.service.listAll(),
     queryFn: () => $getAllServices(),
   });
+
+  const deleteServiceMutation = useMutation({
+    mutationFn: async (ids: string[]) => {
+      await Promise.all(ids.map((id) => $deleteService({ data: id })));
+    },
+    onSuccess: async (_, ids) => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.service.all });
+      toast.success(`Successfully deleted ${ids.length} service${ids.length === 1 ? '' : 's'}.`);
+    },
+    onError: () => {
+      toast.error('Failed to delete selected services.');
+    },
+  });
+
+  const bulkActions = [
+    {
+      label: 'Delete Selected',
+      icon: <Trash2 className="mr-2 h-4 w-4" />,
+      variant: 'destructive' as const,
+      onClick: (selectedRows: typeof services) => {
+        const ids = selectedRows.map((row) => row.id);
+        deleteServiceMutation.mutate(ids);
+      },
+    },
+  ];
 
   if (error) {
     return (
@@ -73,28 +100,28 @@ function ServicesContent() {
     return <ServicesLoading />;
   }
 
-  return <DataTable columns={serviceColumns} data={services} entityName="services" />;
+  return <DataTable bulkActions={bulkActions} columns={serviceColumns} data={services} entityName="services" />;
 }
 
 function Services() {
   return (
-    <>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="font-bold text-2xl tracking-tight">Service List</h2>
-          <p className="text-muted-foreground">Manage your services here.</p>
+          <h2 className="font-bold text-3xl tracking-tight">Services</h2>
+          <p className="text-muted-foreground">Manage and organize your portfolio services.</p>
         </div>
         <Link
           aria-label="Add new service"
           className={cn(buttonVariants({ variant: 'default' }), 'group')}
           to="/services/create"
         >
-          <span>Add Service</span> <Plus className="ml-1" size={18} />
+          <Plus className="mr-2" size={16} /> <span>New Service</span>
         </Link>
       </div>
       <ErrorBoundary fallback={<ServicesError />}>
         <ServicesContent />
       </ErrorBoundary>
-    </>
+    </div>
   );
 }

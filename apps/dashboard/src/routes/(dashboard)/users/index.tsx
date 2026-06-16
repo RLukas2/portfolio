@@ -53,16 +53,16 @@ function UsersContent() {
 
 function Users() {
   return (
-    <>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="font-bold text-2xl tracking-tight">User List</h2>
-          <p className="text-muted-foreground">Manage your users here.</p>
+          <h2 className="font-bold text-3xl tracking-tight">Users</h2>
+          <p className="text-muted-foreground">Manage and organize your portfolio users.</p>
         </div>
       </div>
       <ErrorBoundary fallback={<UsersError />}>
         <UsersContent />
       </ErrorBoundary>
-    </>
+    </div>
   );
 }

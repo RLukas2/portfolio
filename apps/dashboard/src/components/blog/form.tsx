@@ -1,6 +1,7 @@
 import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
 import { STACKS } from '@xbrk/shared/stack';
 import type { ArticleType } from '@xbrk/types';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@xbrk/ui/card';
 import { withForm } from '@xbrk/ui/form';
 import Icon from '@xbrk/ui/icon';
 import { generateSlug } from '@xbrk/utils';
@@ -41,167 +42,205 @@ export const ArticleForm = withForm({
   },
   render({ form, article }) {
     return (
-      <>
-        <form.AppField
-          listeners={{
-            onChange: ({ value }) => {
-              const slug = generateSlug(value);
-              form.setFieldValue('slug', slug);
-            },
-          }}
-          name="title"
-        >
-          {(field) => (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Title
-                  <span className="ml-1 text-destructive">*</span>
-                </span>
-                <AIAssistDialog
-                  buttonSize="sm"
-                  buttonVariant="ghost"
-                  context={{
-                    topic: form.getFieldValue('description') || '',
-                    currentContent: form.getFieldValue('content') || '',
-                  }}
-                  description="Get AI-generated title suggestions for your blog post"
-                  label="AI Suggest"
-                  onApply={(content) => {
-                    field.handleChange(content);
-                  }}
-                  type="title"
-                />
-              </div>
-              <FormInput field={field} label="" placeholder="Article Title" required />
-            </div>
-          )}
-        </form.AppField>
+      <div className="grid gap-6 lg:grid-flow-dense lg:grid-cols-3 lg:gap-8">
+        <div className="flex flex-col gap-6 lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>General Information</CardTitle>
+              <CardDescription>The core details of your blog article.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <form.AppField
+                listeners={{
+                  onChange: ({ value }) => {
+                    const slug = generateSlug(value);
+                    form.setFieldValue('slug', slug);
+                  },
+                }}
+                name="title"
+              >
+                {(field) => (
+                  <field.FormItem>
+                    <div className="flex items-center justify-between">
+                      <field.FormLabel>
+                        Title <span className="text-destructive">*</span>
+                      </field.FormLabel>
+                      <AIAssistDialog
+                        buttonSize="sm"
+                        buttonVariant="ghost"
+                        context={{
+                          topic: form.getFieldValue('description') || '',
+                          currentContent: form.getFieldValue('content') || '',
+                        }}
+                        description="Get AI-generated title suggestions for your blog post"
+                        label="AI Suggest"
+                        onApply={(content) => {
+                          field.handleChange(content);
+                        }}
+                        type="title"
+                      />
+                    </div>
+                    <FormInput field={field} label="" placeholder="Article Title" required />
+                  </field.FormItem>
+                )}
+              </form.AppField>
 
-        <form.AppField name="slug">
-          {(field) => <FormSlug field={field} label="Slug" placeholder="article-title" urlPath="/blog/your-slug" />}
-        </form.AppField>
+              <form.AppField name="slug">
+                {(field) => (
+                  <FormSlug field={field} label="Slug" placeholder="article-title" urlPath="/blog/your-slug" />
+                )}
+              </form.AppField>
 
-        <form.AppField name="description">
-          {(field) => (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Description
-                </span>
-                <AIAssistDialog
-                  buttonSize="sm"
-                  buttonVariant="ghost"
-                  context={{
-                    title: form.getFieldValue('title') || '',
-                    currentContent: form.getFieldValue('content') || '',
-                  }}
-                  description="Generate a compelling description for your blog post"
-                  label="AI Suggest"
-                  onApply={(content) => {
-                    field.handleChange(content.trim());
-                  }}
-                  type="description"
-                />
-              </div>
-              <FormTextarea field={field} label="" placeholder="A brief description of your article" />
-            </div>
-          )}
-        </form.AppField>
+              <form.AppField name="description">
+                {(field) => (
+                  <field.FormItem>
+                    <div className="flex items-center justify-between">
+                      <field.FormLabel>Description</field.FormLabel>
+                      <AIAssistDialog
+                        buttonSize="sm"
+                        buttonVariant="ghost"
+                        context={{
+                          title: form.getFieldValue('title') || '',
+                          currentContent: form.getFieldValue('content') || '',
+                        }}
+                        description="Generate a compelling description for your blog post"
+                        label="AI Suggest"
+                        onApply={(content) => {
+                          field.handleChange(content.trim());
+                        }}
+                        type="description"
+                      />
+                    </div>
+                    <FormTextarea field={field} label="" placeholder="A brief description of your article" />
+                  </field.FormItem>
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
+        </div>
 
-        <form.AppField name="content">
-          {(field) => (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Content
-                </span>
-                <div className="flex gap-2">
-                  <AIAssistDialog
-                    buttonSize="sm"
-                    buttonVariant="ghost"
-                    context={{
-                      title: form.getFieldValue('title') || '',
-                      description: form.getFieldValue('description') || '',
-                    }}
-                    description="Create a detailed outline for your blog post"
-                    label="Create Outline"
-                    onApply={(content) => {
-                      field.handleChange(content.trim());
-                    }}
-                    type="outline"
-                  />
-                  <AIAssistDialog
-                    buttonSize="sm"
-                    buttonVariant="ghost"
-                    context={{
-                      title: form.getFieldValue('title') || '',
-                      description: form.getFieldValue('description') || '',
-                    }}
-                    description="Generate complete blog post content"
-                    label="Generate Content"
-                    onApply={(content) => {
-                      field.handleChange(content.trim());
-                    }}
-                    type="content"
-                  />
-                </div>
-              </div>
-              <FormMDXEditor
-                field={field}
-                label=""
-                placeholder="# Article Details
+        <div className="flex flex-col gap-6 lg:col-span-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>Content</CardTitle>
+              <CardDescription>Write the full details of your article.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form.AppField name="content">
+                {(field) => (
+                  <field.FormItem>
+                    <div className="flex items-center justify-between">
+                      <field.FormLabel>Content</field.FormLabel>
+                      <div className="flex gap-2">
+                        <AIAssistDialog
+                          buttonSize="sm"
+                          buttonVariant="ghost"
+                          context={{
+                            title: form.getFieldValue('title') || '',
+                            description: form.getFieldValue('description') || '',
+                          }}
+                          description="Create a detailed outline for your blog post"
+                          label="Create Outline"
+                          onApply={(content) => {
+                            field.handleChange(content.trim());
+                          }}
+                          type="outline"
+                        />
+                        <AIAssistDialog
+                          buttonSize="sm"
+                          buttonVariant="ghost"
+                          context={{
+                            title: form.getFieldValue('title') || '',
+                            description: form.getFieldValue('description') || '',
+                          }}
+                          description="Generate complete blog post content"
+                          label="Generate Content"
+                          onApply={(content) => {
+                            field.handleChange(content.trim());
+                          }}
+                          type="content"
+                        />
+                      </div>
+                    </div>
+                    <FormMDXEditor
+                      field={field}
+                      label=""
+                      placeholder="# Article Details
 ## Overview
 A brief overview of your article."
-              />
-            </div>
-          )}
-        </form.AppField>
+                    />
+                  </field.FormItem>
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
+        </div>
 
-        <form.AppField name="thumbnail">
-          {(field) => (
-            <FormImageUpload
-              field={field as FormField}
-              initialPreview={article?.imageUrl}
-              label="Image"
-              name={field.name}
-            />
-          )}
-        </form.AppField>
+        <div className="flex flex-col gap-6 lg:col-span-1">
+          <Card>
+            <CardHeader>
+              <CardTitle>Media</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form.AppField name="thumbnail">
+                {(field) => (
+                  <FormImageUpload
+                    field={field as FormField}
+                    initialPreview={article?.imageUrl}
+                    label="Image"
+                    name={field.name}
+                  />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
 
-        <form.AppField name="tags">
-          {(field) => (
-            <FormMultiSelect
-              field={field}
-              label="Tags"
-              options={Object.entries(STACKS).map(([key, value]) => ({
-                label: key,
-                value: key,
-                icon: <Icon className="h-4 w-4" icon={value} />,
-              }))}
-              placeholder="Select tags"
-            />
-          )}
-        </form.AppField>
+          <Card>
+            <CardHeader>
+              <CardTitle>Taxonomy & Settings</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <form.AppField name="tags">
+                {(field) => (
+                  <FormMultiSelect
+                    field={field}
+                    label="Tags"
+                    options={Object.entries(STACKS).map(([key, value]) => ({
+                      label: key,
+                      value: key,
+                      icon: <Icon className="h-4 w-4" icon={value} />,
+                    }))}
+                    placeholder="Select tags"
+                  />
+                )}
+              </form.AppField>
 
-        <form.AppField name="isDraft">
-          {(field) => (
-            <FormCheckbox description="This article won't be visible to visitors" field={field} label="Save as Draft" />
-          )}
-        </form.AppField>
+              <form.AppField name="isDraft">
+                {(field) => (
+                  <FormCheckbox
+                    description="This article won't be visible to visitors"
+                    field={field}
+                    label="Save as Draft"
+                  />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
+        </div>
 
-        <div>
+        <div className="hidden">
           <form.Subscribe selector={(formState) => [formState.canSubmit, formState.isSubmitting]}>
             {([canSubmit, isPending, isSubmitting]) => (
               <FormSubmitButton
                 canSubmit={canSubmit ?? false}
+                id="hidden-submit-btn"
                 isPending={isPending ?? false}
                 isSubmitting={isSubmitting ?? false}
               />
             )}
           </form.Subscribe>
         </div>
-      </>
+      </div>
     );
   },
 });

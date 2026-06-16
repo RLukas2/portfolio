@@ -108,8 +108,8 @@ function LayoutComponent() {
   return (
     <SidebarProvider>
       <DashboardSidebar user={user as UserType} />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+      <SidebarInset className="bg-muted/30">
+        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <SidebarTrigger className="-ml-1" />
           <Separator className="mr-2 h-4" orientation="vertical" />
           <Breadcrumb>
@@ -134,8 +134,8 @@ function LayoutComponent() {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="mx-auto w-full max-w-6xl py-6">
+        <main className="flex flex-1 flex-col gap-4 p-6 pt-4">
+          <div className="mx-auto w-full max-w-7xl">
             <Outlet />
           </div>
         </main>

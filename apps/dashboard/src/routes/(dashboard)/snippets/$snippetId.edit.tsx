@@ -1,11 +1,14 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, useRouter } from '@tanstack/react-router';
 import { SnippetBaseSchema } from '@xbrk/db/schema';
+import { Button } from '@xbrk/ui/button';
 import { useAppForm } from '@xbrk/ui/form';
 import { NotFound } from '@xbrk/ui/not-found';
+import { ExternalLink, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod/v4';
 import { SnippetsForm } from '@/components/snippets/form';
+import { env } from '@/lib/env/client';
 import { queryKeys } from '@/lib/query-keys';
 import { $getSnippetById, $updateSnippet } from '@/lib/server/snippet';
 
@@ -83,14 +86,40 @@ function SnippetsEditPage() {
   });
 
   return (
-    <>
-      <div className="mb-2 flex flex-wrap items-center justify-between space-y-2">
+    <div className="space-y-6 pb-20">
+      <div className="sticky top-16 z-10 -mx-6 mb-6 flex flex-wrap items-center justify-between gap-4 border-b bg-background/95 px-6 py-4 backdrop-blur">
         <div>
-          <h2 className="font-bold text-2xl tracking-tight">Edit Snippet</h2>
-          <p className="text-muted-foreground">Edit a snippet here.</p>
+          <h2 className="font-bold text-3xl tracking-tight">Edit Snippet</h2>
+          <p className="text-muted-foreground">Update your existing code snippet.</p>
+        </div>
+        <div className="flex items-center gap-2">
+          {env.VITE_APP_URL && snippet.data?.slug && (
+            <Button asChild variant="ghost">
+              <a href={`${env.VITE_APP_URL}/snippets/${snippet.data.slug}`} rel="noopener noreferrer" target="_blank">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                View Live
+              </a>
+            </Button>
+          )}
+          <Button onClick={() => router.navigate({ to: '/snippets' })} variant="outline">
+            Cancel
+          </Button>
+          <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+            {([canSubmit, isSubmitting]) => (
+              <Button
+                disabled={!canSubmit}
+                onClick={() => {
+                  form.handleSubmit();
+                }}
+              >
+                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Changes
+              </Button>
+            )}
+          </form.Subscribe>
         </div>
       </div>
-      <div className="py-4">
+      <div>
         <form.AppForm>
           <form
             className="space-y-8"
@@ -104,6 +133,6 @@ function SnippetsEditPage() {
           </form>
         </form.AppForm>
       </div>
-    </>
+    </div>
   );
 }
