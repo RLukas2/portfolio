@@ -194,7 +194,7 @@ function RouteComponent() {
           {/* Article content */}
           <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5, delay: 0.4 }}>
             <Suspense fallback={<ArticleContentSkeleton />}>
-              <article className="prose prose-slate dark:prose-invert mx-auto mt-12 max-w-[70ch] prose-headings:font-heading prose-a:text-primary prose-headings:tracking-tight prose-a:no-underline hover:prose-a:underline">
+              <article className="prose dark:prose-invert mt-12 max-w-none prose-headings:font-heading prose-a:text-primary prose-headings:tracking-tight prose-a:no-underline hover:prose-a:underline">
                 <RenderedMarkdown rendering={article.contentRendering} />
               </article>
             </Suspense>
@@ -278,7 +278,7 @@ function RouteComponent() {
         )}
 
         {/* Mobile Floating ToC Button */}
-        {article.toc && (
+        {article.toc && article.toc.length > 0 && (
           <div className="fixed right-6 bottom-6 z-40 xl:hidden">
             <Sheet>
               <SheetTrigger asChild>

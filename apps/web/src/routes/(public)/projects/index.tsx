@@ -19,8 +19,8 @@ export const Route = createFileRoute('/(public)/projects/')({
     });
 
     // Server-side sorting/filtering for the UI to consume directly
-    const featuredProjects = projects.filter(p => p.isFeatured);
-    const regularProjects = projects.filter(p => !p.isFeatured);
+    const featuredProjects = projects.filter((p) => p.isFeatured);
+    const regularProjects = projects.filter((p) => !p.isFeatured);
 
     return { featuredProjects, regularProjects };
   },
@@ -81,7 +81,7 @@ function RouteComponent() {
       {isLoading || isFetching ? (
         <ProjectsSkeleton />
       ) : (
-        <Projects featuredProjects={featuredProjects} regularProjects={regularProjects} projects={projects} />
+        <Projects featuredProjects={featuredProjects} projects={projects} regularProjects={regularProjects} />
       )}
     </>
   );

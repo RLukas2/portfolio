@@ -54,7 +54,7 @@ const PersonalHero = () => (
           >
             Hi, I'm
           </m.p>
-          <h1 className="font-heading text-5xl text-foreground tracking-tight sm:text-7xl lg:text-8xl">
+          <h1 className="font-bold font-heading text-5xl text-foreground tracking-tight sm:text-7xl lg:text-8xl">
             {siteConfig.author.name}
           </h1>
           <p className="max-w-[20ch] font-light text-2xl text-muted-foreground leading-snug sm:text-4xl">

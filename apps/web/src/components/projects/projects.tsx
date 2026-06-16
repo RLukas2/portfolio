@@ -6,8 +6,8 @@ import { slideInWithFadeOut } from '@/lib/constants/framer-motion-variants';
 import EmptyState from '../shared/empty-state';
 
 interface ProjectsProps {
-  projects: ProjectType[];
   featuredProjects: ProjectType[];
+  projects: ProjectType[];
   regularProjects: ProjectType[];
 }
 

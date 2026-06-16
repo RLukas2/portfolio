@@ -32,7 +32,7 @@ const ConnectSection = () => {
         initial={false}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <h2 className="font-heading text-5xl tracking-tight sm:text-6xl md:text-7xl">Let's talk</h2>
+        <h2 className="font-bold font-heading text-5xl tracking-tight sm:text-6xl md:text-7xl">Let's talk</h2>
         <p className="mt-6 text-lg text-muted-foreground leading-relaxed sm:text-xl">
           I'm always open to discussing new projects, creative ideas or opportunities to be part of your visions.
         </p>

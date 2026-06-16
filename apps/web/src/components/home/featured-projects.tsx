@@ -34,7 +34,7 @@ const FeaturedProjects = ({ featuredProjects }: Readonly<FeaturedProjectsProps>)
       <div className="mb-12">
         <m.h2
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          className="font-heading text-4xl tracking-tight sm:text-5xl"
+          className="font-bold font-heading text-4xl tracking-tight sm:text-5xl"
           initial={false}
           transition={{ delay: 0.2 }}
         >

@@ -197,7 +197,7 @@ function RouteComponent() {
             initial={false}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <div className="prose prose-slate dark:prose-invert mx-auto max-w-[70ch] prose-headings:font-heading prose-a:text-primary prose-headings:tracking-tight prose-a:no-underline hover:prose-a:underline">
+            <div className="prose dark:prose-invert mt-12 max-w-none prose-headings:font-heading prose-a:text-primary prose-headings:tracking-tight prose-a:no-underline hover:prose-a:underline">
               <RenderedMarkdown rendering={contentRendering} />
             </div>
           </m.div>
