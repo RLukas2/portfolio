@@ -63,34 +63,31 @@ function RouteComponent() {
           {collections.map((collection: Collection) => (
             <m.div key={collection._id} variants={itemVariants}>
               <Link
-                className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-border/50 bg-card p-5 transition-all duration-300 hover:border-border hover:shadow-lg hover:shadow-primary/5"
+                className="glassmorphism group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl p-6 no-underline transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 params={{
                   bookmarkId: collection.slug,
                 }}
                 to="/bookmarks/$bookmarkId"
               >
-                {/* Hover gradient overlay */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-cyan-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
                 <div className="relative flex items-start justify-between gap-3">
                   {/* Icon */}
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/10 to-pink-500/10 text-violet-600 dark:text-violet-400">
-                    <FolderOpen size={20} />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <FolderOpen size={24} />
                   </div>
 
                   {/* Arrow indicator */}
                   <ArrowRight
-                    className="mt-2 shrink-0 text-muted-foreground/50 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-primary"
-                    size={18}
+                    className="shrink-0 text-muted-foreground/50 transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary"
+                    size={24}
                   />
                 </div>
 
-                <div className="relative mt-4 flex flex-1 flex-col gap-2">
-                  <h2 className="font-semibold text-lg tracking-tight transition-colors group-hover:text-primary">
+                <div className="relative mt-6 flex flex-1 flex-col gap-2">
+                  <h2 className="font-heading text-2xl tracking-tight transition-colors group-hover:text-primary">
                     {collection.title}
                   </h2>
-                  <span className="inline-flex items-center gap-1.5 text-muted-foreground text-sm">
-                    <Bookmark size={14} />
+                  <span className="inline-flex items-center gap-1.5 text-lg text-muted-foreground">
+                    <Bookmark size={16} />
                     {collection.count} bookmarks
                   </span>
                 </div>

@@ -66,12 +66,14 @@ export default function MessageForm({ user }: Readonly<MessageFormProps>) {
   };
 
   return (
-    <div className="rounded-2xl border bg-card p-4">
+    <div className="glassmorphism mb-8 rounded-2xl p-5">
       <form action={createMessageHandler} ref={formRef}>
         <div className="flex items-center gap-4">
-          <Avatar className="h-10 w-10 border">
+          <Avatar className="h-10 w-10 border-border/50 shadow-sm">
             <AvatarImage alt={user.name} className="object-cover" height={40} src={user.image as string} width={40} />
-            <AvatarFallback className="bg-primary/10 text-primary">{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
+            <AvatarFallback className="bg-primary/10 font-heading text-primary">
+              {user.name?.charAt(0).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
           <div className="relative flex-1">
             <Input

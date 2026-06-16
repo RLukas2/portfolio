@@ -154,27 +154,40 @@ export default function FilteredArticles({ articles }: Readonly<FilteredArticles
           {/* Hover Preview Panel (Sticky on right) */}
           <div className="glassmorphism pointer-events-none sticky top-24 hidden h-[calc(100vh-120px)] overflow-hidden rounded-2xl p-2 lg:block lg:w-1/2">
             <AnimatePresence mode="wait">
-              {hoveredArticle?.imageUrl ? (
+              {hoveredArticle ? (
                 <m.div
                   animate={{ opacity: 1, scale: 1 }}
-                  className="relative h-full w-full overflow-hidden rounded-xl"
+                  className="relative flex h-full w-full flex-col overflow-hidden rounded-xl bg-background/50"
                   exit={{ opacity: 0, scale: 0.95 }}
                   initial={{ opacity: 0, scale: 0.95 }}
                   key={hoveredArticle.slug}
                   transition={{ duration: 0.3 }}
                 >
-                  <img
-                    alt={hoveredArticle.title}
-                    className="absolute inset-0 h-full w-full object-cover"
-                    height={800}
-                    src={hoveredArticle.imageUrl}
-                    width={800}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
-                  <div className="absolute right-0 bottom-0 left-0 flex flex-col gap-2 p-8">
-                    <h3 className="font-heading text-3xl text-foreground">{hoveredArticle.title}</h3>
-                    <p className="line-clamp-3 text-lg text-muted-foreground">{hoveredArticle.description}</p>
-                  </div>
+                  {hoveredArticle.imageUrl ? (
+                    <div className="relative w-full flex-1">
+                      <img
+                        alt={hoveredArticle.title}
+                        className="absolute inset-0 h-full w-full object-cover"
+                        height={800}
+                        src={hoveredArticle.imageUrl}
+                        width={800}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                      <div className="absolute right-0 bottom-0 left-0 flex flex-col gap-2 p-8">
+                        <h3 className="font-heading text-3xl text-foreground">{hoveredArticle.title}</h3>
+                        <p className="line-clamp-3 text-lg text-muted-foreground">{hoveredArticle.description}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex h-full w-full flex-col justify-center gap-6 p-10">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <FileText className="h-5 w-5" />
+                        <span className="font-medium text-sm uppercase tracking-wider">Preview</span>
+                      </div>
+                      <h3 className="font-heading text-4xl text-foreground leading-tight">{hoveredArticle.title}</h3>
+                      <p className="text-muted-foreground text-xl leading-relaxed">{hoveredArticle.description}</p>
+                    </div>
+                  )}
                 </m.div>
               ) : (
                 <m.div

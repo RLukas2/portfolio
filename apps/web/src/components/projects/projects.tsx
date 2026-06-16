@@ -7,15 +7,14 @@ import EmptyState from '../shared/empty-state';
 
 interface ProjectsProps {
   projects: ProjectType[];
+  featuredProjects: ProjectType[];
+  regularProjects: ProjectType[];
 }
 
-export default function Projects({ projects }: Readonly<ProjectsProps>) {
+export default function Projects({ projects, featuredProjects, regularProjects }: Readonly<ProjectsProps>) {
   if (projects.length === 0) {
     return <EmptyState message="The projects are probably off having a party somewhere without us!" />;
   }
-
-  const featuredProjects = projects.filter((p) => p.isFeatured);
-  const regularProjects = projects.filter((p) => !p.isFeatured);
 
   return (
     <m.div animate="visible" className="flex flex-col gap-24" initial={false} variants={slideInWithFadeOut}>

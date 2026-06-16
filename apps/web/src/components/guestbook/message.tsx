@@ -14,18 +14,20 @@ export default function Message({ message }: Readonly<MessageProps>) {
   const { data: currentUser } = useSuspenseQuery(authQueryOptions());
 
   return (
-    <div className="group flex gap-4 rounded-xl p-4 transition-colors hover:bg-muted/50">
-      <Avatar className="h-10 w-10 border">
+    <div className="glassmorphism group flex gap-4 rounded-xl p-5 transition-all hover:bg-muted/20">
+      <Avatar className="h-10 w-10 border-border/50 shadow-sm">
         <AvatarImage alt={user.name} className="object-cover" height={40} src={user.image as string} width={40} />
-        <AvatarFallback className="bg-primary/10 text-primary">{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
+        <AvatarFallback className="bg-primary/10 font-heading text-primary">
+          {user.name?.charAt(0).toUpperCase()}
+        </AvatarFallback>
       </Avatar>
 
-      <div className="flex-1 space-y-1">
+      <div className="flex-1 space-y-2">
         <div className="flex items-center gap-2">
-          <span className="font-medium">{user.name}</span>
+          <span className="font-heading text-lg">{user.name}</span>
           <Timestamp datetime={createdAt.toString()} />
         </div>
-        <p className="text-muted-foreground leading-relaxed">{body}</p>
+        <p className="text-lg text-muted-foreground leading-relaxed">{body}</p>
       </div>
 
       {(currentUser?.id === user.id || currentUser?.role === 'admin') && <DeleteMessageButton messageId={id} />}

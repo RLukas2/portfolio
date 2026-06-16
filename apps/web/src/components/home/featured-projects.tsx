@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import type { ProjectType } from '@xbrk/types';
 import { cn } from '@xbrk/ui';
 import { buttonVariants } from '@xbrk/ui/button';
 import { m, useInView } from 'framer-motion';
@@ -6,60 +6,20 @@ import { ArrowRight } from 'lucide-react';
 import { useRef } from 'react';
 import Link from '@/components/shared/link';
 import { containerVariantsFast, itemVariantsDown } from '@/lib/constants/framer-motion-variants';
-import { queryKeys } from '@/lib/query-keys';
-import { $getAllPublicProjects } from '@/lib/server';
 import EmptyState from '../shared/empty-state';
 
-/**
- * Animation variants for the featured projects section
- * Controls the fade-in and slide-up animation when section comes into view
- */
 const sectionVariants = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
 };
 
-/**
- * FeaturedProjects component displays a curated selection of highlighted projects on the home page.
- *
- * This component fetches all public projects and filters them to show only featured projects
- * (marked with isFeatured flag). If no projects are marked as featured, it displays the first 4
- * projects instead. The component includes smooth scroll-triggered animations and a link to view
- * all projects.
- *
- * Features:
- * - Server-side data fetching with TanStack Query (suspense mode)
- * - Automatic filtering of featured projects (max 4 displayed)
- * - Fallback to first 4 projects if none are featured
- * - Scroll-triggered animations using Framer Motion
- * - Responsive grid layout (1 column mobile, 2 columns desktop)
- * - Empty state handling when no projects exist
- * - Direct Tailwind classes (no Container component abstraction)
- *
- * Layout:
- * - Section header with title and description
- * - Grid of ProjectCard components (2 columns on desktop)
- * - "View all projects" button at the bottom
- *
- * @returns Rendered featured projects section with animations and project cards
- *
- * @example
- * ```tsx
- * <FeaturedProjects />
- * ```
- */
-const FeaturedProjects = () => {
+interface FeaturedProjectsProps {
+  featuredProjects: ProjectType[];
+}
+
+const FeaturedProjects = ({ featuredProjects }: Readonly<FeaturedProjectsProps>) => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
-
-  const { data: projects } = useSuspenseQuery({
-    queryKey: queryKeys.project.listPublic(),
-    queryFn: () => $getAllPublicProjects(),
-  });
-
-  // Get only featured projects or first 4 if none are featured
-  const featured = projects.filter((p) => p.isFeatured).slice(0, 4);
-  const featuredProjects = featured.length > 0 ? featured : projects.slice(0, 4);
 
   return (
     <m.section

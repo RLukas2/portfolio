@@ -15,8 +15,7 @@ import { getBaseUrl } from '@/lib/utils';
 export const Route = createFileRoute('/(public)/')({
   component: Home,
   loader: async ({ context: { queryClient } }) => {
-    // Prefetch both projects and articles data for the home page
-    await Promise.all([
+    const [projects] = await Promise.all([
       queryClient.ensureQueryData({
         queryKey: queryKeys.project.listPublic(),
         queryFn: () => $getAllPublicProjects(),
@@ -26,6 +25,11 @@ export const Route = createFileRoute('/(public)/')({
         queryFn: () => $getAllPublicArticles(),
       }),
     ]);
+
+    const featured = projects.filter((p) => p.isFeatured).slice(0, 4);
+    const featuredProjects = featured.length > 0 ? featured : projects.slice(0, 4);
+
+    return { featuredProjects };
   },
   head: () => {
     const seoData = seo({
@@ -51,12 +55,14 @@ export const Route = createFileRoute('/(public)/')({
 });
 
 function Home() {
+  const { featuredProjects } = Route.useLoaderData();
+
   return (
     <>
       <PersonalHero />
 
       <div className="flex flex-col items-center gap-16 sm:gap-32">
-        <FeaturedProjects />
+        <FeaturedProjects featuredProjects={featuredProjects} />
         <RecentPosts />
         <ConnectSection />
       </div>
