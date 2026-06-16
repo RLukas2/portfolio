@@ -10,6 +10,18 @@
 /* KaTeX styles for math rendering */
 @import "../../../packages/md/node_modules/katex/dist/katex.min.css";
 
+/* Fallback: ensure MathML (screen-reader-only) content stays visually hidden
+   even if the KaTeX CSS fails to load */
+.katex .katex-mathml {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
 @source "../../../packages/ui/src/*.{ts,tsx}";
 @source "../../../packages/md/src/*.{ts,tsx}";
 @source "../../../packages/shared/src/*.{ts,tsx}";
