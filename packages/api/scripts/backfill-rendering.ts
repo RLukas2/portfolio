@@ -1,7 +1,7 @@
 import { db } from '@xbrk/db/client';
 import { articles, project, service, snippet } from '@xbrk/db/schema';
 import { markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
-import { eq, isNull } from 'drizzle-orm';
+import { eq, isNull, lt, or } from 'drizzle-orm';
 
 interface TableConfig {
   idColumn: typeof articles.id;
@@ -18,7 +18,10 @@ const tables: TableConfig[] = [
 ];
 
 async function processTable(config: TableConfig) {
-  const rows = await db.select().from(config.table).where(isNull(config.table.contentRendering));
+  const rows = await db
+    .select()
+    .from(config.table)
+    .where(or(isNull(config.table.contentRendering), lt(config.table.contentRenderingVersion, RENDERING_VERSION)));
 
   if (rows.length === 0) {
     console.log(`  No ${config.name} to process`);
