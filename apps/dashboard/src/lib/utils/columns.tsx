@@ -28,19 +28,23 @@ export function createCommonColumns<T extends BaseItemType>(
     {
       id: 'select',
       header: ({ table }) => (
-        <Checkbox
-          aria-label={`Select all ${entityName}`}
-          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(Boolean(value))}
-        />
+        <div className="pl-4">
+          <Checkbox
+            aria-label={`Select all ${entityName}`}
+            checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(Boolean(value))}
+          />
+        </div>
       ),
       cell: ({ row }) => (
-        <Checkbox
-          aria-label={`Select ${row.original.title}`}
-          checked={row.getIsSelected()}
-          disabled={!row.getCanSelect()}
-          onCheckedChange={(value) => row.toggleSelected(Boolean(value))}
-        />
+        <div className="pl-4">
+          <Checkbox
+            aria-label={`Select ${row.original.title}`}
+            checked={row.getIsSelected()}
+            disabled={!row.getCanSelect()}
+            onCheckedChange={(value) => row.toggleSelected(Boolean(value))}
+          />
+        </div>
       ),
       enableSorting: false,
       enableHiding: false,

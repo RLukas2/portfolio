@@ -27,9 +27,10 @@ export function FormTextarea({
   className,
   minHeight = 'min-h-[80px]',
 }: Readonly<FormTextareaProps>) {
+  const shouldRenderLabel = label !== '';
   return (
     <field.FormItem className={className}>
-      <field.FormLabel>{label}</field.FormLabel>
+      {shouldRenderLabel && <field.FormLabel>{label}</field.FormLabel>}
       <field.FormControl>
         <Textarea
           className={minHeight}

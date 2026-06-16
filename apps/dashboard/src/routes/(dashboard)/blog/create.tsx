@@ -63,7 +63,7 @@ function ArticlesCreatePage() {
 
   return (
     <div className="space-y-6 pb-20">
-      <div className="sticky top-16 z-10 -mx-6 mb-6 flex flex-wrap items-center justify-between gap-4 border-b bg-background/95 px-6 py-4 backdrop-blur">
+      <div className="sticky top-16 z-10 mb-6 flex flex-wrap items-center justify-between gap-4 border-b bg-background/95 py-4 backdrop-blur">
         <div>
           <h2 className="font-bold text-3xl tracking-tight">Create Article</h2>
           <p className="text-muted-foreground">Draft a new article for your blog.</p>

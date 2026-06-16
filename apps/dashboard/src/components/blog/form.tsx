@@ -42,7 +42,7 @@ export const ArticleForm = withForm({
   },
   render({ form, article }) {
     return (
-      <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
+      <div className="grid gap-6 lg:grid-cols-3 lg:grid-flow-dense lg:gap-8">
         <div className="flex flex-col gap-6 lg:col-span-2">
           <Card>
             <CardHeader>
@@ -60,12 +60,11 @@ export const ArticleForm = withForm({
                 name="title"
               >
                 {(field) => (
-                  <div className="space-y-2">
+                  <field.FormItem>
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Title
-                        <span className="ml-1 text-destructive">*</span>
-                      </span>
+                      <field.FormLabel>
+                        Title <span className="text-destructive">*</span>
+                      </field.FormLabel>
                       <AIAssistDialog
                         buttonSize="sm"
                         buttonVariant="ghost"
@@ -82,7 +81,7 @@ export const ArticleForm = withForm({
                       />
                     </div>
                     <FormInput field={field} label="" placeholder="Article Title" required />
-                  </div>
+                  </field.FormItem>
                 )}
               </form.AppField>
 
@@ -94,11 +93,9 @@ export const ArticleForm = withForm({
 
               <form.AppField name="description">
                 {(field) => (
-                  <div className="space-y-2">
+                  <field.FormItem>
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Description
-                      </span>
+                      <field.FormLabel>Description</field.FormLabel>
                       <AIAssistDialog
                         buttonSize="sm"
                         buttonVariant="ghost"
@@ -115,12 +112,14 @@ export const ArticleForm = withForm({
                       />
                     </div>
                     <FormTextarea field={field} label="" placeholder="A brief description of your article" />
-                  </div>
+                  </field.FormItem>
                 )}
               </form.AppField>
             </CardContent>
           </Card>
+        </div>
 
+        <div className="flex flex-col gap-6 lg:col-span-3">
           <Card>
             <CardHeader>
               <CardTitle>Content</CardTitle>
@@ -129,11 +128,9 @@ export const ArticleForm = withForm({
             <CardContent>
               <form.AppField name="content">
                 {(field) => (
-                  <div className="space-y-2">
+                  <field.FormItem>
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Content
-                      </span>
+                      <field.FormLabel>Content</field.FormLabel>
                       <div className="flex gap-2">
                         <AIAssistDialog
                           buttonSize="sm"
@@ -172,7 +169,7 @@ export const ArticleForm = withForm({
 ## Overview
 A brief overview of your article."
                     />
-                  </div>
+                  </field.FormItem>
                 )}
               </form.AppField>
             </CardContent>

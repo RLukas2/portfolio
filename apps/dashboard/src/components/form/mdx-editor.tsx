@@ -18,14 +18,17 @@ interface FormMDXEditorProps {
 }
 
 export function FormMDXEditor({ field, label, placeholder, className }: Readonly<FormMDXEditorProps>) {
+  const shouldRenderLabel = label !== '';
   return (
     <div className={className}>
-      <label
-        className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        htmlFor={field.name}
-      >
-        {label}
-      </label>
+      {shouldRenderLabel && (
+        <label
+          className="mb-2 block font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          htmlFor={field.name}
+        >
+          {label}
+        </label>
+      )}
       <Tabs className="w-full" defaultValue="write">
         <TabsList className="mb-2">
           <TabsTrigger value="write">Write</TabsTrigger>

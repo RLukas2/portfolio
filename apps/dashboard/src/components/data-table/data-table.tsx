@@ -88,6 +88,8 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     onRowSelectionChange: setRowSelection,
     autoResetPageIndex: false,
+    // @ts-expect-error fallback id retrieval
+    getRowId: (row) => row.id || row.slug || Math.random().toString(),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),

@@ -44,7 +44,7 @@ export const ProjectsForm = withForm({
   },
   render({ form, project }) {
     return (
-      <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
+      <div className="grid gap-6 lg:grid-cols-3 lg:grid-flow-dense lg:gap-8">
         <div className="flex flex-col gap-6 lg:col-span-2">
           <Card>
             <CardHeader>
@@ -77,7 +77,9 @@ export const ProjectsForm = withForm({
               </form.AppField>
             </CardContent>
           </Card>
+        </div>
 
+        <div className="flex flex-col gap-6 lg:col-span-3">
           <Card>
             <CardHeader>
               <CardTitle>Content</CardTitle>

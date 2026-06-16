@@ -31,9 +31,13 @@ export function FormInput({
   description,
   className,
 }: Readonly<FormInputProps>) {
+  // If label is explicitly empty string, don't render FormLabel
+  // This allows parent components to completely take over label rendering (like in AI forms)
+  const shouldRenderLabel = label !== '';
+
   return (
     <field.FormItem className={className}>
-      <field.FormLabel>{label}</field.FormLabel>
+      {shouldRenderLabel && <field.FormLabel>{label}</field.FormLabel>}
       <field.FormControl>
         <Input
           aria-describedby={description ? `${field.name}-desc` : undefined}
