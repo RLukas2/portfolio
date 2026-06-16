@@ -1,16 +1,17 @@
 import { ErrorBoundary } from '@sentry/tanstackstart-react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { cn } from '@xbrk/ui';
 import { buttonVariants } from '@xbrk/ui/button';
 import { Card } from '@xbrk/ui/card';
 import { Skeleton } from '@xbrk/ui/skeleton';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { DataTable } from '@/components/data-table/data-table';
 import { projectColumns } from '@/components/projects/columns';
 import { queryKeys } from '@/lib/query-keys';
-import { $getAllProjects } from '@/lib/server/project';
+import { $deleteProject, $getAllProjects } from '@/lib/server/project';
 
 export const Route = createFileRoute('/(dashboard)/projects/')({
   component: Projects,
@@ -48,6 +49,7 @@ function ProjectsError() {
 }
 
 function ProjectsContent() {
+  const queryClient = useQueryClient();
   const {
     data: projects,
     error,
@@ -57,6 +59,32 @@ function ProjectsContent() {
     queryKey: queryKeys.project.listAll(),
     queryFn: () => $getAllProjects(),
   });
+
+  const deleteProjectMutation = useMutation({
+    mutationFn: async (ids: string[]) => {
+      // Execute deletions sequentially or in parallel. We'll do parallel.
+      await Promise.all(ids.map((id) => $deleteProject({ data: id })));
+    },
+    onSuccess: async (_, ids) => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.project.all });
+      toast.success(`Successfully deleted ${ids.length} project${ids.length === 1 ? '' : 's'}.`);
+    },
+    onError: () => {
+      toast.error('Failed to delete selected projects.');
+    },
+  });
+
+  const bulkActions = [
+    {
+      label: 'Delete Selected',
+      icon: <Trash2 className="mr-2 h-4 w-4" />,
+      variant: 'destructive' as const,
+      onClick: (selectedRows: typeof projects) => {
+        const ids = selectedRows.map((row) => row.id);
+        deleteProjectMutation.mutate(ids);
+      },
+    },
+  ];
 
   if (error) {
     return (
@@ -73,28 +101,28 @@ function ProjectsContent() {
     return <ProjectsLoading />;
   }
 
-  return <DataTable columns={projectColumns} data={projects} entityName="projects" />;
+  return <DataTable bulkActions={bulkActions} columns={projectColumns} data={projects} entityName="projects" />;
 }
 
 function Projects() {
   return (
-    <>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="font-bold text-2xl tracking-tight">Project List</h2>
-          <p className="text-muted-foreground">Manage your projects here.</p>
+          <h2 className="font-bold text-3xl tracking-tight">Projects</h2>
+          <p className="text-muted-foreground">Manage and organize your portfolio projects.</p>
         </div>
         <Link
           aria-label="Add new project"
           className={cn(buttonVariants({ variant: 'default' }), 'group')}
           to="/projects/create"
         >
-          <span>Add Project</span> <Plus className="ml-1" size={18} />
+          <Plus className="mr-2" size={16} /> <span>New Project</span>
         </Link>
       </div>
       <ErrorBoundary fallback={<ProjectsError />}>
         <ProjectsContent />
       </ErrorBoundary>
-    </>
+    </div>
   );
 }

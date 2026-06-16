@@ -1,15 +1,14 @@
 import { Button } from '@xbrk/ui/button';
 
-interface FormSubmitButtonProps {
+import type { ComponentProps } from 'react';
+
+interface FormSubmitButtonProps extends ComponentProps<typeof Button> {
   canSubmit: boolean;
-  className?: string;
   defaultText?: string;
   isPending: boolean;
   isSubmitting: boolean;
   loadingText?: string;
   processingText?: string;
-  size?: 'default' | 'sm' | 'lg' | 'icon';
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
 }
 
 export function FormSubmitButton({
@@ -22,6 +21,7 @@ export function FormSubmitButton({
   variant = 'default',
   size = 'default',
   className = 'w-full md:w-auto',
+  ...props
 }: Readonly<FormSubmitButtonProps>) {
   const buttonText = (() => {
     if (isSubmitting) {
@@ -37,6 +37,7 @@ export function FormSubmitButton({
 
   return (
     <Button
+      {...props}
       className={className}
       disabled={!canSubmit || isPending || isSubmitting}
       size={size}

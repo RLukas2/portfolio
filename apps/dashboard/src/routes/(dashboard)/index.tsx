@@ -32,15 +32,21 @@ export const Route = createFileRoute('/(dashboard)/')({
 
 function DashboardIndex() {
   return (
-    <div className="flex-1 space-y-4">
-      <OverviewCards />
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <div className="col-span-4 space-y-4">
-          <UsersStats />
-          <BlogViewsStats />
-        </div>
-        <div className="col-span-3">
-          <RecentActivity />
+    <div className="space-y-6">
+      <div className="flex flex-col gap-2">
+        <h2 className="font-bold text-3xl tracking-tight">Dashboard</h2>
+        <p className="text-muted-foreground">Overview of your portfolio and site performance.</p>
+      </div>
+      <div className="flex-1 space-y-6">
+        <OverviewCards />
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+          <div className="col-span-4 space-y-6">
+            <UsersStats />
+            <BlogViewsStats />
+          </div>
+          <div className="col-span-3">
+            <RecentActivity />
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import { type ColumnDef } from '@tanstack/react-table';
+import { Badge } from '@xbrk/ui/badge';
 import { Checkbox } from '@xbrk/ui/checkbox';
+import { Star } from 'lucide-react';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 
 export interface BaseItemType {
@@ -68,14 +70,22 @@ export function createCommonColumns<T extends BaseItemType>(
     },
     {
       accessorKey: 'isDraft',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Draft" />,
-      cell: ({ row }) => (
-        <Checkbox
-          aria-label={`${row.original.title} is draft: ${row.original.isDraft ? 'Yes' : 'No'}`}
-          checked={row.original.isDraft}
-          disabled
-        />
-      ),
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+      cell: ({ row }) => {
+        const isDraft = row.original.isDraft;
+        return (
+          <Badge
+            className={
+              isDraft
+                ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900/30 dark:text-yellow-500'
+                : 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-500'
+            }
+            variant={isDraft ? 'secondary' : 'default'}
+          >
+            {isDraft ? 'Draft' : 'Published'}
+          </Badge>
+        );
+      },
     },
   ];
 }
@@ -89,13 +99,19 @@ export function createToggleColumn<T extends { title: string }>(
     header: ({ column }) => <DataTableColumnHeader column={column} title={title} />,
     cell: ({ row }) => {
       const value = row.original[accessorKey] as unknown as boolean;
-      return (
-        <Checkbox
-          aria-label={`${row.original.title} is ${title.toLowerCase()}: ${value ? 'Yes' : 'No'}`}
-          checked={value}
-          disabled
-        />
-      );
+
+      if (accessorKey === 'isFeatured') {
+        return (
+          <div className="flex w-full items-center justify-center">
+            <Star
+              aria-label={`${row.original.title} is featured: ${value ? 'Yes' : 'No'}`}
+              className={`h-4 w-4 ${value ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground/30'}`}
+            />
+          </div>
+        );
+      }
+
+      return <Badge variant={value ? 'default' : 'secondary'}>{value ? 'Yes' : 'No'}</Badge>;
     },
   };
 }

@@ -1,6 +1,7 @@
 import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
 import { STACKS } from '@xbrk/shared/stack';
 import type { ProjectType } from '@xbrk/types';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@xbrk/ui/card';
 import { withForm } from '@xbrk/ui/form';
 import Icon from '@xbrk/ui/icon';
 import { generateSlug } from '@xbrk/utils';
@@ -43,37 +44,52 @@ export const ProjectsForm = withForm({
   },
   render({ form, project }) {
     return (
-      <>
-        <form.AppField
-          listeners={{
-            onChange: ({ value }) => {
-              const slug = generateSlug(value);
-              form.setFieldValue('slug', slug);
-            },
-          }}
-          name="title"
-        >
-          {(field) => <FormInput field={field} label="Title" placeholder="Portfolio Project" required />}
-        </form.AppField>
+      <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
+        <div className="flex flex-col gap-6 lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>General Information</CardTitle>
+              <CardDescription>The core details of your project.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <form.AppField
+                listeners={{
+                  onChange: ({ value }) => {
+                    const slug = generateSlug(value);
+                    form.setFieldValue('slug', slug);
+                  },
+                }}
+                name="title"
+              >
+                {(field) => <FormInput field={field} label="Title" placeholder="Portfolio Project" required />}
+              </form.AppField>
 
-        <form.AppField name="slug">
-          {(field) => (
-            <FormSlug field={field} label="Slug" placeholder="portfolio-project" urlPath="/projects/your-slug" />
-          )}
-        </form.AppField>
+              <form.AppField name="slug">
+                {(field) => (
+                  <FormSlug field={field} label="Slug" placeholder="portfolio-project" urlPath="/projects/your-slug" />
+                )}
+              </form.AppField>
 
-        <form.AppField name="description">
-          {(field) => (
-            <FormTextarea field={field} label="Description" placeholder="A brief description of your project" />
-          )}
-        </form.AppField>
+              <form.AppField name="description">
+                {(field) => (
+                  <FormTextarea field={field} label="Description" placeholder="A brief description of your project" />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
 
-        <form.AppField name="content">
-          {(field) => (
-            <FormMDXEditor
-              field={field}
-              label="Content"
-              placeholder="# Project Details
+          <Card>
+            <CardHeader>
+              <CardTitle>Content</CardTitle>
+              <CardDescription>Write the full details and case study for the project.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form.AppField name="content">
+                {(field) => (
+                  <FormMDXEditor
+                    field={field}
+                    label=""
+                    placeholder="# Project Details
 ## Overview
 A brief overview of your project.
 ## Features
@@ -81,87 +97,111 @@ A brief overview of your project.
 - Feature 2
 ## Implementation
 Details about how you implemented the project."
-            />
-          )}
-        </form.AppField>
-
-        <form.AppField name="thumbnail">
-          {(field) => (
-            <FormImageUpload
-              field={field as FormField}
-              initialPreview={project?.imageUrl}
-              label="Image"
-              name={field.name}
-            />
-          )}
-        </form.AppField>
-
-        <div className="grid gap-8 md:grid-cols-2">
-          <form.AppField name="githubUrl">
-            {(field) => (
-              <FormInput
-                field={field}
-                label="GitHub URL"
-                placeholder="https://github.com/username/project"
-                type="url"
-              />
-            )}
-          </form.AppField>
-
-          <form.AppField name="demoUrl">
-            {(field) => <FormInput field={field} label="Demo URL" placeholder="https://example.com" type="url" />}
-          </form.AppField>
+                  />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
         </div>
 
-        <form.AppField name="stacks">
-          {(field) => (
-            <FormMultiSelect
-              field={field}
-              label="Stacks"
-              options={Object.entries(STACKS).map(([key, value]) => ({
-                label: key,
-                value: key,
-                icon: <Icon className="h-4 w-4" icon={value} />,
-              }))}
-              placeholder="Select technology stacks"
-            />
-          )}
-        </form.AppField>
+        <div className="flex flex-col gap-6 lg:col-span-1">
+          <Card>
+            <CardHeader>
+              <CardTitle>Media</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form.AppField name="thumbnail">
+                {(field) => (
+                  <FormImageUpload
+                    field={field as FormField}
+                    initialPreview={project?.imageUrl}
+                    label="Image"
+                    name={field.name}
+                  />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
 
-        <div className="grid gap-8 md:grid-cols-2">
-          <form.AppField name="isFeatured">
-            {(field) => (
-              <FormCheckbox
-                description="Display this project in featured section"
-                field={field}
-                label="Featured Project"
-              />
-            )}
-          </form.AppField>
+          <Card>
+            <CardHeader>
+              <CardTitle>Links & Stack</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <form.AppField name="githubUrl">
+                {(field) => (
+                  <FormInput
+                    field={field}
+                    label="GitHub URL"
+                    placeholder="https://github.com/username/project"
+                    type="url"
+                  />
+                )}
+              </form.AppField>
 
-          <form.AppField name="isDraft">
-            {(field) => (
-              <FormCheckbox
-                description="This project won't be visible to visitors"
-                field={field}
-                label="Save as Draft"
-              />
-            )}
-          </form.AppField>
+              <form.AppField name="demoUrl">
+                {(field) => <FormInput field={field} label="Demo URL" placeholder="https://example.com" type="url" />}
+              </form.AppField>
+
+              <form.AppField name="stacks">
+                {(field) => (
+                  <FormMultiSelect
+                    field={field}
+                    label="Stacks"
+                    options={Object.entries(STACKS).map(([key, value]) => ({
+                      label: key,
+                      value: key,
+                      icon: <Icon className="h-4 w-4" icon={value} />,
+                    }))}
+                    placeholder="Select technology stacks"
+                  />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Settings</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <form.AppField name="isFeatured">
+                {(field) => (
+                  <FormCheckbox
+                    description="Display this project in featured section"
+                    field={field}
+                    label="Featured Project"
+                  />
+                )}
+              </form.AppField>
+
+              <form.AppField name="isDraft">
+                {(field) => (
+                  <FormCheckbox
+                    description="This project won't be visible to visitors"
+                    field={field}
+                    label="Save as Draft"
+                  />
+                )}
+              </form.AppField>
+            </CardContent>
+          </Card>
         </div>
 
-        <div>
+        {/* We moved the submit button out of the component to place it in the header instead */}
+        <div className="hidden">
           <form.Subscribe selector={(formState) => [formState.canSubmit, formState.isSubmitting]}>
             {([canSubmit, isPending, isSubmitting]) => (
               <FormSubmitButton
                 canSubmit={canSubmit ?? false}
+                id="hidden-submit-btn"
                 isPending={isPending ?? false}
                 isSubmitting={isSubmitting ?? false}
               />
             )}
           </form.Subscribe>
         </div>
-      </>
+      </div>
     );
   },
 });

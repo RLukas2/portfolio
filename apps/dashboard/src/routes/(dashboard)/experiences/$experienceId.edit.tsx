@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, useRouter } from '@tanstack/react-router';
 import { ExperienceBaseSchema, ExperienceType, type ExperienceTypeValue } from '@xbrk/db/schema';
+import { Button } from '@xbrk/ui/button';
 import { useAppForm } from '@xbrk/ui/form';
 import { NotFound } from '@xbrk/ui/not-found';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod/v4';
 import { ExperiencesForm } from '@/components/experiences/form';
@@ -89,14 +91,32 @@ function ExperiencesEditPage() {
   });
 
   return (
-    <>
-      <div className="mb-2 flex flex-wrap items-center justify-between space-y-2">
+    <div className="space-y-6 pb-20">
+      <div className="sticky top-16 z-10 -mx-6 mb-6 flex flex-wrap items-center justify-between gap-4 border-b bg-background/95 px-6 py-4 backdrop-blur">
         <div>
-          <h2 className="font-bold text-2xl tracking-tight">Edit Experience</h2>
-          <p className="text-muted-foreground">Edit an experience here.</p>
+          <h2 className="font-bold text-3xl tracking-tight">Edit Experience</h2>
+          <p className="text-muted-foreground">Update your existing experience details.</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button onClick={() => router.navigate({ to: '/experiences' })} variant="outline">
+            Cancel
+          </Button>
+          <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+            {([canSubmit, isSubmitting]) => (
+              <Button
+                disabled={!canSubmit}
+                onClick={() => {
+                  form.handleSubmit();
+                }}
+              >
+                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Changes
+              </Button>
+            )}
+          </form.Subscribe>
         </div>
       </div>
-      <div className="py-4">
+      <div>
         <form.AppForm>
           <form
             className="space-y-8"
@@ -110,6 +130,6 @@ function ExperiencesEditPage() {
           </form>
         </form.AppForm>
       </div>
-    </>
+    </div>
   );
 }
