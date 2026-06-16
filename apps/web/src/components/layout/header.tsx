@@ -4,7 +4,7 @@ import Navbar from './navbar';
 
 const Header = ({ links, user }: Readonly<{ links: NavItem[]; user: UserType }>) => {
   return (
-    <header className="sticky top-0 z-40 w-full">
+    <header className="sticky top-0 z-40 w-full transition-all duration-300">
       {/* Skip to content link for accessibility */}
       <a
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
@@ -13,19 +13,13 @@ const Header = ({ links, user }: Readonly<{ links: NavItem[]; user: UserType }>)
         Skip to main content
       </a>
 
-      {/* Glass morphism background */}
-      <div className="absolute inset-0 border-border/40 border-b bg-background/70 backdrop-blur-xl" />
+      {/* Glass morphism background - enhanced for Apple-style feel */}
+      <div className="absolute inset-0 bg-background/50 backdrop-blur-2xl border-b border-white/5 shadow-sm" />
 
       {/* Subtle gradient glow at the top */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/10 to-transparent"
-      />
-
-      {/* Decorative accent line at bottom */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-violet-500/20 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent"
       />
 
       <div className="container relative lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl">

@@ -44,7 +44,13 @@ export default function Stats() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 relative pb-24">
+      {/* Moving mesh background specific to Stats dashboard */}
+      <div className="absolute inset-0 z-[-1] overflow-hidden rounded-3xl pointer-events-none opacity-50 mix-blend-screen">
+        <div className="absolute top-[20%] left-[10%] w-[30%] h-[30%] rounded-full bg-blue-500/10 blur-[80px] animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute top-[40%] right-[10%] w-[40%] h-[40%] rounded-full bg-purple-500/10 blur-[80px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }} />
+      </div>
+
       {/* Header */}
       <m.div
         animate={{ opacity: 1, y: 0 }}
@@ -52,13 +58,13 @@ export default function Stats() {
         initial={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-          <FaGithub className="h-5 w-5 text-primary" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-background border border-white/10 shadow-inner">
+          <FaGithub className="h-6 w-6 text-foreground/80" />
         </div>
-        <h2 className="font-semibold text-xl">GitHub Overview</h2>
+        <h2 className="font-heading font-semibold text-2xl tracking-tight">GitHub Overview</h2>
       </m.div>
 
-      {/* Stat cards */}
+      {/* Stat cards - Glass dashboard style */}
       <m.div
         animate={{ opacity: 1, y: 0 }}
         className="grid grid-cols-1 gap-4 sm:grid-cols-3"
@@ -66,11 +72,15 @@ export default function Stats() {
         transition={{ duration: 0.5, delay: 0.1 }}
       >
         {statCards.map((card) => (
-          <StatCard card={card} key={card.title} />
+          <div key={card.title} className="glass-panel rounded-2xl border border-white/5 bg-background/40 hover:bg-background/60 transition-colors">
+            <StatCard card={card} />
+          </div>
         ))}
       </m.div>
 
-      <GithubContributor />
+      <div className="glass-panel rounded-3xl border border-white/5 bg-background/40 p-4 sm:p-8 mt-8">
+        <GithubContributor />
+      </div>
     </div>
   );
 }

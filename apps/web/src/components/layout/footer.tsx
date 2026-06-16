@@ -8,14 +8,14 @@ import { FOOTER_LINKS } from '@/lib/constants/footer';
 const CURRENT_YEAR = () => new Date().getFullYear();
 
 const Footer = () => (
-  <footer className="relative mt-20 border-t bg-grid print:hidden">
+  <footer className="relative mt-20 border-t border-white/5 bg-background/30 backdrop-blur-md print:hidden">
     {/* Decorative gradient */}
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent"
+      className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
     />
 
-    <div className="container py-12 lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl">
+    <div className="container py-12 lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl relative z-10">
       <m.div
         animate={{ opacity: 1, y: 0 }}
         className="fade-in slide-in-from-bottom-4 mb-8 grid animate-in grid-cols-2 gap-8 duration-500 md:grid-cols-4"
@@ -37,7 +37,7 @@ const Footer = () => (
             <div className="flex flex-col items-start gap-2" key={group.header}>
               <h3 className="font-semibold text-foreground text-sm">{group.header}</h3>
               {group.links.map(({ title, path }) => (
-                <Link className="text-muted-foreground text-sm" href={path} key={path} variant="muted">
+                <Link className="text-muted-foreground text-sm hover:text-primary transition-colors" href={path} key={path} variant="muted">
                   {title}
                 </Link>
               ))}
@@ -47,14 +47,14 @@ const Footer = () => (
       </m.div>
 
       {/* Horizontal divider */}
-      <div aria-hidden="true" className="my-8 border-border/50 border-t" />
+      <div aria-hidden="true" className="my-8 border-t border-white/5" />
 
       {/* Bottom Footer */}
       <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
         <div className="flex flex-col items-center gap-2 text-center text-sm sm:flex-row sm:text-left">
           <p className="text-muted-foreground">
             © {CURRENT_YEAR()}{' '}
-            <Link className="font-medium text-foreground" href="/" variant="nav">
+            <Link className="font-medium text-foreground hover:text-primary transition-colors" href="/" variant="nav">
               {siteConfig.author.name}
             </Link>
           </p>
@@ -63,7 +63,7 @@ const Footer = () => (
           </span>
           <p className="text-muted-foreground">
             <Link
-              className="text-muted-foreground"
+              className="text-muted-foreground hover:text-primary transition-colors"
               href="https://www.google.com/maps/place/Ho+Chi+Minh+City,+Vietnam"
               variant="muted"
             >
@@ -78,7 +78,7 @@ const Footer = () => (
             <a
               aria-label={`Follow on ${social.name}`}
               className={cn(
-                'text-lg text-muted-foreground transition-colors hover:text-foreground',
+                'text-lg text-muted-foreground transition-all duration-300 hover:-translate-y-1',
                 social.name === 'LinkedIn' && 'hover:text-[#0A66C2]',
                 social.name === 'GitHub' && 'hover:text-foreground',
                 social.name === 'Twitter' && 'hover:text-[#1DA1F2]',
@@ -89,7 +89,7 @@ const Footer = () => (
               target="_blank"
               title={social.name}
             >
-              <Icon className="h-4 w-4" icon={social.icon} />
+              <Icon className="h-5 w-5" icon={social.icon} />
             </a>
           ))}
         </nav>
