@@ -25,94 +25,7 @@ let cachedProcessor: ReturnType<typeof createProcessorInternal> | null = null;
 
 function createProcessorInternal() {
   const sanitizeSchema = structuredClone(defaultSchema);
-
-  // Allow style, className, id, and aria-hidden on all elements
-  // (default schema only allows className on specific tags)
-  const wildcardAttrs = sanitizeSchema.attributes?.['*'] ?? [];
-  wildcardAttrs.push('style', 'className', 'id', 'aria-hidden');
-
-  // MathML elements produced by KaTeX — the default schema doesn't include these
-  const mathmlTags = [
-    'math',
-    'semantics',
-    'mrow',
-    'mi',
-    'mo',
-    'mn',
-    'msup',
-    'msub',
-    'mfrac',
-    'msqrt',
-    'mover',
-    'munder',
-    'mtext',
-    'annotation',
-    'mtable',
-    'mtr',
-    'mtd',
-    'merror',
-    'mpadded',
-    'mspace',
-    'mstyle',
-    'msubsup',
-    'munderover',
-    'mmultiscripts',
-    'mphantom',
-    'mroot',
-    'menclose',
-    'mfenced',
-    'mglyph',
-    'mlabeledtr',
-  ];
-
-  // SVG elements used by KaTeX for radical signs, integrals, and cancel lines
-  const svgTags = ['svg', 'path', 'g', 'line'];
-
-  sanitizeSchema.tagNames = [...(sanitizeSchema.tagNames ?? []), ...mathmlTags, ...svgTags];
-
-  sanitizeSchema.attributes = {
-    ...sanitizeSchema.attributes,
-
-    // SVG
-    svg: ['xmlns', 'viewBox', 'preserveAspectRatio', 'width', 'height', 'style'],
-    path: ['d'],
-    line: ['x1', 'y1', 'x2', 'y2', 'stroke-width'],
-
-    // Images
-    img: ['src', 'alt', 'width', 'height', 'longDesc'],
-
-    // MathML
-    math: ['xmlns', 'display', 'href'],
-    mi: ['mathvariant'],
-    mo: [
-      'stretchy',
-      'fence',
-      'lspace',
-      'rspace',
-      'separator',
-      'largeop',
-      'movablelimits',
-      'minsize',
-      'maxsize',
-      'accent',
-      'accentunder',
-      'mathcolor',
-    ],
-    mn: ['mathvariant'],
-    mtext: ['mathvariant'],
-    mfrac: ['linethickness'],
-    mover: ['accent'],
-    munder: ['accentunder'],
-    munderover: ['accent', 'accentunder'],
-    mstyle: ['displaystyle', 'scriptlevel', 'mathcolor', 'mathbackground', 'mathsize', 'style'],
-    mpadded: ['width', 'height', 'depth', 'voffset', 'lspace', 'rspace'],
-    menclose: ['notation', 'mathbackground', 'style'],
-    mspace: ['width', 'height', 'mathbackground', 'linebreak'],
-    mtable: ['rowspacing', 'columnalign', 'columnlines', 'columnspacing', 'rowlines', 'width'],
-    mtd: ['padleft', 'padright', 'columnalign'],
-    mglyph: ['alt', 'src', 'valign', 'width', 'height'],
-    annotation: ['encoding'],
-  };
+  sanitizeSchema.attributes?.['*']?.push('style');
 
   return (
     unified()
@@ -184,7 +97,7 @@ export function clearProcessorCache(): void {
  * Increment when the processor pipeline changes (new plugins, themes, etc.)
  * to invalidate cached HAST trees that need regeneration.
  */
-export const RENDERING_VERSION = 5;
+export const RENDERING_VERSION = 1;
 
 /**
  * Processes markdown source through the full unified pipeline and returns
