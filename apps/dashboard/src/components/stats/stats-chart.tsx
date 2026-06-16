@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@xbrk/ui/card';
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@xbrk/ui/chart';
-import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 type MonthlyData = { month: string; count: number }[];
 
@@ -39,7 +39,7 @@ export function StatsChart({ title, description, data, chartColor, label }: Stat
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <LineChart
+          <AreaChart
             accessibilityLayer
             data={chartData}
             margin={{
@@ -47,6 +47,12 @@ export function StatsChart({ title, description, data, chartColor, label }: Stat
               right: 12,
             }}
           >
+            <defs>
+              <linearGradient id={`fill${label}`} x1="0" x2="0" y1="0" y2="1">
+                <stop offset="5%" stopColor="var(--color-count)" stopOpacity={0.4} />
+                <stop offset="95%" stopColor="var(--color-count)" stopOpacity={0.0} />
+              </linearGradient>
+            </defs>
             <CartesianGrid vertical={false} />
             <XAxis
               axisLine={false}
@@ -56,8 +62,15 @@ export function StatsChart({ title, description, data, chartColor, label }: Stat
               tickMargin={TICK_MARGIN_DEFAULT}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Line dataKey="count" dot={false} stroke="var(--color-count)" strokeWidth={2} type="linear" />
-          </LineChart>
+            <Area
+              dataKey="count"
+              fill={`url(#fill${label})`}
+              fillOpacity={0.4}
+              stroke="var(--color-count)"
+              strokeWidth={2}
+              type="monotone"
+            />
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>

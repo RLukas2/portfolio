@@ -25,9 +25,9 @@ interface ArticleCardProps {
  * @returns Rendered article card with interactive hover effects
  */
 const ArticleCard = ({ article }: ArticleCardProps) => (
-  <article className="group relative flex flex-col overflow-hidden rounded-2xl border bg-card transition-all duration-300 hover:border-foreground/20 hover:shadow-xl">
+  <article className="group relative flex flex-col overflow-hidden rounded-2xl border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-2xl dark:hover:shadow-primary/5">
     {/* Hover gradient overlay */}
-    <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-violet-500/5 via-transparent to-pink-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+    <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
     {article.imageUrl && (
       <div className="relative overflow-hidden">

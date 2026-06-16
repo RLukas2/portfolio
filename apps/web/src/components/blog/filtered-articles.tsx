@@ -58,19 +58,22 @@ export default function FilteredArticles({ articles }: Readonly<FilteredArticles
   return (
     <>
       {/* Search box */}
-      <div className="relative mb-4">
-        <Input
-          aria-label="Search articles"
-          className="h-12 rounded-xl border-none bg-muted pl-12 focus-visible:ring-1"
-          id="search"
-          onChange={handleInputChange}
-          placeholder="Search articles..."
-          type="text"
-          value={searchValue}
-        />
-        <Label htmlFor="search">
-          <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-        </Label>
+      <div className="group relative mb-4 rounded-xl transition-all duration-300 hover:shadow-md hover:shadow-primary/5">
+        <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary/30 to-secondary/30 opacity-0 blur transition duration-500 group-hover:opacity-100" />
+        <div className="relative flex items-center rounded-xl border border-border/50 bg-background/80 backdrop-blur-md">
+          <Input
+            aria-label="Search articles"
+            className="h-12 w-full rounded-xl border-none bg-transparent pl-12 shadow-none focus-visible:ring-0"
+            id="search"
+            onChange={handleInputChange}
+            placeholder="Search articles..."
+            type="text"
+            value={searchValue}
+          />
+          <Label htmlFor="search">
+            <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
+          </Label>
+        </div>
       </div>
 
       {allTags.length > 0 && (

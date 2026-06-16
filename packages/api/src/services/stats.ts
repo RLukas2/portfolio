@@ -1,8 +1,8 @@
 // biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
-import { articleViews, user } from '@xbrk/db/schema';
-import { sql } from 'drizzle-orm';
+import { articles, articleViews, project, snippet, user } from '@xbrk/db/schema';
+import { count, desc, sql } from 'drizzle-orm';
 
 type DbClient = typeof DB;
 
@@ -91,6 +91,104 @@ export async function monthlyUsers(db: DbClient, input?: { months?: number }): P
     }
     Sentry.captureException(error);
     console.error('[stats.monthlyUsers] Database error:', error);
+    return [];
+  }
+}
+
+/**
+ * Returns total counts for users, articles, projects, and snippets.
+ */
+export async function totalStats(db: DbClient) {
+  try {
+    const [usersRes, articlesRes, projectsRes, snippetsRes] = await Promise.all([
+      db.select({ count: count() }).from(user),
+      db.select({ count: count() }).from(articles),
+      db.select({ count: count() }).from(project),
+      db.select({ count: count() }).from(snippet),
+    ]);
+
+    return {
+      users: usersRes[0]?.count ?? 0,
+      articles: articlesRes[0]?.count ?? 0,
+      projects: projectsRes[0]?.count ?? 0,
+      snippets: snippetsRes[0]?.count ?? 0,
+    };
+  } catch (error) {
+    Sentry.captureException(error);
+    console.error('[stats.totalStats] Database error:', error);
+    return { users: 0, articles: 0, projects: 0, snippets: 0 };
+  }
+}
+
+export interface RecentActivityItem {
+  createdAt: Date;
+  id: string;
+  title: string;
+  type: 'user' | 'article' | 'project';
+  url: string;
+}
+
+/**
+ * Returns a combined list of recent activity (users joining, articles created, projects created).
+ */
+export async function recentActivity(db: DbClient, limit = 10): Promise<RecentActivityItem[]> {
+  try {
+    const recentUsers = await db.query.user.findMany({
+      orderBy: [desc(user.createdAt)],
+      limit,
+      columns: { id: true, name: true, createdAt: true },
+    });
+
+    const recentArticles = await db.query.articles.findMany({
+      orderBy: [desc(articles.createdAt)],
+      limit,
+      columns: { id: true, title: true, createdAt: true },
+    });
+
+    const recentProjects = await db.query.project.findMany({
+      orderBy: [desc(project.createdAt)],
+      limit,
+      columns: { id: true, title: true, createdAt: true },
+    });
+
+    const combined: RecentActivityItem[] = [
+      ...recentUsers.map(
+        (u) =>
+          ({
+            id: u.id,
+            type: 'user',
+            title: u.name,
+            createdAt: u.createdAt,
+            url: '/users',
+          }) as RecentActivityItem,
+      ),
+      ...recentArticles.map(
+        (a) =>
+          ({
+            id: a.id,
+            type: 'article',
+            title: a.title,
+            createdAt: a.createdAt,
+            url: `/blog/${a.id}/edit`,
+          }) as RecentActivityItem,
+      ),
+      ...recentProjects.map(
+        (p) =>
+          ({
+            id: p.id,
+            type: 'project',
+            title: p.title,
+            createdAt: p.createdAt,
+            url: `/projects/${p.id}/edit`,
+          }) as RecentActivityItem,
+      ),
+    ];
+
+    // Sort descending by createdAt and slice the total top N
+    return combined.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, limit);
+  } catch (error) {
+    Sentry.captureException(error);
+    console.error('[stats.recentActivity] Database error:', error);
     return [];
   }
 }

@@ -5,7 +5,6 @@ import { getRequest } from '@tanstack/react-start/server';
 import type { UserType } from '@xbrk/types';
 import { Card } from '@xbrk/ui/card';
 
-
 import { DataTable } from '@/components/data-table/data-table';
 import { userColumns } from '@/components/users/columns';
 import { auth } from '@/lib/auth/server';
@@ -34,7 +33,6 @@ export const Route = createFileRoute('/(dashboard)/users/')({
     meta: [{ title: 'Users | Dashboard' }, { name: 'description', content: 'Manage your portfolio users' }],
   }),
 });
-
 
 function UsersError() {
   return (
