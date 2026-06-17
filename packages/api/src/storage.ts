@@ -2,7 +2,8 @@
 import * as Sentry from '@sentry/node';
 import { del, put } from '@vercel/blob';
 import { InternalServerError, ValidationError } from '@xbrk/errors';
-import { createSlug, isValidBase64 } from './lib/validation';
+import { generateSlug } from '@xbrk/utils';
+import { isValidBase64 } from './lib/validation';
 
 export const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 const allowedDomains = ['vercel-blob.com', 'blob.vercel-storage.com'];
@@ -33,7 +34,7 @@ export async function uploadImage(folder: string, image: string, slug: string): 
     }
 
     // Sanitize slug to ensure it's URL-safe
-    const safeSlug = createSlug(slug);
+    const safeSlug = generateSlug(slug);
     const fileName = `${safeSlug}-${Date.now()}.avif`;
     const imageBuffer = Buffer.from(image, 'base64');
     const path = `${folder}/${fileName}`;

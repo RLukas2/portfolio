@@ -3,10 +3,10 @@ import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateExperienceSchema, experience, UpdateExperienceSchema } from '@xbrk/db/schema';
 import { InternalServerError, NotFoundError } from '@xbrk/errors';
+import { generateSlug } from '@xbrk/utils';
 import { desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 import { handleImageUpdate, handleImageUpload } from '../lib/base-service';
-import { createSlug } from '../lib/validation';
 import { deleteFile } from '../storage';
 
 type DbClient = typeof DB;
@@ -64,7 +64,7 @@ export function create(db: DbClient, input: z.infer<typeof CreateExperienceSchem
       const { thumbnail, ...experienceData } = input;
 
       // Create URL-safe slug from title
-      const slug = createSlug(experienceData.title);
+      const slug = generateSlug(experienceData.title);
 
       const dataToInsert = {
         ...experienceData,
@@ -96,7 +96,7 @@ export function update(db: DbClient, input: z.infer<typeof UpdateExperienceSchem
       const { thumbnail, id, ...experienceData } = input;
 
       // Create URL-safe slug from title if title is being updated
-      const slug = experienceData.title ? createSlug(experienceData.title) : undefined;
+      const slug = experienceData.title ? generateSlug(experienceData.title) : undefined;
 
       const dataToUpdate = {
         ...experienceData,

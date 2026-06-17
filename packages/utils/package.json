@@ -1,5 +1,6 @@
 {
   "name": "@xbrk/utils",
+  "version": "1.0.0",
   "license": "MIT",
   "private": true,
   "type": "module",
@@ -13,10 +14,13 @@
     "build": "tsc",
     "clean": "git clean -xdf .cache dist node_modules",
     "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@xbrk/tsconfig": "workspace:*",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
