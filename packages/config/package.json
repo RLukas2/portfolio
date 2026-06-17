@@ -16,7 +16,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@xbrk/types": "workspace:*",
     "simple-icons": "catalog:"
   },
   "devDependencies": {

@@ -35,7 +35,6 @@
     "@xbrk/errors": "workspace:*",
     "@xbrk/md": "workspace:*",
     "@xbrk/shared": "workspace:*",
-    "@xbrk/types": "workspace:*",
     "@xbrk/ui": "workspace:*",
     "@xbrk/utils": "workspace:*",
     "better-auth": "catalog:",

@@ -1,5 +1,5 @@
 import { ClientOnly, Link, useRouterState } from '@tanstack/react-router';
-import type { UserType } from '@xbrk/types';
+import type { User } from '@xbrk/db';
 import { Avatar, AvatarFallback, AvatarImage } from '@xbrk/ui/avatar';
 import {
   DropdownMenu,
@@ -73,7 +73,7 @@ const navigationItems = [
   },
 ];
 
-export function DashboardSidebar({ user }: Readonly<{ user: UserType }>) {
+export function DashboardSidebar({ user }: Readonly<{ user: User }>) {
   const router = useRouterState();
   const currentPath = router.location.pathname;
 

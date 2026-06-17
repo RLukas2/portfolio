@@ -1,6 +1,6 @@
 import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
+import type { Article } from '@xbrk/db';
 import { STACKS } from '@xbrk/shared/stack';
-import type { ArticleType } from '@xbrk/types';
 import { withForm } from '@xbrk/ui/form';
 import Icon from '@xbrk/ui/icon';
 import { generateSlug } from '@xbrk/utils';
@@ -37,7 +37,7 @@ interface FormField {
 export const ArticleForm = withForm({
   ...articleFormOpts,
   props: {
-    article: undefined as ArticleType | undefined,
+    article: undefined as Article | undefined,
   },
   render({ form, article }) {
     return (

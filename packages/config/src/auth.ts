@@ -1,5 +1,5 @@
-import type { AuthProvider } from '@xbrk/types';
 import { siFacebook, siGithub, siGoogle, siX } from 'simple-icons';
+import type { AuthProvider } from './types';
 
 /**
  * Authentication providers configuration

@@ -1,14 +1,14 @@
-import type { CommentReactionType, CommentType, UserType } from '@xbrk/types';
+import type { Comment, CommentReaction, User } from '@xbrk/db';
 import { createContext, useContext } from 'react';
 
 export interface CommentContext {
   comment: {
-    comment: CommentType;
-    user: UserType | null;
+    comment: Comment;
+    user: User | null;
     likesCount: number;
     dislikesCount: number;
     repliesCount: number;
-    userReaction: CommentReactionType | null;
+    userReaction: CommentReaction | null;
   };
   isEditing: boolean;
   isOpenReplies: boolean;

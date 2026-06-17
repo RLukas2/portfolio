@@ -1,8 +1,8 @@
-import { type Bookmark } from '@xbrk/types';
 import { m } from 'framer-motion';
 import BookmarkCard from '@/components/bookmarks/bookmark-card';
 import LoadMore from '@/components/bookmarks/load-more';
 import { PAGE_SIZE } from '@/lib/integrations/raindrop';
+import { type Bookmark } from '@/types/misc';
 
 interface BookmarkListProps {
   id: number;

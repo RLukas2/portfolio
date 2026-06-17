@@ -1,10 +1,10 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import type { UserType } from '@xbrk/types';
+import type { User } from '@xbrk/db';
 import { Checkbox } from '@xbrk/ui/checkbox';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { Actions } from './actions';
 
-export const userColumns: ColumnDef<UserType>[] = [
+export const userColumns: ColumnDef<User>[] = [
   {
     id: 'select',
     header: ({ table }) => (

@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { CommentWithRelations } from '@xbrk/types';
 import { queryKeys } from '@/lib/query-keys';
 import { $getAllComments } from '@/lib/server';
+import type { CommentWithRelations } from '@/types/misc';
 import CommentItem from './comment-item';
 
 interface CommentListProps {

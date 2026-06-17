@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import type { ContributionDay } from '@xbrk/types';
 import GithubActivityAreaChart from '@/components/github-stats/github-activity-area-chart';
 import GithubActivityBarChart from '@/components/github-stats/github-activity-bar-chart';
 import { type ContributionCountByDayOfWeek } from '@/lib/integrations/github';
 import { queryKeys } from '@/lib/query-keys';
+import type { ContributionDay } from '@/types/github';
 
 export default function GithubActivityGraph() {
   const { data: result, isLoading } = useQuery({

@@ -1,10 +1,10 @@
 import { type JSONContent } from '@tiptap/react';
-import type { CommentWithRelations } from '@xbrk/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@xbrk/ui/avatar';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import { useMemo, useState } from 'react';
 import Timestamp from '@/components/shared/timestamp';
 import { type CommentContext, CommentProvider } from '@/contexts/comment';
+import type { CommentWithRelations } from '@/types/misc';
 import CommentActions from './comment-actions';
 import CommentEditor, { useCommentEditor } from './comment-editor';
 import CommentMenu from './comment-menu';

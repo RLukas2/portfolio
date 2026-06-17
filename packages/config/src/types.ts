@@ -1,11 +1,12 @@
 import type { SimpleIcon } from 'simple-icons';
 
-/**
- * Main site configuration
- * Contains metadata, author info, and external links
- */
+export interface AuthProvider {
+  icon: SimpleIcon;
+  label: string;
+  provider: string;
+}
+
 export interface SiteConfig {
-  /** Author information */
   author: {
     name: string;
     email: string;
@@ -15,17 +16,10 @@ export interface SiteConfig {
     location?: string;
     knowsAbout?: string[];
   };
-
-  /** Optional Calendly integration */
   calendlyUrl?: string;
-  /** Website description */
   description: string;
-  /** Hiring status for the author */
   hiringStatus?: 'off' | 'open' | 'hired';
-  /** Keywords used to describe the website */
   keywords: string;
-
-  /** External links */
   links: {
     mail: string;
     twitter?: string;
@@ -33,16 +27,11 @@ export interface SiteConfig {
     githubRepo: string;
     linkedin?: string;
   };
-
   name: string;
-  /** Site metadata */
   title: string;
   url: string;
 }
 
-/**
- * Social media profile configuration
- */
 export interface Social {
   icon: SimpleIcon;
   name: string;
@@ -50,9 +39,6 @@ export interface Social {
   username?: string;
 }
 
-/**
- * Navigation item for site menus
- */
 export interface NavItem {
   content?: ContentNavItem[];
   description?: string;
@@ -61,9 +47,6 @@ export interface NavItem {
   title: string;
 }
 
-/**
- * Navigation item with required href (for content pages)
- */
 export interface ContentNavItem extends NavItem {
   href: string;
 }

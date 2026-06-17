@@ -1,4 +1,4 @@
-import type { ContentNavItem, NavItem } from '@xbrk/types';
+import type { ContentNavItem, NavItem } from '@xbrk/config';
 import type { LucideIcon } from 'lucide-react';
 import {
   BarChart3,

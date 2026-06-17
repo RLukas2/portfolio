@@ -1,11 +1,11 @@
-import type { ServiceType } from '@xbrk/types';
+import type { Service } from '@xbrk/db';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 import { ArrowRight, Layers } from 'lucide-react';
 import Link from '@/components/shared/link';
 import TechStacks from '../shared/tech-stacks';
 
 interface ServiceCardProps {
-  service: ServiceType;
+  service: Service;
 }
 
 const ServiceCard = ({ service }: ServiceCardProps) => {

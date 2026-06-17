@@ -1,5 +1,5 @@
-import type { Social } from '@xbrk/types';
 import { siGithub, siLinkedin, siX } from 'simple-icons';
+import type { Social } from './types';
 
 /**
  * Social media profiles configuration

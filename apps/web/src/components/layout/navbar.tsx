@@ -1,6 +1,7 @@
 import { useLocation } from '@tanstack/react-router';
+import { type NavItem } from '@xbrk/config';
+import { type User } from '@xbrk/db';
 import { useTheme } from '@xbrk/shared/theme-provider';
-import { type NavItem, type UserType } from '@xbrk/types';
 import { cn } from '@xbrk/ui';
 import { useIsMobile } from '@xbrk/ui/hooks/use-mobile';
 import {
@@ -21,7 +22,7 @@ import SearchCommand from './command-menu';
 
 interface MainNavbarProps {
   links: NavItem[];
-  user: UserType;
+  user: User;
 }
 
 const NavBar = ({ links, user }: Readonly<MainNavbarProps>) => {
@@ -74,7 +75,7 @@ const NavBar = ({ links, user }: Readonly<MainNavbarProps>) => {
 
       {/* Desktop actions */}
       <div className="hidden items-center gap-2 lg:flex">
-        {user && <AvatarDropdown user={user as UserType} />}
+        {user && <AvatarDropdown user={user as User} />}
         <div className="flex items-center gap-1 rounded-2xl border border-border/50 bg-muted/30 p-1 backdrop-blur-sm">
           <Suspense fallback={<Spinner className="size-5" />}>
             <SearchCommand />
@@ -88,7 +89,7 @@ const NavBar = ({ links, user }: Readonly<MainNavbarProps>) => {
 
       {/* Mobile actions - just command menu */}
       <div className="flex items-center gap-2 lg:hidden">
-        {user && <AvatarDropdown user={user as UserType} />}
+        {user && <AvatarDropdown user={user as User} />}
         <Suspense fallback={<Spinner className="size-5" />}>
           <SearchCommand />
         </Suspense>

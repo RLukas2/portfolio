@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { UserType } from '@xbrk/types';
+import type { User } from '@xbrk/db';
 import { Avatar, AvatarFallback, AvatarImage } from '@xbrk/ui/avatar';
 import { Button } from '@xbrk/ui/button';
 import { Input } from '@xbrk/ui/input';
@@ -10,7 +10,7 @@ import { queryKeys } from '@/lib/query-keys';
 import { $createGuestbookEntry } from '@/lib/server';
 
 interface MessageFormProps {
-  user: UserType;
+  user: User;
 }
 
 export default function MessageForm({ user }: Readonly<MessageFormProps>) {

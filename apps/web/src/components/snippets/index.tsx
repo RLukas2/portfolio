@@ -1,4 +1,4 @@
-import type { SnippetType } from '@xbrk/types';
+import type { Snippet } from '@xbrk/db';
 import { Badge } from '@xbrk/ui/badge';
 import { formatDate } from '@xbrk/utils';
 import { m } from 'framer-motion';
@@ -8,7 +8,7 @@ import { containerVariants, itemVariants } from '@/lib/constants/framer-motion-v
 import EmptyState from '../shared/empty-state';
 
 interface SnippetsProps {
-  snippets: SnippetType[];
+  snippets: Snippet[];
 }
 
 export default function Snippets({ snippets }: Readonly<SnippetsProps>) {

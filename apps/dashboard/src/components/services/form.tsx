@@ -1,6 +1,6 @@
 import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
+import type { Service } from '@xbrk/db';
 import { STACKS } from '@xbrk/shared/stack';
-import type { ServiceType } from '@xbrk/types';
 import { withForm } from '@xbrk/ui/form';
 import Icon from '@xbrk/ui/icon';
 import { generateSlug } from '@xbrk/utils';
@@ -36,7 +36,7 @@ interface FormField {
 export const ServicesForm = withForm({
   ...serviceFormOpts,
   props: {
-    service: undefined as ServiceType | undefined,
+    service: undefined as Service | undefined,
   },
   render({ form, service }) {
     return (

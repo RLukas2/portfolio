@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
-import type { UserType } from '@xbrk/types';
+import type { User } from '@xbrk/db';
 import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import { navbarLinks } from '@/lib/constants/navbar';
@@ -14,7 +14,7 @@ function LayoutComponent() {
 
   return (
     <>
-      <Header links={navbarLinks} user={user as UserType} />
+      <Header links={navbarLinks} user={user as User} />
       <main
         className="container mx-auto flex-1 py-4 sm:py-6 md:py-10 lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl"
         id="main-content"

@@ -1,7 +1,7 @@
-import { type Bookmark } from '@xbrk/types';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 import { ExternalLink, Globe } from 'lucide-react';
 import Link from '@/components/shared/link';
+import { type Bookmark } from '@/types/misc';
 
 interface BookmarkCardProps {
   bookmark: Bookmark;

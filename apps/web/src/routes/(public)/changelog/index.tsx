@@ -1,12 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
 import { RenderedMarkdown } from '@xbrk/md';
-import type { TOC } from '@xbrk/types';
 import { m } from 'framer-motion';
 import TableOfContents from '@/components/blog/toc';
 import PageHeading from '@/components/shared/page-heading';
 import { seo } from '@/lib/seo';
 import { getBaseUrl } from '@/lib/utils';
+import type { TOC } from '@/types/misc';
 
 export const Route = createFileRoute('/(public)/changelog/')({
   component: RouteComponent,

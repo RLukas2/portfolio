@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import type { Collection } from '@xbrk/types';
 import { m } from 'framer-motion';
 import { ArrowRight, Bookmark, FolderOpen } from 'lucide-react';
 import EmptyState from '@/components/shared/empty-state';
@@ -8,6 +7,7 @@ import PageHeading from '@/components/shared/page-heading';
 import { getCollections } from '@/lib/integrations/raindrop';
 import { seo } from '@/lib/seo';
 import { getBaseUrl } from '@/lib/utils';
+import type { Collection } from '@/types/misc';
 
 export const Route = createFileRoute('/(public)/bookmarks/')({
   loader: async () => {

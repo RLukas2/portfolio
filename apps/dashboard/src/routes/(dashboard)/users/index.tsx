@@ -2,7 +2,7 @@ import { ErrorBoundary } from '@sentry/tanstackstart-react';
 import { createFileRoute } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';
-import type { UserType } from '@xbrk/types';
+import type { User } from '@xbrk/db';
 import { Card } from '@xbrk/ui/card';
 
 import { DataTable } from '@/components/data-table/data-table';
@@ -20,7 +20,7 @@ const getUsers = createServerFn({ method: 'GET' }).handler(async () => {
     headers,
   });
 
-  return { users: data.users as UserType[] };
+  return { users: data.users as User[] };
 });
 
 export const Route = createFileRoute('/(dashboard)/users/')({

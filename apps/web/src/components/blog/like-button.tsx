@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { ArticleType } from '@xbrk/types';
+import type { Article } from '@xbrk/db';
 import { cn } from '@xbrk/ui';
 import { HeartIcon } from 'lucide-react';
 import { toast } from 'sonner';
@@ -7,7 +7,7 @@ import { queryKeys } from '@/lib/query-keys';
 import { $isArticleLiked, $likeArticle } from '@/lib/server';
 
 interface LikeButtonProps {
-  article: ArticleType;
+  article: Article;
 }
 
 const LikeButton = ({ article }: LikeButtonProps) => {

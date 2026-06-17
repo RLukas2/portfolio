@@ -1,10 +1,10 @@
-import type { ArticleType, UserType } from '@xbrk/types';
+import type { Article, User } from '@xbrk/db';
 import Icon from '@xbrk/ui/icon';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 import { siX } from 'simple-icons';
 
 interface ArticleAuthorProps {
-  article: ArticleType & { author: UserType };
+  article: Article & { author: User };
 }
 
 const ArticleAuthor = ({ article }: ArticleAuthorProps) => {

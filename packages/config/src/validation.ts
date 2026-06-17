@@ -1,4 +1,4 @@
-import type { AuthProvider, SiteConfig, Social } from '@xbrk/types';
+import type { AuthProvider, SiteConfig, Social } from './types';
 
 /**
  * Validation utilities for configuration

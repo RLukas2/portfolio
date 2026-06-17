@@ -24,7 +24,6 @@
     "@shikijs/rehype": "^4.0.2",
     "@shikijs/transformers": "^4.0.2",
     "@unpic/react": "^1.0.2",
-    "@xbrk/types": "workspace:*",
     "@xbrk/ui": "workspace:*",
     "@xbrk/utils": "workspace:*",
     "hast-util-to-jsx-runtime": "^2.3.2",
