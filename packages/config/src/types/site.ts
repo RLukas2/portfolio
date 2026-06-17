@@ -1,11 +1,3 @@
-import type { SimpleIcon } from 'simple-icons';
-
-export interface AuthProvider {
-  icon: SimpleIcon;
-  label: string;
-  provider: string;
-}
-
 export interface SiteConfig {
   author: {
     name: string;
@@ -30,13 +22,6 @@ export interface SiteConfig {
   name: string;
   title: string;
   url: string;
-}
-
-export interface Social {
-  icon: SimpleIcon;
-  name: string;
-  url: string;
-  username?: string;
 }
 
 export interface NavItem {

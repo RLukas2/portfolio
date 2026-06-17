@@ -15,9 +15,6 @@
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "simple-icons": "catalog:"
-  },
   "devDependencies": {
     "@xbrk/tsconfig": "workspace:*",
     "typescript": "catalog:"

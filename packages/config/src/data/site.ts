@@ -1,10 +1,6 @@
-import type { SiteConfig } from './types';
+import type { SiteConfig } from '../types/site';
 
-/**
- * Main site configuration
- * Contains metadata, author information, and external links
- */
-export const siteConfig: SiteConfig = {
+export const siteConfig = {
   title: 'Tuan Ngo-Hoang',
   name: 'rickielukas',
   description: 'Full-stack Developer and Software Engineer',
@@ -28,4 +24,4 @@ export const siteConfig: SiteConfig = {
     linkedin: 'https://www.linkedin.com/in/xbrk',
   },
   calendlyUrl: '',
-};
+} as const satisfies SiteConfig;
