@@ -1,14 +1,9 @@
 import { createHash } from 'node:crypto';
 // biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
 import * as Sentry from '@sentry/node';
+import { type CreateArticleSchema, type UpdateArticleSchema } from '@xbrk/db/api-schemas';
 import type { db as DB } from '@xbrk/db/client';
-import {
-  articleLikes,
-  articles,
-  articleViews,
-  type CreateArticleSchema,
-  type UpdateArticleSchema,
-} from '@xbrk/db/schema';
+import { articleLikes, articles, articleViews } from '@xbrk/db/schema';
 import { InternalServerError, NotFoundError } from '@xbrk/errors';
 import { getTOCFromHast, markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
 import { and, desc, eq, sql } from 'drizzle-orm';

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, useRouter } from '@tanstack/react-router';
-import { SnippetBaseSchema } from '@xbrk/db/schema';
+import { SnippetBaseSchema } from '@xbrk/db/api-schemas';
 import { useAppForm } from '@xbrk/ui/form';
 import { NotFound } from '@xbrk/ui/not-found';
 import { toast } from 'sonner';

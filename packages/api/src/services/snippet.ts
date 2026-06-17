@@ -1,7 +1,8 @@
 // biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
 import * as Sentry from '@sentry/node';
+import { CreateSnippetSchema, UpdateSnippetSchema } from '@xbrk/db/api-schemas';
 import type { db as DB } from '@xbrk/db/client';
-import { CreateSnippetSchema, snippet, UpdateSnippetSchema } from '@xbrk/db/schema';
+import { snippet } from '@xbrk/db/schema';
 import { InternalServerError, NotFoundError } from '@xbrk/errors';
 import { markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
 import { desc, eq, sql } from 'drizzle-orm';

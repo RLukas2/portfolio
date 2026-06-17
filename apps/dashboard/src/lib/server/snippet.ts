@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { snippetService } from '@xbrk/api';
-import { CreateSnippetSchema, UpdateSnippetSchema } from '@xbrk/db/schema';
+import { CreateSnippetSchema, UpdateSnippetSchema } from '@xbrk/db/api-schemas';
 import { z } from 'zod/v4';
 import { adminMiddleware, authMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';

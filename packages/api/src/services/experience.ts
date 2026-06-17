@@ -1,7 +1,8 @@
 // biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
 import * as Sentry from '@sentry/node';
+import { CreateExperienceSchema, UpdateExperienceSchema } from '@xbrk/db/api-schemas';
 import type { db as DB } from '@xbrk/db/client';
-import { CreateExperienceSchema, experience, UpdateExperienceSchema } from '@xbrk/db/schema';
+import { experience } from '@xbrk/db/schema';
 import { InternalServerError, NotFoundError } from '@xbrk/errors';
 import { generateSlug } from '@xbrk/utils';
 import { desc, eq, sql } from 'drizzle-orm';
@@ -63,6 +64,10 @@ export function create(db: DbClient, input: z.infer<typeof CreateExperienceSchem
     try {
       const { thumbnail, ...experienceData } = input;
 
+      if (experienceData.isOnGoing && experienceData.endDate) {
+        console.warn('[experience.create] Ongoing experience received an endDate despite schema validation');
+      }
+
       // Create URL-safe slug from title
       const slug = generateSlug(experienceData.title);
 
@@ -94,6 +99,10 @@ export function update(db: DbClient, input: z.infer<typeof UpdateExperienceSchem
   return db.transaction(async (tx) => {
     try {
       const { thumbnail, id, ...experienceData } = input;
+
+      if (experienceData.isOnGoing && experienceData.endDate) {
+        console.warn('[experience.update] Ongoing experience received an endDate despite schema validation');
+      }
 
       // Create URL-safe slug from title if title is being updated
       const slug = experienceData.title ? generateSlug(experienceData.title) : undefined;
