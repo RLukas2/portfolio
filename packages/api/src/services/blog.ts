@@ -9,6 +9,7 @@ import {
   type CreateArticleSchema,
   type UpdateArticleSchema,
 } from '@xbrk/db/schema';
+import { InternalServerError, NotFoundError } from '@xbrk/errors';
 import { getTOCFromHast, markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
 import { and, desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
@@ -112,14 +113,14 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
       .limit(1);
 
     if (!result[0]) {
-      throw new Error('Article not found');
+      throw new NotFoundError('Article not found');
     }
 
     const { article, viewCount, likesCount } = result[0];
 
     // Check draft access
     if (article.isDraft && session?.user.role !== 'admin') {
-      throw new Error('Article is not public');
+      throw new NotFoundError('Article is not public');
     }
 
     // Fetch related data
@@ -172,15 +173,12 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
       author: articleWithRelations?.author,
     };
   } catch (error) {
-    if (
-      error instanceof Error &&
-      (error.message === 'Article not found' || error.message === 'Article is not public')
-    ) {
+    if (error instanceof NotFoundError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[blog.getBySlug] Database error:', error);
-    throw new Error('Failed to fetch article');
+    throw new InternalServerError('Failed to fetch article');
   }
 }
 
@@ -305,12 +303,12 @@ export async function like(
     const article = await query.execute({ slug: input.slug });
 
     if (!article) {
-      throw new Error('Article not found');
+      throw new NotFoundError('Article not found');
     }
 
     // if article is draft, throw an error unless user is admin
     if (article.isDraft && session?.user.role !== 'admin') {
-      throw new Error('Article is not public');
+      throw new NotFoundError('Article is not public');
     }
 
     // Extract IP address from headers
@@ -336,15 +334,12 @@ export async function like(
       });
     });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      (error.message === 'Article not found' || error.message === 'Article is not public')
-    ) {
+    if (error instanceof NotFoundError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[blog.like] Database error:', error);
-    throw new Error('Failed to toggle like');
+    throw new InternalServerError('Failed to toggle like');
   }
 }
 
@@ -394,12 +389,12 @@ export async function view(db: DbClient, input: { slug: string }): Promise<void>
     const article = await query.execute({ slug: input.slug });
 
     if (!article) {
-      throw new Error('Article not found');
+      throw new NotFoundError('Article not found');
     }
 
     // if article is draft, throw an error
     if (article.isDraft) {
-      throw new Error('Article is not public');
+      throw new NotFoundError('Article is not public');
     }
 
     // Insert view record with timestamp
@@ -407,14 +402,11 @@ export async function view(db: DbClient, input: { slug: string }): Promise<void>
       articleId: article.id,
     });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      (error.message === 'Article not found' || error.message === 'Article is not public')
-    ) {
+    if (error instanceof NotFoundError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[blog.view] Database error:', error);
-    throw new Error('Failed to record view');
+    throw new InternalServerError('Failed to record view');
   }
 }

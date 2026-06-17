@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateServiceSchema, service, UpdateServiceSchema } from '@xbrk/db/schema';
+import { InternalServerError, NotFoundError } from '@xbrk/errors';
 import { markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
 import { desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
@@ -51,25 +52,22 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
     const serviceResult = await query.execute({ slug: input.slug });
 
     if (!serviceResult) {
-      throw new Error('Service not found');
+      throw new NotFoundError('Service not found');
     }
 
     // if service is draft, throw an error unless user is admin
     if (serviceResult.isDraft && session?.user.role !== 'admin') {
-      throw new Error('Service is not public');
+      throw new NotFoundError('Service is not public');
     }
 
     return serviceResult;
   } catch (error) {
-    if (
-      error instanceof Error &&
-      (error.message === 'Service not found' || error.message === 'Service is not public')
-    ) {
+    if (error instanceof NotFoundError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[service.getBySlug] Database error:', error);
-    throw new Error('Failed to fetch service');
+    throw new InternalServerError('Failed to fetch service');
   }
 }
 
@@ -112,7 +110,7 @@ export async function create(db: DbClient, input: z.infer<typeof CreateServiceSc
   } catch (error) {
     Sentry.captureException(error);
     console.error('[service.create] Database error:', error);
-    throw new Error('Failed to create service');
+    throw new InternalServerError('Failed to create service');
   }
 }
 
@@ -154,7 +152,7 @@ export function update(db: DbClient, input: z.infer<typeof UpdateServiceSchema>)
     } catch (error) {
       Sentry.captureException(error);
       console.error('[service.update] Database error:', error);
-      throw new Error('Failed to update service');
+      throw new InternalServerError('Failed to update service');
     }
   });
 }
@@ -168,7 +166,7 @@ export function remove(db: DbClient, id: string) {
       });
 
       if (!serviceToDelete) {
-        throw new Error('Service not found');
+        throw new NotFoundError('Service not found');
       }
 
       await tx.delete(service).where(eq(service.id, id));
@@ -182,12 +180,12 @@ export function remove(db: DbClient, id: string) {
         }
       }
     } catch (error) {
-      if (error instanceof Error && error.message === 'Service not found') {
+      if (error instanceof NotFoundError) {
         throw error;
       }
       Sentry.captureException(error);
       console.error('[service.remove] Database error:', error);
-      throw new Error('Failed to delete service');
+      throw new InternalServerError('Failed to delete service');
     }
   });
 }

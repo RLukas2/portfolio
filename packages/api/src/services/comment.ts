@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { commentReactions, comments, user } from '@xbrk/db/schema';
+import { ForbiddenError, InternalServerError, NotFoundError } from '@xbrk/errors';
 import { and, asc, desc, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod/v4';
 
@@ -46,7 +47,7 @@ export async function create(
   } catch (error) {
     Sentry.captureException(error);
     console.error('[comment.create] Database error:', error);
-    throw new Error('Failed to create comment');
+    throw new InternalServerError('Failed to create comment');
   }
 }
 
@@ -121,11 +122,11 @@ export async function remove(db: DbClient, input: { id: string }, userId: string
       });
 
       if (!comment) {
-        throw new Error('Comment not found');
+        throw new NotFoundError('Comment not found');
       }
 
       if (comment.userId !== userId && userRole !== 'admin') {
-        throw new Error('You are not allowed to delete this comment');
+        throw new ForbiddenError('You are not allowed to delete this comment');
       }
 
       // Delete child comments first (replies) to avoid foreign key constraint violation
@@ -135,15 +136,12 @@ export async function remove(db: DbClient, input: { id: string }, userId: string
       await tx.delete(comments).where(eq(comments.id, input.id));
     });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      (error.message === 'Comment not found' || error.message === 'You are not allowed to delete this comment')
-    ) {
+    if (error instanceof NotFoundError || error instanceof ForbiddenError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[comment.remove] Database error:', error);
-    throw new Error('Failed to delete comment');
+    throw new InternalServerError('Failed to delete comment');
   }
 }
 
@@ -162,7 +160,7 @@ export async function react(db: DbClient, input: { id: string; like: boolean }, 
       });
 
       if (!comment) {
-        throw new Error('Comment not found');
+        throw new NotFoundError('Comment not found');
       }
 
       // if (comment.userId === userId) {
@@ -184,14 +182,11 @@ export async function react(db: DbClient, input: { id: string; like: boolean }, 
       }
     });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      (error.message === 'Comment not found' || error.message === 'You are not allowed to react to your own comment')
-    ) {
+    if (error instanceof NotFoundError || error instanceof ForbiddenError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[comment.react] Database error:', error);
-    throw new Error('Failed to react to comment');
+    throw new InternalServerError('Failed to react to comment');
   }
 }

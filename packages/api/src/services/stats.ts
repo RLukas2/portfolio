@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { articles, articleViews, project, snippet, user } from '@xbrk/db/schema';
+import { ValidationError } from '@xbrk/errors';
 import { count, desc, sql } from 'drizzle-orm';
 
 type DbClient = typeof DB;
@@ -25,7 +26,7 @@ function validateMonths(months?: number): number {
   }
 
   if (months < MIN_MONTHS || months > MAX_MONTHS) {
-    throw new Error(`Months must be between ${MIN_MONTHS} and ${MAX_MONTHS}`);
+    throw new ValidationError(`Months must be between ${MIN_MONTHS} and ${MAX_MONTHS}`);
   }
 
   return months;
@@ -218,7 +219,7 @@ export async function monthlyBlogViews(db: DbClient, input?: { months?: number }
 
     return processMonthlyData(result, start, months);
   } catch (error) {
-    if (error instanceof Error && error.message.includes('Months must be')) {
+    if (error instanceof ValidationError) {
       throw error;
     }
     Sentry.captureException(error);

@@ -146,7 +146,7 @@ export const Route = createFileRoute('/api/ai/blog-assist/')({
           const validation = requestSchema.safeParse(payload);
           if (!validation.success) {
             return handleApiError(
-              new ValidationError('Invalid request', { details: validation.error.format() }),
+              new ValidationError('Invalid request', { metadata: { details: validation.error.format() } }),
               request,
             );
           }

@@ -62,7 +62,7 @@ export const Route = createFileRoute('/api/chat/')({
             console.warn(`[Chat API] Validation failed for IP ${clientIp}:`, validation.error);
             return handleApiError(
               new ValidationError(validation.error || 'Invalid chat request', {
-                details: validation.details,
+                metadata: { details: validation.details },
               }),
               request,
             );

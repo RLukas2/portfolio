@@ -1,15 +1,7 @@
-import { AppError } from '@xbrk/errors';
+import { isHttpError } from '@xbrk/errors';
 import { AlertTriangle } from 'lucide-react';
 import { Button } from './button';
 import { Separator } from './separator';
-
-// Type guard to check if error is AppError
-function isAppError(error: unknown): error is AppError {
-  return (
-    error instanceof AppError ||
-    (error !== null && typeof error === 'object' && 'code' in error && 'statusCode' in error && 'message' in error)
-  );
-}
 
 interface DefaultCatchBoundaryProps {
   debug?: boolean;
@@ -18,10 +10,9 @@ interface DefaultCatchBoundaryProps {
 }
 
 export function DefaultCatchBoundary({ error, reset, debug = false }: DefaultCatchBoundaryProps) {
-  // Check if it's a known error type using type guard
-  const errorCode = isAppError(error) ? error.code : 'UNKNOWN_ERROR';
-  const statusCode = isAppError(error) ? error.statusCode : 500;
-  const metadata = isAppError(error) ? error.metadata : undefined;
+  const errorCode = isHttpError(error) ? error.code : 'UNKNOWN_ERROR';
+  const statusCode = isHttpError(error) ? error.statusCode : 500;
+  const metadata = isHttpError(error) ? error.metadata : undefined;
 
   const handleRetry = () => {
     if (reset) {

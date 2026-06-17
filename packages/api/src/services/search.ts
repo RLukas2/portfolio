@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { articles, project, snippet } from '@xbrk/db/schema';
+import { ValidationError } from '@xbrk/errors';
 import { and, eq, ilike, or } from 'drizzle-orm';
 import { escapeSearchTerm, validateSearchQuery } from '../lib/validation';
 
@@ -31,7 +32,7 @@ export async function query(db: DbClient, input: { query: string }): Promise<Sea
     // Validate search query
     const validation = validateSearchQuery(input.query);
     if (!validation.valid) {
-      throw new Error(validation.error);
+      throw new ValidationError(validation.error ?? 'Invalid search query');
     }
 
     const searchTerm = `%${escapeSearchTerm(input.query)}%`;
@@ -84,7 +85,7 @@ export async function query(db: DbClient, input: { query: string }): Promise<Sea
       snippets: snippetsResult,
     };
   } catch (error) {
-    if (error instanceof Error && error.message.includes('Search query')) {
+    if (error instanceof ValidationError) {
       throw error;
     }
     Sentry.captureException(error);
