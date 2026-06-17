@@ -17,13 +17,12 @@ export class HttpError extends Error {
     this.statusCode = statusCode;
     this.metadata = options?.metadata;
 
-    // biome-ignore lint/complexity/noBannedTypes: Error.captureStackTrace requires Function type
     if (typeof (Error as unknown as { captureStackTrace?: unknown }).captureStackTrace === 'function') {
-      // biome-ignore lint/complexity/noBannedTypes: Error.captureStackTrace requires Function type
-      (Error as unknown as { captureStackTrace: (target: object, constructorOpt: Function) => void }).captureStackTrace(
-        this,
-        this.constructor,
-      );
+      (
+        Error as unknown as {
+          captureStackTrace: (target: object, constructorOpt: new (...args: unknown[]) => unknown) => void;
+        }
+      ).captureStackTrace(this, this.constructor as new (...args: unknown[]) => unknown);
     }
   }
 
