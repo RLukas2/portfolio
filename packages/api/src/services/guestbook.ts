@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { guestbook } from '@xbrk/db/schema';
+import { ForbiddenError, InternalServerError, NotFoundError } from '@xbrk/errors';
 import { desc, eq } from 'drizzle-orm';
 
 type DbClient = typeof DB;
@@ -16,7 +17,7 @@ export async function create(db: DbClient, input: { message: string }, userId: s
   } catch (error) {
     Sentry.captureException(error);
     console.error('[guestbook.create] Database error:', error);
-    throw new Error('Failed to create guestbook entry');
+    throw new InternalServerError('Failed to create guestbook entry');
   }
 }
 
@@ -55,25 +56,21 @@ export async function remove(db: DbClient, input: { id: string }, userId: string
       });
 
       if (!entry) {
-        throw new Error('Guestbook entry not found');
+        throw new NotFoundError('Guestbook entry not found');
       }
 
       if (entry.userId !== userId && userRole !== 'admin') {
-        throw new Error('You are not allowed to delete this guestbook entry');
+        throw new ForbiddenError('You are not allowed to delete this guestbook entry');
       }
 
       await tx.delete(guestbook).where(eq(guestbook.id, input.id));
     });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      (error.message === 'Guestbook entry not found' ||
-        error.message === 'You are not allowed to delete this guestbook entry')
-    ) {
+    if (error instanceof NotFoundError || error instanceof ForbiddenError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[guestbook.remove] Database error:', error);
-    throw new Error('Failed to delete guestbook entry');
+    throw new InternalServerError('Failed to delete guestbook entry');
   }
 }

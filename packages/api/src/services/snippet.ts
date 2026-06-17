@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateSnippetSchema, snippet, UpdateSnippetSchema } from '@xbrk/db/schema';
+import { InternalServerError, NotFoundError } from '@xbrk/errors';
 import { markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
 import { desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
@@ -66,24 +67,21 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
     const result = await query.execute({ slug: input.slug });
 
     if (!result) {
-      throw new Error('Snippet not found');
+      throw new NotFoundError('Snippet not found');
     }
 
     if (result.isDraft && session?.user.role !== 'admin') {
-      throw new Error('Snippet is not public');
+      throw new NotFoundError('Snippet is not public');
     }
 
     return result;
   } catch (error) {
-    if (
-      error instanceof Error &&
-      (error.message === 'Snippet not found' || error.message === 'Snippet is not public')
-    ) {
+    if (error instanceof NotFoundError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[snippet.getBySlug] Database error:', error);
-    throw new Error('Failed to fetch snippet');
+    throw new InternalServerError('Failed to fetch snippet');
   }
 }
 
@@ -99,7 +97,7 @@ export async function create(db: DbClient, input: z.infer<typeof CreateSnippetSc
   } catch (error) {
     Sentry.captureException(error);
     console.error('[snippet.create] Database error:', error);
-    throw new Error('Failed to create snippet');
+    throw new InternalServerError('Failed to create snippet');
   }
 }
 
@@ -117,7 +115,7 @@ export async function update(db: DbClient, input: z.infer<typeof UpdateSnippetSc
   } catch (error) {
     Sentry.captureException(error);
     console.error('[snippet.update] Database error:', error);
-    throw new Error('Failed to update snippet');
+    throw new InternalServerError('Failed to update snippet');
   }
 }
 
@@ -127,6 +125,6 @@ export async function remove(db: DbClient, id: string) {
   } catch (error) {
     Sentry.captureException(error);
     console.error('[snippet.remove] Database error:', error);
-    throw new Error('Failed to delete snippet');
+    throw new InternalServerError('Failed to delete snippet');
   }
 }

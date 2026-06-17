@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateExperienceSchema, experience, UpdateExperienceSchema } from '@xbrk/db/schema';
+import { InternalServerError, NotFoundError } from '@xbrk/errors';
 import { desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
 import { handleImageUpdate, handleImageUpload } from '../lib/base-service';
@@ -80,7 +81,7 @@ export function create(db: DbClient, input: z.infer<typeof CreateExperienceSchem
     } catch (error) {
       Sentry.captureException(error);
       console.error('[experience.create] Error:', error);
-      throw new Error('Failed to create experience');
+      throw new InternalServerError('Failed to create experience');
     }
   })();
 }
@@ -125,7 +126,7 @@ export function update(db: DbClient, input: z.infer<typeof UpdateExperienceSchem
     } catch (error) {
       Sentry.captureException(error);
       console.error('[experience.update] Error:', error);
-      throw new Error('Failed to update experience');
+      throw new InternalServerError('Failed to update experience');
     }
   });
 }
@@ -139,7 +140,7 @@ export function remove(db: DbClient, id: string) {
       });
 
       if (!experienceToDelete) {
-        throw new Error('Experience not found');
+        throw new NotFoundError('Experience not found');
       }
 
       await tx.delete(experience).where(eq(experience.id, id));
@@ -153,12 +154,12 @@ export function remove(db: DbClient, id: string) {
         }
       }
     } catch (error) {
-      if (error instanceof Error && error.message === 'Experience not found') {
+      if (error instanceof NotFoundError) {
         throw error;
       }
       Sentry.captureException(error);
       console.error('[experience.remove] Error:', error);
-      throw new Error('Failed to delete experience');
+      throw new InternalServerError('Failed to delete experience');
     }
   });
 }

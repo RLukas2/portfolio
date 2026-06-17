@@ -1,6 +1,7 @@
 // biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
 import * as Sentry from '@sentry/node';
 import { del, put } from '@vercel/blob';
+import { InternalServerError, ValidationError } from '@xbrk/errors';
 import { createSlug, isValidBase64 } from './lib/validation';
 
 export const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -17,16 +18,16 @@ const allowedDomains = ['vercel-blob.com', 'blob.vercel-storage.com'];
 export async function uploadImage(folder: string, image: string, slug: string): Promise<string> {
   try {
     if (!image?.trim()) {
-      throw new Error('Invalid image: empty string provided');
+      throw new ValidationError('Invalid image: empty string provided');
     }
 
     if (!isValidBase64(image)) {
-      throw new Error('Invalid base64 format');
+      throw new ValidationError('Invalid base64 format');
     }
 
     const imageSize = Buffer.byteLength(image, 'base64');
     if (imageSize > MAX_IMAGE_SIZE) {
-      throw new Error(
+      throw new ValidationError(
         `Image exceeds maximum allowed size of ${MAX_IMAGE_SIZE / 1024 / 1024}MB (got ${(imageSize / 1024 / 1024).toFixed(2)}MB)`,
       );
     }
@@ -44,7 +45,7 @@ export async function uploadImage(folder: string, image: string, slug: string): 
     return url;
   } catch (_error) {
     Sentry.captureException(_error);
-    throw new Error('Failed to upload image', { cause: _error as Error });
+    throw new InternalServerError('Failed to upload image', { cause: _error as Error });
   }
 }
 
@@ -56,17 +57,17 @@ export async function uploadImage(folder: string, image: string, slug: string): 
 export async function deleteFile(url: string): Promise<void> {
   try {
     if (!url?.trim()) {
-      throw new Error('Invalid URL: empty string provided');
+      throw new ValidationError('Invalid URL: empty string provided');
     }
 
     const urlObj = new URL(url);
     if (!allowedDomains.some((domain) => urlObj.hostname.includes(domain))) {
-      throw new Error('URL does not belong to an allowed storage domain');
+      throw new ValidationError('URL does not belong to an allowed storage domain');
     }
 
     await del(url);
   } catch (_error) {
     Sentry.captureException(_error);
-    throw new Error('Failed to delete file', { cause: _error as Error });
+    throw new InternalServerError('Failed to delete file', { cause: _error as Error });
   }
 }

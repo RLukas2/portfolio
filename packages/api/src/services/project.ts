@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node';
 import type { db as DB } from '@xbrk/db/client';
 import { CreateProjectSchema, project, UpdateProjectSchema } from '@xbrk/db/schema';
+import { InternalServerError, NotFoundError } from '@xbrk/errors';
 import { getTOCFromHast, markdownToHastJson, RENDERING_VERSION } from '@xbrk/md/processor';
 import { desc, eq, sql } from 'drizzle-orm';
 import type { z } from 'zod/v4';
@@ -52,26 +53,23 @@ export async function getBySlug(db: DbClient, input: { slug: string }, session?:
     const result = await query.execute({ slug: input.slug });
 
     if (!result) {
-      throw new Error('Project not found');
+      throw new NotFoundError('Project not found');
     }
 
     if (result.isDraft && session?.user.role !== 'admin') {
-      throw new Error('Project is not public');
+      throw new NotFoundError('Project is not public');
     }
 
     const toc = getTOCFromHast(result.contentRendering);
 
     return { ...result, toc };
   } catch (error) {
-    if (
-      error instanceof Error &&
-      (error.message === 'Project not found' || error.message === 'Project is not public')
-    ) {
+    if (error instanceof NotFoundError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[project.getBySlug] Database error:', error);
-    throw new Error('Failed to fetch project');
+    throw new InternalServerError('Failed to fetch project');
   }
 }
 
@@ -89,17 +87,17 @@ export async function getById(db: DbClient, input: { id: string }) {
     const result = await query.execute({ id: input.id });
 
     if (!result) {
-      throw new Error('Project not found');
+      throw new NotFoundError('Project not found');
     }
 
     return result;
   } catch (error) {
-    if (error instanceof Error && error.message === 'Project not found') {
+    if (error instanceof NotFoundError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[project.getById] Database error:', error);
-    throw new Error('Failed to fetch project');
+    throw new InternalServerError('Failed to fetch project');
   }
 }
 
@@ -126,7 +124,7 @@ export async function create(db: DbClient, input: z.infer<typeof CreateProjectSc
   } catch (error) {
     Sentry.captureException(error);
     console.error('[project.create] Database error:', error);
-    throw new Error('Failed to create project');
+    throw new InternalServerError('Failed to create project');
   }
 }
 
@@ -169,7 +167,7 @@ export async function update(db: DbClient, input: z.infer<typeof UpdateProjectSc
   } catch (error) {
     Sentry.captureException(error);
     console.error('[project.update] Database error:', error);
-    throw new Error('Failed to update project');
+    throw new InternalServerError('Failed to update project');
   }
 }
 
@@ -185,7 +183,7 @@ export async function remove(db: DbClient, id: string) {
       });
 
       if (!projectToDelete) {
-        throw new Error('Project not found');
+        throw new NotFoundError('Project not found');
       }
 
       await tx.delete(project).where(eq(project.id, id));
@@ -200,11 +198,11 @@ export async function remove(db: DbClient, id: string) {
       }
     });
   } catch (error) {
-    if (error instanceof Error && error.message === 'Project not found') {
+    if (error instanceof NotFoundError) {
       throw error;
     }
     Sentry.captureException(error);
     console.error('[project.remove] Database error:', error);
-    throw new Error('Failed to delete project');
+    throw new InternalServerError('Failed to delete project');
   }
 }

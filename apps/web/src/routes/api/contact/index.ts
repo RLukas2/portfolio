@@ -66,7 +66,7 @@ export const Route = createFileRoute('/api/contact/')({
           if (!validationResult.success) {
             return handleApiError(
               new ValidationError('Invalid input', {
-                details: validationResult.error.flatten(),
+                metadata: { details: validationResult.error.flatten() },
               }),
               request,
             );

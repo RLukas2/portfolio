@@ -1,6 +1,6 @@
 // biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
 import * as Sentry from '@sentry/node';
-import { AppError, InternalServerError } from '@xbrk/errors';
+import { HttpError, InternalServerError } from '@xbrk/errors';
 import type { ApiErrorResponse } from '../types/error-response';
 
 // Only non-PII headers safe to forward to Sentry
@@ -19,10 +19,10 @@ const isDev = process.env.NODE_ENV === 'development';
 const GENERIC_5XX_MESSAGE = 'An unexpected error occurred';
 
 /**
- * Convert any error to AppError, preserving the original for Sentry.
+ * Convert any error to HttpError, preserving the original for Sentry.
  */
-function toAppError(error: unknown): { appError: AppError; originalError: unknown } {
-  if (error instanceof AppError) {
+function toAppError(error: unknown): { appError: HttpError; originalError: unknown } {
+  if (error instanceof HttpError) {
     return { appError: error, originalError: error };
   }
 
