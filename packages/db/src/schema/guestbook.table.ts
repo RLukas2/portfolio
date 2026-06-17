@@ -1,14 +1,6 @@
 import { relations } from 'drizzle-orm';
 import { index, pgTable } from 'drizzle-orm/pg-core';
-import { user } from './auth.schema';
-
-/**
- * Relationship map:
- *
- * user ──< guestbook
- *
- * guestbook → user: many-to-one (guestbook.userId → user.id)
- */
+import { user } from './auth.table';
 
 export const guestbook = pgTable(
   'guestbook',
@@ -20,7 +12,11 @@ export const guestbook = pgTable(
       .notNull(),
     message: t.text().notNull(),
     createdAt: t.timestamp().defaultNow().notNull(),
-    updatedAt: t.timestamp().defaultNow().notNull(),
+    updatedAt: t
+      .timestamp({ mode: 'date', withTimezone: true })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
   }),
   (t) => [index('guestbook_user_id_idx').on(t.userId), index('guestbook_created_at_idx').on(t.createdAt)],
 );
