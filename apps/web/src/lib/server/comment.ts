@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start';
-import { commentService } from '@xbrk/api';
+import { commentsService } from '@xbrk/api';
 import { z } from 'zod/v4';
 import { authMiddleware, optionalAuthMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
@@ -18,12 +18,12 @@ export const $createComment = createServerFn({ method: 'POST' })
   .inputValidator(
     z.object({
       articleId: z.uuid(),
-      content: commentService.JSONContentSchema,
+      content: commentsService.JSONContentSchema,
       parentId: z.string().optional(),
     }),
   )
   .handler((ctx) => {
-    return commentService.create(ctx.context.db, ctx.data, ctx.context.user.id);
+    return commentsService.create(ctx.context.db, ctx.data, ctx.context.user.id);
   });
 
 /**
@@ -46,7 +46,7 @@ export const $getAllComments = createServerFn({ method: 'GET' })
   .handler(
     // biome-ignore lint/suspicious/noExplicitAny: Drizzle relation types trigger serialization false positive
     (ctx): Promise<any> => {
-      return commentService.getAll(ctx.context.db, ctx.data, ctx.context.user?.id);
+      return commentsService.getAll(ctx.context.db, ctx.data, ctx.context.user?.id);
     },
   );
 
@@ -61,7 +61,7 @@ export const $deleteComment = createServerFn({ method: 'POST' })
   .middleware([dbMiddleware, authMiddleware])
   .inputValidator(z.object({ id: z.string() }))
   .handler((ctx) => {
-    return commentService.remove(ctx.context.db, ctx.data, ctx.context.user.id, ctx.context.user.role ?? '');
+    return commentsService.remove(ctx.context.db, ctx.data, ctx.context.user.id, ctx.context.user.role ?? '');
   });
 
 /**
@@ -76,5 +76,5 @@ export const $reactToComment = createServerFn({ method: 'POST' })
   .middleware([dbMiddleware, authMiddleware])
   .inputValidator(z.object({ id: z.string(), like: z.boolean() }))
   .handler((ctx) => {
-    return commentService.react(ctx.context.db, ctx.data, ctx.context.user.id);
+    return commentsService.react(ctx.context.db, ctx.data, ctx.context.user.id);
   });

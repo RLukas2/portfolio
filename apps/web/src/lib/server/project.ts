@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start';
-import { projectService } from '@xbrk/api';
+import { projectsService } from '@xbrk/api';
 import { z } from 'zod/v4';
 import { optionalAuthMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
@@ -12,7 +12,7 @@ import { dbMiddleware } from '@/lib/middleware/db';
 export const $getAllPublicProjects = createServerFn({ method: 'GET' })
   .middleware([dbMiddleware])
   .handler(({ context }) => {
-    return projectService.getAllPublic(context.db);
+    return projectsService.getAllPublic(context.db);
   });
 
 /**
@@ -26,5 +26,5 @@ export const $getProjectBySlug = createServerFn({ method: 'GET' })
   .inputValidator(z.object({ slug: z.string() }))
   .handler((ctx) => {
     const session = ctx.context.user ? { user: { role: ctx.context.user.role ?? '' } } : null;
-    return projectService.getBySlug(ctx.context.db, ctx.data, session);
+    return projectsService.getBySlug(ctx.context.db, ctx.data, session);
   });

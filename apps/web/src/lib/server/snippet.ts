@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start';
-import { snippetService } from '@xbrk/api';
+import { snippetsService } from '@xbrk/api';
 import { z } from 'zod/v4';
 import { optionalAuthMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
@@ -12,7 +12,7 @@ import { dbMiddleware } from '@/lib/middleware/db';
 export const $getAllPublicSnippets = createServerFn({ method: 'GET' })
   .middleware([dbMiddleware])
   .handler(({ context }) => {
-    return snippetService.getAllPublic(context.db);
+    return snippetsService.getAllPublic(context.db);
   });
 
 /**
@@ -26,5 +26,5 @@ export const $getSnippetBySlug = createServerFn({ method: 'GET' })
   .inputValidator(z.object({ slug: z.string() }))
   .handler((ctx) => {
     const session = ctx.context.user ? { user: { role: ctx.context.user.role ?? '' } } : null;
-    return snippetService.getBySlug(ctx.context.db, ctx.data, session);
+    return snippetsService.getBySlug(ctx.context.db, ctx.data, session);
   });
