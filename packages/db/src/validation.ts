@@ -1,13 +1,7 @@
 import { z } from 'zod/v4';
 
-/**
- * Shared validation utilities for database schemas
- */
-
-// Common regex patterns
 export const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-// Common field validators
 export const validators = {
   title: z.string().min(1, 'Title is required').max(255, 'Title cannot exceed 255 characters'),
   slug: z
