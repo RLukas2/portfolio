@@ -1,12 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { GuestbookType, UserType } from '@xbrk/types';
+import type { Guestbook, User } from '@xbrk/db';
 import { Avatar, AvatarFallback, AvatarImage } from '@xbrk/ui/avatar';
 import Timestamp from '@/components/shared/timestamp';
 import { authQueryOptions } from '@/lib/auth/queries';
 import DeleteMessageButton from './delete-message-button';
 
 interface MessageProps {
-  message: GuestbookType & { user: Pick<UserType, 'id' | 'name' | 'image'> };
+  message: Guestbook & { user: Pick<User, 'id' | 'name' | 'image'> };
 }
 
 export default function Message({ message }: Readonly<MessageProps>) {

@@ -1,12 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { ExperienceType } from '@xbrk/types';
+import type { Experience } from '@xbrk/db';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 import { formatDate } from '@xbrk/utils';
 import { queryKeys } from '@/lib/query-keys';
 import { $getAllPublicExperiences } from '@/lib/server';
 
 interface ExperienceItemProps {
-  experience: ExperienceType;
+  experience: Experience;
 }
 
 function ExperienceImage({ title, imageUrl, url }: { title: string; imageUrl: string; url: string | null }) {

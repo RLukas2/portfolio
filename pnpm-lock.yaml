@@ -206,9 +206,6 @@ importers:
       '@xbrk/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@xbrk/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       '@xbrk/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -438,9 +435,6 @@ importers:
       '@xbrk/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@xbrk/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       '@xbrk/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -678,9 +672,6 @@ importers:
 
   packages/config:
     dependencies:
-      '@xbrk/types':
-        specifier: workspace:*
-        version: link:../types
       simple-icons:
         specifier: 'catalog:'
         version: 13.21.0
@@ -752,9 +743,6 @@ importers:
       '@unpic/react':
         specifier: ^1.0.2
         version: 1.0.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@xbrk/types':
-        specifier: workspace:*
-        version: link:../types
       '@xbrk/ui':
         specifier: workspace:*
         version: link:../ui
@@ -859,22 +847,6 @@ importers:
       react:
         specifier: 'catalog:'
         version: 19.2.4
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/types:
-    dependencies:
-      '@xbrk/db':
-        specifier: workspace:*
-        version: link:../db
-      simple-icons:
-        specifier: 'catalog:'
-        version: 13.21.0
-    devDependencies:
-      '@xbrk/tsconfig':
-        specifier: workspace:*
-        version: link:../../tooling/typescript
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -1010,10 +982,6 @@ importers:
         version: 4.3.6
 
   packages/utils:
-    dependencies:
-      '@xbrk/types':
-        specifier: workspace:*
-        version: link:../types
     devDependencies:
       '@xbrk/tsconfig':
         specifier: workspace:*

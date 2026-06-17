@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import type { CommentType } from '@xbrk/types';
+import type { Comment } from '@xbrk/db';
 import { Button } from '@xbrk/ui/button';
 import {
   Dialog,
@@ -19,7 +19,7 @@ import { queryKeys } from '@/lib/query-keys';
 import { $deleteComment } from '@/lib/server';
 
 interface CommentMenuProps {
-  comment: CommentType;
+  comment: Comment;
 }
 
 export default function CommentMenu({ comment }: Readonly<CommentMenuProps>) {

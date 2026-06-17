@@ -1,4 +1,4 @@
-import type { NavItem } from '@xbrk/types';
+import type { NavItem } from '@xbrk/config';
 import { cn } from '@xbrk/ui';
 import { ChevronRight } from 'lucide-react';
 import { forwardRef, type ReactNode } from 'react';

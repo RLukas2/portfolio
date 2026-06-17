@@ -1,11 +1,11 @@
+import type { Service } from '@xbrk/db';
 import { RenderedMarkdown } from '@xbrk/md';
-import type { ServiceType } from '@xbrk/types';
 import ZoomImage from '@xbrk/ui/zoom-image';
 import TechStacks from '../shared/tech-stacks';
 import ServiceContact from './service-contact';
 
 interface ServiceContentProps {
-  service: ServiceType;
+  service: Service;
 }
 
 export default function ServiceContent({ service }: Readonly<ServiceContentProps>) {

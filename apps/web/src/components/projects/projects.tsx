@@ -1,11 +1,11 @@
-import type { ProjectType } from '@xbrk/types';
+import type { Project } from '@xbrk/db';
 import { m } from 'framer-motion';
 import { slideInWithFadeOut } from '@/lib/constants/framer-motion-variants';
 import EmptyState from '../shared/empty-state';
 import ProjectCard from './project-card';
 
 interface ProjectsProps {
-  projects: ProjectType[];
+  projects: Project[];
 }
 
 export default function Projects({ projects }: Readonly<ProjectsProps>) {

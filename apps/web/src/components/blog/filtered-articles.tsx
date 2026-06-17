@@ -1,4 +1,4 @@
-import type { ArticleType } from '@xbrk/types';
+import type { Article } from '@xbrk/db';
 import { cn } from '@xbrk/ui';
 import { Input } from '@xbrk/ui/input';
 import { Label } from '@xbrk/ui/label';
@@ -10,7 +10,7 @@ import EmptyState from '../shared/empty-state';
 import ArticleCard from './article-card';
 
 interface FilteredArticlesProps {
-  articles: (ArticleType & { viewCount: number; likesCount: number })[];
+  articles: (Article & { viewCount: number; likesCount: number })[];
 }
 
 export default function FilteredArticles({ articles }: Readonly<FilteredArticlesProps>) {

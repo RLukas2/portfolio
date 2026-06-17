@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, redirect, useRouterState } from '@tanstack/react-router';
-import type { UserType } from '@xbrk/types';
+import type { User } from '@xbrk/db';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -107,7 +107,7 @@ function LayoutComponent() {
 
   return (
     <SidebarProvider>
-      <DashboardSidebar user={user as UserType} />
+      <DashboardSidebar user={user as User} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />

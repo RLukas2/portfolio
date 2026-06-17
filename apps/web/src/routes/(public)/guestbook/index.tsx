@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import type { UserType } from '@xbrk/types';
+import type { User } from '@xbrk/db';
 import { Skeleton } from '@xbrk/ui/skeleton';
 import SignInButton from '@/components/auth/sign-in-button';
 import SignInModal from '@/components/auth/sign-in-modal';
@@ -78,7 +78,7 @@ function RouteComponent() {
     <>
       <PageHeading description={'A place for you to leave your comments and feedback.'} title={'Guestbook'} />
 
-      {user ? <MessageForm user={user as UserType} /> : <SignInButton />}
+      {user ? <MessageForm user={user as User} /> : <SignInButton />}
       {isLoading || isFetching ? <GuestbookSkeleton /> : <Messages messages={messages} />}
       <SignInModal />
     </>

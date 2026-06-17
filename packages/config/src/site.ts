@@ -1,4 +1,4 @@
-import type { SiteConfig } from '@xbrk/types';
+import type { SiteConfig } from './types';
 
 /**
  * Main site configuration

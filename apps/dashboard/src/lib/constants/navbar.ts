@@ -1,4 +1,4 @@
-import type { NavItem } from '@xbrk/types';
+import type { NavItem } from '@xbrk/config';
 
 /**
  * Dashboard Navigation Links

@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { ClientOnly, useRouter } from '@tanstack/react-router';
-import { type UserType } from '@xbrk/types';
+import { type User } from '@xbrk/db';
 import { Avatar, AvatarFallback, AvatarImage } from '@xbrk/ui/avatar';
 import { Button } from '@xbrk/ui/button';
 import {
@@ -23,7 +23,7 @@ const getInitials = (name: string) =>
     .join('')
     .toUpperCase();
 
-export function AvatarDropdown({ user }: { user: UserType }) {
+export function AvatarDropdown({ user }: { user: User }) {
   const queryClient = useQueryClient();
   const router = useRouter();
 

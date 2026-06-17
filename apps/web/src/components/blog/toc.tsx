@@ -1,10 +1,10 @@
-import type { TOC } from '@xbrk/types';
 import { cn } from '@xbrk/ui';
 import { ScrollArea } from '@xbrk/ui/scroll-area';
 import { List } from 'lucide-react';
 import { useMemo } from 'react';
 import useActiveItem from '@/hooks/use-active-item';
 import useMounted from '@/hooks/use-mounted';
+import type { TOC } from '@/types/misc';
 
 const HASH_REGEX = /^#/;
 

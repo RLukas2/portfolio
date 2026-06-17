@@ -1,6 +1,6 @@
 import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
+import type { Project } from '@xbrk/db';
 import { STACKS } from '@xbrk/shared/stack';
-import type { ProjectType } from '@xbrk/types';
 import { withForm } from '@xbrk/ui/form';
 import Icon from '@xbrk/ui/icon';
 import { generateSlug } from '@xbrk/utils';
@@ -39,7 +39,7 @@ interface FormField {
 export const ProjectsForm = withForm({
   ...projectFormOpts,
   props: {
-    project: undefined as ProjectType | undefined,
+    project: undefined as Project | undefined,
   },
   render({ form, project }) {
     return (

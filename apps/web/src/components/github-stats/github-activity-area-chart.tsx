@@ -1,9 +1,9 @@
 import { useTheme } from '@xbrk/shared/theme-provider';
-import type { ContributionDay } from '@xbrk/types';
 import { format, subDays } from 'date-fns';
 import { useMemo } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import ContributionsTooltip from '@/components/github-stats/contributions-tooltip';
+import type { ContributionDay } from '@/types/github';
 
 interface GithubActivityAreaChartProps {
   contributionsByLast30Days?: ContributionDay[];

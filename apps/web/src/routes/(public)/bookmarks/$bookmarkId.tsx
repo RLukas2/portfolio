@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import type { Collection } from '@xbrk/types';
 import BookmarkList from '@/components/bookmarks/bookmark-list';
 import PageHeading from '@/components/shared/page-heading';
 import { getBookmarksByCollectionId, getCollection, getCollections } from '@/lib/integrations/raindrop';
 import { seo } from '@/lib/seo';
 import { getBaseUrl } from '@/lib/utils';
+import type { Collection } from '@/types/misc';
 
 export const Route = createFileRoute('/(public)/bookmarks/$bookmarkId')({
   component: RouteComponent,

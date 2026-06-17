@@ -1,6 +1,6 @@
 import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
-import { ExperienceType as ExperienceTypeEnum, type ExperienceTypeValue } from '@xbrk/db/schema';
-import type { ExperienceType } from '@xbrk/types';
+import type { Experience } from '@xbrk/db';
+import { ExperienceType as ExperienceEnum, type ExperienceTypeValue } from '@xbrk/db/schema';
 import { withForm } from '@xbrk/ui/form';
 import {
   FormCheckbox,
@@ -21,7 +21,7 @@ export const experienceFormOpts = formOptions({
     startDate: '',
     endDate: '',
     url: '',
-    type: ExperienceTypeEnum.WORK as ExperienceTypeValue,
+    type: ExperienceEnum.WORK as ExperienceTypeValue,
     isDraft: false,
     isOnGoing: false,
   },
@@ -36,7 +36,7 @@ interface FormField {
 export const ExperiencesForm = withForm({
   ...experienceFormOpts,
   props: {
-    experience: undefined as ExperienceType | undefined,
+    experience: undefined as Experience | undefined,
   },
   render({ form, experience }) {
     return (
@@ -75,7 +75,7 @@ export const ExperiencesForm = withForm({
             <FormSelect
               field={field}
               label="Type"
-              options={Object.values(ExperienceTypeEnum).map((type) => ({
+              options={Object.values(ExperienceEnum).map((type) => ({
                 value: type,
                 label: type,
               }))}

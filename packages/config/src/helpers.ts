@@ -1,6 +1,6 @@
-import type { AuthProvider, Social } from '@xbrk/types';
 import { authProviders } from './auth';
 import { socialConfig } from './social';
+import type { AuthProvider, Social } from './types';
 
 /**
  * Helper functions for working with configuration

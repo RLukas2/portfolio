@@ -1,19 +1,12 @@
+import type { Comment, CommentReaction, User } from '@xbrk/db';
 import type { SimpleIcon } from 'simple-icons';
 
-/**
- * Table of contents entry
- * Used for article/document navigation
- */
 export interface TOC {
   depth: number;
   title: string;
   url: string;
 }
 
-/**
- * Content collection metadata
- * Used for grouping related content
- */
 export interface Collection {
   _id: string;
   count: number;
@@ -22,10 +15,6 @@ export interface Collection {
   title: string;
 }
 
-/**
- * Bookmark/saved link
- * Used for curated link collections
- */
 export interface Bookmark {
   _id: string;
   cover: string;
@@ -37,13 +26,18 @@ export interface Bookmark {
   title: string;
 }
 
-/**
- * Tool/software usage data
- * Used for "uses" page showing tech stack
- */
 export interface UseData {
   description: string;
   icon: SimpleIcon;
   link: string;
   name: string;
+}
+
+export interface CommentWithRelations {
+  comment: Comment;
+  dislikesCount: number;
+  likesCount: number;
+  repliesCount: number;
+  user: User | null;
+  userReaction: CommentReaction | null;
 }

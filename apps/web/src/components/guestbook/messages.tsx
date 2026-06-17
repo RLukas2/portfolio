@@ -1,12 +1,12 @@
-import type { GuestbookType, UserType } from '@xbrk/types';
+import type { Guestbook, User } from '@xbrk/db';
 import { m } from 'framer-motion';
 import { MessageSquare } from 'lucide-react';
 import { containerVariants, itemVariants } from '@/lib/constants/framer-motion-variants';
 import Message from './message';
 
 interface MessageProps {
-  messages: (GuestbookType & {
-    user: Pick<UserType, 'id' | 'name' | 'image'>;
+  messages: (Guestbook & {
+    user: Pick<User, 'id' | 'name' | 'image'>;
   })[];
 }
 

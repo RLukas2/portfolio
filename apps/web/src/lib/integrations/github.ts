@@ -1,7 +1,7 @@
 // biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
 import * as Sentry from '@sentry/tanstackstart-react';
-import type { ContributionCalender, ContributionDay, ContributionsCollection, GitHubUser } from '@xbrk/types';
 import { formatISO, subDays } from 'date-fns';
+import type { ContributionCalendar, ContributionDay, ContributionsCollection, GitHubUser } from '@/types/github';
 import { env } from '../env/server';
 
 const GITHUB_API_BASE_URL = 'https://api.github.com' as const;
@@ -212,7 +212,7 @@ async function getGithubActivities() {
  * @returns Array of day-of-week contribution counts sorted chronologically
  */
 function calculateMostProductiveDayOfWeek(
-  contributionCalendar: ContributionCalender,
+  contributionCalendar: ContributionCalendar,
 ): { day: string; count: number }[] {
   const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const contributionCountByDayOfWeek: ContributionCountByDay = {

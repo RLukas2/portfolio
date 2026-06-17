@@ -1,5 +1,5 @@
 import { useRouter } from '@tanstack/react-router';
-import type { UserType } from '@xbrk/types';
+import type { User } from '@xbrk/db';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,7 +26,7 @@ import { toast } from 'sonner';
 import authClient from '@/lib/auth/client';
 
 interface DataTableRowActionsProps {
-  user: UserType;
+  user: User;
 }
 
 export function Actions({ user }: Readonly<DataTableRowActionsProps>) {

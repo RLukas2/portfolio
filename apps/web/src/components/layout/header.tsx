@@ -1,8 +1,9 @@
+import { type NavItem } from '@xbrk/config';
+import { type User } from '@xbrk/db';
 import Logo from '@xbrk/shared/logo';
-import { type NavItem, type UserType } from '@xbrk/types';
 import Navbar from './navbar';
 
-const Header = ({ links, user }: Readonly<{ links: NavItem[]; user: UserType }>) => {
+const Header = ({ links, user }: Readonly<{ links: NavItem[]; user: User }>) => {
   return (
     <header className="sticky top-0 z-40 w-full">
       {/* Skip to content link for accessibility */}

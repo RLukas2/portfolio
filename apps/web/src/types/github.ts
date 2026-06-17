@@ -1,40 +1,20 @@
-/**
- * GitHub API types
- * Used for fetching and displaying GitHub activity data
- */
-
-/**
- * Single day of GitHub contributions
- */
 export interface ContributionDay {
   contributionCount: number;
   date: string;
 }
 
-/**
- * Week of GitHub contributions (7 days)
- */
 export interface ContributionWeeks {
   contributionDays: ContributionDay[];
 }
 
-/**
- * Full contribution calendar data
- */
-export interface ContributionCalender {
+export interface ContributionCalendar {
   weeks: ContributionWeeks[];
 }
 
-/**
- * Container for contribution calendar
- */
 export interface ContributionsCollection {
-  contributionCalendar: ContributionCalender;
+  contributionCalendar: ContributionCalendar;
 }
 
-/**
- * GitHub user profile data
- */
 export interface GitHubUser {
   avatar_url: string;
   bio: string;
