@@ -4,10 +4,10 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin, oAuthProxy } from 'better-auth/plugins';
 import { tanstackStartCookies } from 'better-auth/tanstack-start';
-import { handleAuthError } from './lib/error-handler';
-import { buildSocialProviders, getEnabledProviders } from './lib/providers';
-import type { InitAuthOptions } from './lib/validation';
-import { validateAuthOptions } from './lib/validation';
+import { handleAuthError } from './internal/error-handler';
+import { buildSocialProviders, getEnabledProviders } from './internal/providers';
+import type { InitAuthOptions } from './internal/validation';
+import { validateAuthOptions } from './internal/validation';
 
 /**
  * Initializes a Better Auth instance with Drizzle adapter and optional social providers.
@@ -92,8 +92,5 @@ export function initAuth(options: InitAuthOptions) {
 export type Auth = ReturnType<typeof initAuth>;
 export type Session = Auth['$Infer']['Session'];
 
-export { getSafeErrorMessage, handleAuthError } from './lib/error-handler';
-export { buildSocialProviders, getEnabledProviders } from './lib/providers';
-export type { InitAuthOptions } from './lib/validation';
-// Re-export utilities
-export { validateAuthOptions } from './lib/validation';
+export { authEnv } from './env';
+export type { InitAuthOptions } from './internal/validation';
