@@ -22,6 +22,27 @@
       "when": 1781544124609,
       "tag": "0002_pretty_veda",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1781707766360,
+      "tag": "0003_lonely_kabuki",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1781709210216,
+      "tag": "0004_modern_sphinx",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1781709686062,
+      "tag": "0005_condemned_wild_child",
+      "breakpoints": true
     }
   ]
 }
