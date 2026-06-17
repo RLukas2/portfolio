@@ -1,7 +1,3 @@
-/**
- * Standard API Error Response Format
- * Used across all API endpoints for consistent error handling
- */
 export interface ApiErrorResponse {
   error: {
     code: string;
@@ -14,10 +10,6 @@ export interface ApiErrorResponse {
   };
 }
 
-/**
- * Standard API Success Response Format
- * Used for consistent success responses
- */
 export interface ApiSuccessResponse<T = unknown> {
   data: T;
   metadata?: {

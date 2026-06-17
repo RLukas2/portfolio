@@ -1,9 +1,8 @@
 // biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
 import * as Sentry from '@sentry/node';
 import { HttpError, InternalServerError } from '@xbrk/errors';
-import type { ApiErrorResponse } from '../types/error-response';
+import type { ApiErrorResponse } from './error-response';
 
-// Only non-PII headers safe to forward to Sentry
 const SAFE_HEADERS = new Set([
   'content-type',
   'content-length',
@@ -15,12 +14,8 @@ const SAFE_HEADERS = new Set([
 
 const isDev = process.env.NODE_ENV === 'development';
 
-// Generic message shown to clients for all 5xx in production
 const GENERIC_5XX_MESSAGE = 'An unexpected error occurred';
 
-/**
- * Convert any error to HttpError, preserving the original for Sentry.
- */
 function toAppError(error: unknown): { appError: HttpError; originalError: unknown } {
   if (error instanceof HttpError) {
     return { appError: error, originalError: error };
@@ -39,26 +34,10 @@ function toAppError(error: unknown): { appError: HttpError; originalError: unkno
   };
 }
 
-/**
- * Standard error handler for API routes
- * Converts errors to consistent API error responses
- *
- * @example
- * ```typescript
- * export async function POST(request: Request) {
- *   try {
- *     // ... your logic
- *   } catch (error) {
- *     return handleApiError(error, request);
- *   }
- * }
- * ```
- */
 export function handleApiError(error: unknown, request: Request, headers?: HeadersInit): Response {
   const { appError, originalError } = toAppError(error);
   const is5xx = appError.statusCode >= 500;
 
-  // In production: hide message and metadata for 5xx to avoid leaking internals
   const clientMessage = !isDev && is5xx ? GENERIC_5XX_MESSAGE : appError.message;
   let clientMetadata: Record<string, unknown> | undefined;
   if (isDev || !is5xx) {
@@ -77,8 +56,6 @@ export function handleApiError(error: unknown, request: Request, headers?: Heade
     },
   };
 
-  // Log to Sentry for 5xx — send original error to preserve stack trace,
-  // whitelist only non-PII headers
   if (is5xx) {
     const safeHeaders: Record<string, string> = {};
     for (const [key, value] of request.headers.entries()) {
@@ -108,7 +85,6 @@ export function handleApiError(error: unknown, request: Request, headers?: Heade
     });
   }
 
-  // Normalize headers to avoid issues with Headers instance spreading
   const responseHeaders = new Headers({ 'Content-Type': 'application/json' });
   if (headers) {
     const normalized = new Headers(headers);
@@ -123,22 +99,6 @@ export function handleApiError(error: unknown, request: Request, headers?: Heade
   });
 }
 
-/**
- * Create a success response
- *
- * @example
- * ```typescript
- * return createSuccessResponse({ id: 1, title: 'Hello' });
- *
- * // With custom headers
- * return createSuccessResponse(
- *   { content, toc },
- *   undefined,
- *   200,
- *   { 'Cache-Control': 'public, max-age=3600' }
- * );
- * ```
- */
 export function createSuccessResponse<T>(
   data: T,
   metadata?: Record<string, unknown>,

@@ -1,14 +1,7 @@
-/**
- * Validation utilities for API inputs
- */
-
 const BASE64_REGEX = /^[A-Za-z0-9+/=]+$/;
 const MIN_SEARCH_QUERY_LENGTH = 2;
 const MAX_SEARCH_QUERY_LENGTH = 200;
 
-/**
- * Validates base64 string format
- */
 export function isValidBase64(str: string): boolean {
   if (!str?.trim()) {
     return false;
@@ -16,9 +9,6 @@ export function isValidBase64(str: string): boolean {
   return BASE64_REGEX.test(str);
 }
 
-/**
- * Validates search query length and format
- */
 export function validateSearchQuery(query: string): { valid: boolean; error?: string } {
   if (!query?.trim()) {
     return { valid: false, error: 'Search query cannot be empty' };
@@ -41,9 +31,6 @@ export function validateSearchQuery(query: string): { valid: boolean; error?: st
   return { valid: true };
 }
 
-/**
- * Escapes special SQL LIKE characters
- */
 export function escapeSearchTerm(term: string): string {
   return term.replace(/[%_\\]/g, (char) => `\\${char}`);
 }
