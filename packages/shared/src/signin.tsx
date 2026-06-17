@@ -2,7 +2,15 @@ import { authProviders } from '@xbrk/config';
 import Callout from '@xbrk/ui/callout';
 import { Card, CardContent, CardHeader, CardTitle } from '@xbrk/ui/card';
 import SignInButton from '@xbrk/ui/sign-in-button';
+import { siFacebook, siGithub, siGoogle, siX } from 'simple-icons';
 import Logo from './logo';
+
+const AUTH_ICONS: Record<string, typeof siGithub> = {
+  github: siGithub,
+  x: siX,
+  google: siGoogle,
+  facebook: siFacebook,
+};
 
 const ERROR_MESSAGES: Record<string, { title: string; description: string }> = {
   access_denied: {
@@ -61,7 +69,7 @@ export default function SignIn({
                   {authProviders.map((provider) => (
                     <SignInButton
                       disabled={disabled}
-                      icon={provider.icon}
+                      icon={AUTH_ICONS[provider.icon]}
                       key={provider.provider}
                       label={provider.label}
                       onClick={() => onClick(provider.provider)}
