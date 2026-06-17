@@ -2,7 +2,6 @@ import type { DialogProps } from '@radix-ui/react-dialog';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { siteConfig, socialConfig } from '@xbrk/config';
-import { useTheme } from '@xbrk/shared/theme-provider';
 import { Badge } from '@xbrk/ui/badge';
 import { Button } from '@xbrk/ui/button';
 import {
@@ -15,6 +14,7 @@ import {
   CommandSeparator,
 } from '@xbrk/ui/command';
 import Icon from '@xbrk/ui/icon';
+import { useTheme } from '@xbrk/ui/theme-provider';
 import {
   Code,
   CommandIcon,

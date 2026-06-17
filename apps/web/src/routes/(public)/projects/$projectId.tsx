@@ -1,18 +1,16 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
-import { siteConfig } from '@xbrk/config';
+import { STACKS, siteConfig } from '@xbrk/config';
 import { RenderedMarkdown } from '@xbrk/md';
-import ProjectLink from '@xbrk/shared/link';
-import { STACKS } from '@xbrk/shared/stack';
 import Icon from '@xbrk/ui/icon';
 import { NotFound } from '@xbrk/ui/not-found';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@xbrk/ui/tooltip';
 import ZoomImage from '@xbrk/ui/zoom-image';
 import { m } from 'framer-motion';
 import { Code2, ExternalLink, Sparkles } from 'lucide-react';
-
 import TableOfContents from '@/components/blog/toc';
 import BreadcrumbNavigation from '@/components/shared/breadcrumb-navigation';
+import ProjectExternalLink from '@/components/shared/project-external-link';
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
 import { $getProjectBySlug } from '@/lib/server';
@@ -187,9 +185,15 @@ function RouteComponent() {
               transition={{ duration: 0.5, delay: 0.25 }}
             >
               {githubUrl && (
-                <ProjectLink icon={<Icon className="h-4 w-4" icon="github" />} title="Source Code" url={githubUrl} />
+                <ProjectExternalLink
+                  icon={<Icon className="h-4 w-4" icon="github" />}
+                  title="Source Code"
+                  url={githubUrl}
+                />
               )}
-              {demoUrl && <ProjectLink icon={<ExternalLink className="h-4 w-4" />} title="Live Demo" url={demoUrl} />}
+              {demoUrl && (
+                <ProjectExternalLink icon={<ExternalLink className="h-4 w-4" />} title="Live Demo" url={demoUrl} />
+              )}
             </m.div>
           </div>
         </m.div>

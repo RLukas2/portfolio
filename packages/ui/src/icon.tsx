@@ -27,7 +27,7 @@ const ICONS = {
 
 export type IconName = keyof typeof ICONS;
 
-function resolveIcon(icon: IconName | SimpleIcon): SimpleIcon {
+export function resolveIcon(icon: IconName | SimpleIcon): SimpleIcon {
   return typeof icon === 'string' ? ICONS[icon] : icon;
 }
 

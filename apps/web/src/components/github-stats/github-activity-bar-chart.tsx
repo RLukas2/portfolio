@@ -1,4 +1,4 @@
-import { useTheme } from '@xbrk/shared/theme-provider';
+import { useTheme } from '@xbrk/ui/theme-provider';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import ContributionCountByDayOfWeekToolTip from '@/components/github-stats/contribution-count-by-day-of-week-tooltip';
 import type { ContributionCountByDayOfWeek } from '@/lib/integrations/github';

@@ -53,6 +53,7 @@
     "./sidebar": "./src/sidebar.tsx",
     "./sheet": "./src/sheet.tsx",
     "./sign-in-button": "./src/sign-in-button.tsx",
+    "./sign-in-page": "./src/sign-in-page.tsx",
     "./skeleton": "./src/skeleton.tsx",
     "./sonner": "./src/sonner.tsx",
     "./spinner": "./src/spinner.tsx",
@@ -60,7 +61,7 @@
     "./tabs": "./src/tabs.tsx",
     "./tag-list": "./src/tag-list.tsx",
     "./textarea": "./src/textarea.tsx",
-    "./theme": "./src/theme.tsx",
+    "./theme-provider": "./src/theme-provider.tsx",
     "./tooltip": "./src/tooltip.tsx",
     "./youtube": "./src/youtube.tsx",
     "./zoom-image": "./src/zoom-image.tsx"
@@ -112,7 +113,6 @@
     "zod": "catalog:"
   },
   "peerDependencies": {
-    "react": "catalog:",
-    "zod": "catalog:"
+    "react": "catalog:"
   }
 }

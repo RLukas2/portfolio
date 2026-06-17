@@ -1,4 +1,4 @@
-import { useTheme } from '@xbrk/shared/theme-provider';
+import { useTheme } from '@xbrk/ui/theme-provider';
 import { format, subDays } from 'date-fns';
 import { useMemo } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';

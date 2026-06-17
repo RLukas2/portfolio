@@ -1,6 +1,6 @@
 import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
+import { STACKS } from '@xbrk/config';
 import type { Project } from '@xbrk/db';
-import { STACKS } from '@xbrk/shared/stack';
 import { withForm } from '@xbrk/ui/form';
 import Icon from '@xbrk/ui/icon';
 import { generateSlug } from '@xbrk/utils';

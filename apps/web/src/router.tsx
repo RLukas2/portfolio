@@ -1,5 +1,5 @@
 import { createClientOnlyFn } from '@tanstack/react-start';
-import { createRouter } from '@xbrk/shared/create-router';
+import { createRouter } from '@/lib/create-router';
 import { routeTree } from './routeTree.gen';
 
 // Create a client-only function for Sentry initialization
