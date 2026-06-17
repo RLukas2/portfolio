@@ -1,7 +1,6 @@
 import { useLocation } from '@tanstack/react-router';
 import { type NavItem } from '@xbrk/config';
 import { type User } from '@xbrk/db';
-import { useTheme } from '@xbrk/shared/theme-provider';
 import { cn } from '@xbrk/ui';
 import { useIsMobile } from '@xbrk/ui/hooks/use-mobile';
 import {
@@ -14,7 +13,7 @@ import {
   navigationMenuTriggerStyle,
 } from '@xbrk/ui/navigation-menu';
 import { Spinner } from '@xbrk/ui/spinner';
-import { ThemeToggle } from '@xbrk/ui/theme';
+import { ThemeToggle } from '@xbrk/ui/theme-provider';
 import { Suspense } from 'react';
 import Link from '@/components/shared/link';
 import { AvatarDropdown } from './avatar-dropdown';
@@ -27,7 +26,6 @@ interface MainNavbarProps {
 
 const NavBar = ({ links, user }: Readonly<MainNavbarProps>) => {
   const isMobile = useIsMobile();
-  const { setTheme } = useTheme();
 
   const activeLink = useLocation({
     select: (location) => links.find((link) => location.pathname.endsWith(link.href ?? '')),
@@ -82,7 +80,7 @@ const NavBar = ({ links, user }: Readonly<MainNavbarProps>) => {
           </Suspense>
           <div aria-hidden="true" className="h-4 w-px bg-border/50" />
           <Suspense fallback={<Spinner className="size-5" />}>
-            <ThemeToggle setTheme={setTheme} />
+            <ThemeToggle />
           </Suspense>
         </div>
       </div>

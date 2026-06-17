@@ -1,4 +1,4 @@
-import { STACKS } from '@xbrk/shared/stack';
+import { STACKS } from '@xbrk/config';
 import Icon from '@xbrk/ui/icon';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@xbrk/ui/tooltip';
 

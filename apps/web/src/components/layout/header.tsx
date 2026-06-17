@@ -1,6 +1,6 @@
 import { type NavItem } from '@xbrk/config';
 import { type User } from '@xbrk/db';
-import Logo from '@xbrk/shared/logo';
+import Logo from '@/components/layout/logo';
 import Navbar from './navbar';
 
 const Header = ({ links, user }: Readonly<{ links: NavItem[]; user: User }>) => {

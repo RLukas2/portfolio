@@ -1,5 +1,5 @@
 import { ClientOnly } from '@tanstack/react-router';
-import { useTheme } from '@xbrk/shared/theme-provider';
+import { useTheme } from '@xbrk/ui/theme-provider';
 import { m } from 'framer-motion';
 import { Calendar, GitBranch } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';

@@ -1,6 +1,8 @@
 import { createFileRoute, redirect, useSearch } from '@tanstack/react-router';
-import SignIn from '@xbrk/shared/signin';
+import { authProviders } from '@xbrk/config';
+import SignInPage from '@xbrk/ui/sign-in-page';
 import { useState } from 'react';
+import Logo from '@/components/layout/logo';
 import authClient from '@/lib/auth/client';
 
 const DEFAULT_REDIRECT = '/';
@@ -74,12 +76,20 @@ function AuthPage() {
     }
   };
 
+  const providers = authProviders.map((p) => ({
+    id: p.provider,
+    label: p.label,
+    icon: p.icon as import('@xbrk/ui/icon').IconName,
+  }));
+
   return (
-    <SignIn
+    <SignInPage
       disabled={isSigningIn}
       error={error}
       errorDescription={error_description || message}
+      logo={<Logo />}
       onClick={handleSignIn}
+      providers={providers}
     />
   );
 }

@@ -1,16 +1,14 @@
-import { authProviders } from '@xbrk/config';
-import Callout from '@xbrk/ui/callout';
-import { Card, CardContent, CardHeader, CardTitle } from '@xbrk/ui/card';
-import SignInButton from '@xbrk/ui/sign-in-button';
-import { siFacebook, siGithub, siGoogle, siX } from 'simple-icons';
-import Logo from './logo';
+import type { ReactNode } from 'react';
+import Callout from './callout';
+import { Card, CardContent, CardHeader, CardTitle } from './card';
+import { type IconName, resolveIcon } from './icon';
+import SignInButton from './sign-in-button';
 
-const AUTH_ICONS: Record<string, typeof siGithub> = {
-  github: siGithub,
-  x: siX,
-  google: siGoogle,
-  facebook: siFacebook,
-};
+interface SignInProvider {
+  icon: IconName;
+  id: string;
+  label: string;
+}
 
 const ERROR_MESSAGES: Record<string, { title: string; description: string }> = {
   access_denied: {
@@ -35,23 +33,30 @@ const ERROR_MESSAGES: Record<string, { title: string; description: string }> = {
   },
 };
 
-export default function SignIn({
-  onClick,
-  disabled = false,
-  error,
-  errorDescription,
-}: {
-  onClick: (provider: string) => void;
+interface SignInPageProps {
   disabled?: boolean;
   error?: string;
   errorDescription?: string;
-}) {
+  logo?: ReactNode;
+  onClick: (provider: string) => void;
+  providers: SignInProvider[];
+}
+
+export default function SignInPage({
+  disabled = false,
+  error,
+  errorDescription,
+  logo,
+  onClick,
+  providers,
+}: SignInPageProps) {
   const errorInfo = error ? ERROR_MESSAGES[error] || ERROR_MESSAGES.unknown_error : null;
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
-        <Logo className="self-center" />
+        {logo && <div className="self-center">{logo}</div>}
+
         <div className="flex flex-col gap-6">
           {errorInfo && (
             <Callout variant="error">
@@ -59,6 +64,7 @@ export default function SignIn({
               <p className="text-sm">{errorDescription || errorInfo.description}</p>
             </Callout>
           )}
+
           <Card>
             <CardHeader className="text-center">
               <CardTitle className="text-xl">Welcome back</CardTitle>
@@ -66,13 +72,13 @@ export default function SignIn({
             <CardContent>
               <div className="grid gap-6">
                 <div className="flex flex-col gap-4">
-                  {authProviders.map((provider) => (
+                  {providers.map((provider) => (
                     <SignInButton
                       disabled={disabled}
-                      icon={AUTH_ICONS[provider.icon]}
-                      key={provider.provider}
+                      icon={resolveIcon(provider.icon)}
+                      key={provider.id}
                       label={provider.label}
-                      onClick={() => onClick(provider.provider)}
+                      onClick={() => onClick(provider.id)}
                     />
                   ))}
                 </div>

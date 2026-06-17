@@ -48,7 +48,7 @@
     "@xbrk/db": "workspace:*",
     "@xbrk/errors": "workspace:*",
     "@xbrk/md": "workspace:*",
-    "@xbrk/shared": "workspace:*",
+
     "@xbrk/ui": "workspace:*",
     "@xbrk/utils": "workspace:*",
     "better-auth": "catalog:",
@@ -89,6 +89,9 @@
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "catalog:",
     "@tanstack/devtools-vite": "catalog:",
+    "@tanstack/react-devtools": "catalog:",
+    "@tanstack/react-query-devtools": "catalog:",
+    "@tanstack/react-router-devtools": "catalog:",
     "@types/babel__core": "^7.20.5",
     "@types/node": "catalog:",
     "@types/nprogress": "^0.2.3",
