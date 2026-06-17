@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { blogService } from '@xbrk/api';
+import { articlesService } from '@xbrk/api';
 import { siteConfig } from '@xbrk/config';
 import { db } from '@xbrk/db/client';
 import { getBaseUrl } from '@/lib/utils';
@@ -41,7 +41,7 @@ interface JsonFeed {
 }
 
 async function generateJsonFeed(): Promise<JsonFeed> {
-  const articles = await blogService.getAllPublic(db);
+  const articles = await articlesService.getAllPublic(db);
 
   const items: JsonFeedItem[] = articles.map((article) => ({
     id: `${SITE_URL}/blog/${article.slug}`,

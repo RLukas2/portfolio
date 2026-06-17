@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { blogService } from '@xbrk/api';
+import { articlesService } from '@xbrk/api';
 import { siteConfig } from '@xbrk/config';
 import { db } from '@xbrk/db/client';
 import { getBaseUrl } from '@/lib/utils';
@@ -16,7 +16,7 @@ function escapeXml(unsafe: string): string {
 }
 
 async function generateRssFeed(): Promise<string> {
-  const articles = await blogService.getAllPublic(db);
+  const articles = await articlesService.getAllPublic(db);
 
   const latestArticle = articles[0];
   const lastBuildDate = latestArticle?.updatedAt ?? latestArticle?.createdAt ?? new Date();
