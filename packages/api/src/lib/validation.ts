@@ -42,18 +42,6 @@ export function validateSearchQuery(query: string): { valid: boolean; error?: st
 }
 
 /**
- * Creates a URL-safe slug from a string
- */
-export function createSlug(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-/**
  * Escapes special SQL LIKE characters
  */
 export function escapeSearchTerm(term: string): string {

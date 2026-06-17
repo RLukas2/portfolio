@@ -4,7 +4,6 @@ import {
   transformerNotationDiff,
   transformerNotationHighlight,
 } from '@shikijs/transformers';
-import { stripMarkdown } from '@xbrk/utils';
 import type { Element, Root, Text } from 'hast';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeKatex from 'rehype-katex';
@@ -16,6 +15,7 @@ import remarkMath from 'remark-math';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
+import { stripMarkdown } from './strip-markdown';
 
 /**
  * Cached processor instance for performance.
