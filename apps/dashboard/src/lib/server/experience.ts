@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { experienceService } from '@xbrk/api';
-import { CreateExperienceSchema, UpdateExperienceSchema } from '@xbrk/db/schema';
+import { CreateExperienceSchema, UpdateExperienceSchema } from '@xbrk/db/api-schemas';
 import { z } from 'zod/v4';
 import { adminMiddleware, authMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';

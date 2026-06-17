@@ -1,6 +1,6 @@
 import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
 import type { Experience } from '@xbrk/db';
-import { ExperienceType as ExperienceEnum, type ExperienceTypeValue } from '@xbrk/db/schema';
+import { ExperienceType as ExperienceEnum, type ExperienceTypeValue } from '@xbrk/db/api-schemas';
 import { withForm } from '@xbrk/ui/form';
 import {
   FormCheckbox,

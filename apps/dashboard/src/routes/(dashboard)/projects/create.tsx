@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
-import { ProjectBaseSchema } from '@xbrk/db/schema';
+import { ProjectBaseSchema } from '@xbrk/db/api-schemas';
 import { useAppForm } from '@xbrk/ui/form';
 import { toast } from 'sonner';
 import { z } from 'zod/v4';

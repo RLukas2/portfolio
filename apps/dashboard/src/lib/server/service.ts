@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { serviceService } from '@xbrk/api';
-import { CreateServiceSchema, UpdateServiceSchema } from '@xbrk/db/schema';
+import { CreateServiceSchema, UpdateServiceSchema } from '@xbrk/db/api-schemas';
 import { z } from 'zod/v4';
 import { adminMiddleware, authMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
