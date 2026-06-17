@@ -1,6 +1,6 @@
 import type { AuthProvider, Social } from '../types/identity';
 
-export const authProviders: AuthProvider[] = [
+export const authProviders = [
   {
     provider: 'github',
     label: 'GitHub',
@@ -21,9 +21,9 @@ export const authProviders: AuthProvider[] = [
     label: 'Facebook',
     icon: 'facebook',
   },
-];
+] as const satisfies AuthProvider[];
 
-export const socialConfig: Social[] = [
+export const socialConfig = [
   {
     name: 'Twitter',
     url: 'https://twitter.com/rickielukas',
@@ -31,7 +31,7 @@ export const socialConfig: Social[] = [
     icon: 'x',
   },
   {
-    name: 'Github',
+    name: 'GitHub',
     url: 'https://github.com/rlukas2',
     username: 'rlukas2',
     icon: 'github',
@@ -42,4 +42,4 @@ export const socialConfig: Social[] = [
     username: 'xbrk',
     icon: 'linkedin',
   },
-];
+] as const satisfies Social[];

@@ -1,7 +1,6 @@
 import type { Article, User } from '@xbrk/db';
 import Icon from '@xbrk/ui/icon';
 import { LazyImage } from '@xbrk/ui/lazy-image';
-import { siX } from 'simple-icons';
 
 interface ArticleAuthorProps {
   article: Article & { author: User };
@@ -37,7 +36,7 @@ const ArticleAuthor = ({ article }: ArticleAuthorProps) => {
             rel="noreferrer noopener"
             target="_blank"
           >
-            <Icon className="h-3 w-3" icon={siX} />@{article.author.twitterHandle}
+            <Icon className="h-3 w-3" icon="x" />@{article.author.twitterHandle}
           </a>
         )}
       </div>

@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@xbrk/
 import ZoomImage from '@xbrk/ui/zoom-image';
 import { m } from 'framer-motion';
 import { Code2, ExternalLink, Sparkles } from 'lucide-react';
-import { siGithub } from 'simple-icons';
+
 import TableOfContents from '@/components/blog/toc';
 import BreadcrumbNavigation from '@/components/shared/breadcrumb-navigation';
 import { queryKeys } from '@/lib/query-keys';
@@ -187,7 +187,7 @@ function RouteComponent() {
               transition={{ duration: 0.5, delay: 0.25 }}
             >
               {githubUrl && (
-                <ProjectLink icon={<Icon className="h-4 w-4" icon={siGithub} />} title="Source Code" url={githubUrl} />
+                <ProjectLink icon={<Icon className="h-4 w-4" icon="github" />} title="Source Code" url={githubUrl} />
               )}
               {demoUrl && <ProjectLink icon={<ExternalLink className="h-4 w-4" />} title="Live Demo" url={demoUrl} />}
             </m.div>
