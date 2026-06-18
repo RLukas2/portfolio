@@ -78,9 +78,13 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
  * @throws {Error} Throws "Forbidden: Admin access required" if user is not admin
  * @see {@link https://tanstack.com/start/latest/docs/framework/react/middleware TanStack Middleware Docs}
  */
+interface AuthContext {
+  user?: { role?: string };
+}
+
 export const adminMiddleware = createMiddleware().server(({ next, context }) => {
-  // Type assertion: context.user should exist from authMiddleware
-  const user = (context as unknown as Record<string, unknown>).user as { role?: string } | undefined;
+  // Context type flows from upstream middlewares (authMiddleware provides user)
+  const { user } = context as AuthContext;
 
   if (!user) {
     setResponseStatus(401);
