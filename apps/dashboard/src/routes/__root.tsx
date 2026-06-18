@@ -38,7 +38,10 @@ export const Route = createRootRouteWithContext<{
         content: siteConfig.description,
       },
     ],
-    links: [{ rel: 'stylesheet', href: appCss, as: 'style', type: 'text/css' }],
+    links: [
+      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css', type: 'text/css' },
+      { rel: 'stylesheet', href: appCss, as: 'style', type: 'text/css' },
+    ],
   }),
   shellComponent: ({ children }) => {
     return (
