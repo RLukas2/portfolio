@@ -1,5 +1,5 @@
-import { cn } from '@xbrk/ui';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 function Card({ className, ...props }: ComponentProps<'div'>) {
   return (

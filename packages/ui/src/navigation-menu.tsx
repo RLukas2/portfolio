@@ -1,8 +1,8 @@
 import { Content, Indicator, Item, Link, List, Root, Trigger, Viewport } from '@radix-ui/react-navigation-menu';
-import { cn } from '@xbrk/ui';
 import { cva } from 'class-variance-authority';
 import { ChevronDownIcon } from 'lucide-react';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 function NavigationMenu({
   className,

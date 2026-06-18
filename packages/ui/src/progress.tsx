@@ -1,6 +1,6 @@
 import { Indicator, Root } from '@radix-ui/react-progress';
-import { cn } from '@xbrk/ui';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 function Progress({ className, value, ...props }: Readonly<ComponentProps<typeof Root>>) {
   return (

@@ -1,8 +1,8 @@
 import { Slot } from '@radix-ui/react-slot';
 import { createFormHook, createFormHookContexts, useStore } from '@tanstack/react-form';
-import { cn } from '@xbrk/ui';
 import { createContext, useContext, useId } from 'react';
 import { Label } from './label';
+import { cn } from './lib/cn';
 
 const { fieldContext, formContext, useFieldContext: useFormFieldContext, useFormContext } = createFormHookContexts();
 

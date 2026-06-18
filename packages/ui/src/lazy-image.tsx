@@ -1,8 +1,8 @@
 import { Image } from '@unpic/react';
-import { cn } from '@xbrk/ui';
 import type { HTMLAttributes } from 'react';
 import { useCallback, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { cn } from './lib/cn';
 
 type LazyImageProps = HTMLAttributes<HTMLDivElement> & {
   src: string;

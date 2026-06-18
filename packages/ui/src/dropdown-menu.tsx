@@ -15,9 +15,9 @@ import {
   SubTrigger,
   Trigger,
 } from '@radix-ui/react-dropdown-menu';
-import { cn } from '@xbrk/ui';
 import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 function DropdownMenu({ ...props }: Readonly<ComponentProps<typeof Root>>) {
   return <Root data-slot="dropdown-menu" {...props} />;

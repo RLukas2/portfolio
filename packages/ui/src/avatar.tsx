@@ -1,6 +1,6 @@
 import { Fallback, Image, Root } from '@radix-ui/react-avatar';
-import { cn } from '@xbrk/ui';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 function Avatar({ className, ...props }: ComponentProps<typeof Root>) {
   return (

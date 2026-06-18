@@ -1,8 +1,8 @@
-import { cn } from '@xbrk/ui';
 import { Command as CommandPrimitive } from 'cmdk';
 import { SearchIcon } from 'lucide-react';
 import { type ComponentProps } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './dialog';
+import { cn } from './lib/cn';
 
 function Command({ className, ...props }: ComponentProps<typeof CommandPrimitive>) {
   return (

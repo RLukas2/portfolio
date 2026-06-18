@@ -1,5 +1,5 @@
-import { cn } from '@xbrk/ui';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 const Table = ({ className, ...props }: ComponentProps<'table'>) => (
   <div className="relative w-full overflow-x-auto" data-slot="table-container">

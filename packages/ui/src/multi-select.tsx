@@ -1,4 +1,3 @@
-import { cn } from '@xbrk/ui';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { CheckIcon, ChevronDown, WandSparkles, X, XCircle } from 'lucide-react';
 import { type ComponentProps, useState } from 'react';
@@ -13,6 +12,7 @@ import {
   CommandList,
   CommandSeparator,
 } from './command';
+import { cn } from './lib/cn';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { Separator } from './separator';
 

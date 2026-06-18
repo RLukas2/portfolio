@@ -9,9 +9,9 @@ import {
   Title,
   Trigger,
 } from '@radix-ui/react-alert-dialog';
-import { cn } from '@xbrk/ui';
 import { type ComponentProps } from 'react';
 import { buttonVariants } from './button';
+import { cn } from './lib/cn';
 
 function AlertDialog({ ...props }: Readonly<ComponentProps<typeof Root>>) {
   return <Root data-slot="alert-dialog" {...props} />;

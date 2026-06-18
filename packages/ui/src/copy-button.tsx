@@ -1,8 +1,8 @@
-import { cn } from '@xbrk/ui';
 import { Check, Copy } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { Button } from './button';
+import { cn } from './lib/cn';
 
 interface CopyButtonProps extends HTMLAttributes<HTMLButtonElement> {
   value: string;

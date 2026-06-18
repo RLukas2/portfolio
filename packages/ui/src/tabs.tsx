@@ -1,6 +1,6 @@
 import { Content, List, Root, Trigger } from '@radix-ui/react-tabs';
-import { cn } from '@xbrk/ui';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 function Tabs({ className, ...props }: Readonly<ComponentProps<typeof Root>>) {
   return <Root className={cn('flex flex-col gap-2', className)} data-slot="tabs" {...props} />;
