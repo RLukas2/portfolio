@@ -140,7 +140,7 @@ function RouteComponent() {
 
   return (
     <>
-      <article className="relative lg:gap-10 xl:grid xl:max-w-6xl xl:grid-cols-[1fr_280px] 2xl:max-w-7xl">
+      <article className="relative xl:max-w-6xl 2xl:max-w-7xl">
         <div className="w-full min-w-0">
           <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5 }}>
             <BreadcrumbNavigation pageTitle={article.title} />
@@ -239,89 +239,93 @@ function RouteComponent() {
               </div>
             </m.div>
           )}
+        </div>
 
-          {/* Article content */}
-          <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5, delay: 0.4 }}>
-            <Suspense fallback={<ArticleContentSkeleton />}>
-              <article className="prose prose-slate dark:prose-invert mt-8 max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
-                <RenderedMarkdown rendering={article.contentRendering} />
-              </article>
-            </Suspense>
-          </m.div>
+        <div className="relative mt-8 lg:gap-10 xl:grid xl:grid-cols-[1fr_280px]">
+          <div className="w-full min-w-0">
+            {/* Article content */}
+            <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5, delay: 0.4 }}>
+              <Suspense fallback={<ArticleContentSkeleton />}>
+                <article className="prose prose-slate dark:prose-invert max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
+                  <RenderedMarkdown rendering={article.contentRendering} />
+                </article>
+              </Suspense>
+            </m.div>
+          </div>
 
-          {/* Tags and share section */}
-          <m.div
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-12 border-border/50 border-t pt-8"
-            initial={false}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              {article.tags && article.tags.length > 0 && (
-                <div className="flex flex-wrap items-center gap-2">
-                  <Tag className="size-4 text-muted-foreground" />
-                  {article.tags.map((tag: string) => (
-                    <span
-                      className="inline-flex items-center rounded-full bg-linear-to-r from-violet-500/10 to-fuchsia-500/10 px-3 py-1 font-medium text-foreground text-xs transition-colors hover:from-violet-500/20 hover:to-fuchsia-500/20"
-                      key={tag}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-              <SocialShare
-                text={`${article.title} via ${siteConfig.author.handle}`}
-                url={`${siteConfig.url}/blog/${articleId}`}
-              />
-            </div>
-          </m.div>
-
-          {/* Comments section */}
-          <m.div
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-12"
-            initial={false}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <ArticleComment articleId={article.id} articleSlug={article.slug} />
-          </m.div>
-
-          {/* Related Articles section */}
-          {article.relatedArticles && article.relatedArticles.length > 0 && (
+          {/* Table of contents - enhanced sticky sidebar */}
+          {article.toc && (
             <m.div
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-12 border-border/50 border-t pt-8"
+              animate={{ opacity: 1, x: 0 }}
+              className="hidden text-sm xl:block"
               initial={false}
-              transition={{ duration: 0.5, delay: 0.7 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <h2 className="mb-6 font-bold font-heading text-2xl tracking-tight">Related Posts</h2>
-              <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-                {article.relatedArticles.map((relatedArticle: Parameters<typeof ArticleCard>[0]['article']) => (
-                  <ArticleCard
-                    article={{
-                      ...relatedArticle,
-                      viewCount: relatedArticle.viewCount ?? 0,
-                      likesCount: relatedArticle.likesCount ?? 0,
-                    }}
-                    key={relatedArticle.slug}
-                  />
-                ))}
+              <div className="sticky top-20">
+                <TableOfContents toc={article.toc} />
               </div>
             </m.div>
           )}
         </div>
 
-        {/* Table of contents - enhanced sticky sidebar */}
-        {article.toc && (
+        {/* Tags and share section */}
+        <m.div
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-12 border-border/50 border-t pt-8"
+          initial={false}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            {article.tags && article.tags.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
+                <Tag className="size-4 text-muted-foreground" />
+                {article.tags.map((tag: string) => (
+                  <span
+                    className="inline-flex items-center rounded-full bg-linear-to-r from-violet-500/10 to-fuchsia-500/10 px-3 py-1 font-medium text-foreground text-xs transition-colors hover:from-violet-500/20 hover:to-fuchsia-500/20"
+                    key={tag}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            <SocialShare
+              text={`${article.title} via ${siteConfig.author.handle}`}
+              url={`${siteConfig.url}/blog/${articleId}`}
+            />
+          </div>
+        </m.div>
+
+        {/* Comments section */}
+        <m.div
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-12"
+          initial={false}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <ArticleComment articleId={article.id} articleSlug={article.slug} />
+        </m.div>
+
+        {/* Related Articles section */}
+        {article.relatedArticles && article.relatedArticles.length > 0 && (
           <m.div
-            animate={{ opacity: 1, x: 0 }}
-            className="hidden text-sm xl:block"
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-12 border-border/50 border-t pt-8"
             initial={false}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
           >
-            <div className="sticky top-20 -mt-10 pt-10">
-              <TableOfContents toc={article.toc} />
+            <h2 className="mb-6 font-bold font-heading text-2xl tracking-tight">Related Posts</h2>
+            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+              {article.relatedArticles.map((relatedArticle: Parameters<typeof ArticleCard>[0]['article']) => (
+                <ArticleCard
+                  article={{
+                    ...relatedArticle,
+                    viewCount: relatedArticle.viewCount ?? 0,
+                    likesCount: relatedArticle.likesCount ?? 0,
+                  }}
+                  key={relatedArticle.slug}
+                />
+              ))}
             </div>
           </m.div>
         )}
