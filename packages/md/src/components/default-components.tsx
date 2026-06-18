@@ -66,10 +66,10 @@ export const components: Components = {
     <Image
       alt={alt ?? ''}
       className={cn('rounded-md border', className)}
-      height={toImageDimension(height) as number}
+      height={toImageDimension(height)}
       layout="constrained"
       src={src ?? ''}
-      width={toImageDimension(width) as number}
+      width={toImageDimension(width)}
       {...props}
     />
   ),
