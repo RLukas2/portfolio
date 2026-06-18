@@ -8,12 +8,23 @@
         "src/**",
         "tsconfig.json",
         "package.json",
+        "vite.config.*",
+        "nitro.config.*",
+        "public/**",
         "!dist/**",
         "!.output/**",
         "!.cache/**",
         "!coverage/**",
         "!node_modules/.vite/**",
-        "!routeTree.gen.ts"
+        "!src/routeTree.gen.ts"
+      ],
+      "env": [
+        "CI",
+        "VERCEL",
+        "NODE_ENV",
+        "SENTRY_AUTH_TOKEN",
+        "SENTRY_ORG",
+        "SENTRY_PROJECT"
       ]
     },
     "dev": {
