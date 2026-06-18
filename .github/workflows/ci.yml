@@ -47,5 +47,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
-      - name: Run Turbo (Build, Lint, Typecheck)
-        run: pnpm turbo run build lint typecheck
+      - name: Run quality gates
+        run: |
+          pnpm check
+          pnpm typecheck
+          pnpm test
+          pnpm build
