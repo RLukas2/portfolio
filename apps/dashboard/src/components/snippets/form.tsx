@@ -1,4 +1,5 @@
 import { formOptions } from '@tanstack/react-form';
+import type { Snippet } from '@xbrk/db';
 import { withForm } from '@xbrk/ui/form';
 import { generateSlug } from '@xbrk/utils';
 import { FormCheckbox, FormInput, FormMDXEditor, FormSlug, FormSubmitButton, FormTextarea } from '../form';
@@ -16,12 +17,19 @@ export const snippetFormOpts = formOptions({
 
 export const SnippetsForm = withForm({
   ...snippetFormOpts,
-  render({ form }) {
+  props: {
+    snippet: undefined as Snippet | undefined,
+    isPending: false,
+  },
+  render({ form, snippet, isPending }) {
     return (
       <>
         <form.AppField
           listeners={{
             onChange: ({ value }) => {
+              if (snippet) {
+                return;
+              }
               const slug = generateSlug(value);
               form.setFieldValue('slug', slug);
             },
@@ -65,10 +73,10 @@ const add = (a, b) => a + b;
 
         <div>
           <form.Subscribe selector={(formState) => [formState.canSubmit, formState.isSubmitting]}>
-            {([canSubmit, isPending, isSubmitting]) => (
+            {([canSubmit, isSubmitting]) => (
               <FormSubmitButton
                 canSubmit={canSubmit ?? false}
-                isPending={isPending ?? false}
+                isPending={isPending}
                 isSubmitting={isSubmitting ?? false}
               />
             )}

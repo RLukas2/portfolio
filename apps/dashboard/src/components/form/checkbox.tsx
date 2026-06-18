@@ -1,3 +1,4 @@
+import { cn } from '@xbrk/ui';
 import { Checkbox } from '@xbrk/ui/checkbox';
 
 interface FormCheckboxProps {
@@ -14,7 +15,7 @@ interface FormCheckboxProps {
 
 export function FormCheckbox({ field, label, description, className }: Readonly<FormCheckboxProps>) {
   return (
-    <div className={`flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 ${className}`}>
+    <div className={cn('flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4', className)}>
       <Checkbox
         checked={field.state.value}
         id={field.name}

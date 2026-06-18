@@ -1,4 +1,4 @@
-import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
+import { formOptions } from '@tanstack/react-form';
 import { STACKS } from '@xbrk/config';
 import type { Article } from '@xbrk/db';
 import { withForm } from '@xbrk/ui/form';
@@ -7,6 +7,7 @@ import { generateSlug } from '@xbrk/utils';
 import {
   FormCheckbox,
   FormImageUpload,
+  type FormImageUploadField,
   FormInput,
   FormMDXEditor,
   FormMultiSelect,
@@ -16,7 +17,7 @@ import {
 } from '@/components/form';
 import { AIAssistDialog } from './ai-assist-dialog';
 
-export const articleFormOpts = formOptions({
+const articleFormOpts = formOptions({
   defaultValues: {
     title: '',
     slug: '',
@@ -28,25 +29,43 @@ export const articleFormOpts = formOptions({
   },
 });
 
-interface FormField {
-  handleBlur: () => void;
-  handleChange: (value: string) => void;
-  setErrorMap: (errorMap: ValidationErrorMap) => void;
+export const articleDefaultValues = articleFormOpts.defaultValues;
+
+export function getArticleFormValues(article?: Article) {
+  if (!article) {
+    return articleDefaultValues;
+  }
+
+  return {
+    ...articleDefaultValues,
+    title: article.title,
+    slug: article.slug,
+    description: article.description ?? '',
+    content: article.content ?? '',
+    isDraft: article.isDraft,
+    tags: article.tags ?? [],
+  };
 }
 
 export const ArticleForm = withForm({
   ...articleFormOpts,
   props: {
     article: undefined as Article | undefined,
+    isPending: false,
   },
-  render({ form, article }) {
+  render({ form, article, isPending }) {
     return (
       <>
         <form.AppField
           listeners={{
             onChange: ({ value }) => {
-              const slug = generateSlug(value);
-              form.setFieldValue('slug', slug);
+              if (article) {
+                return;
+              }
+              const slugTouched = form.state.fieldMeta.slug?.isTouched;
+              if (!slugTouched) {
+                form.setFieldValue('slug', generateSlug(value));
+              }
             },
           }}
           name="title"
@@ -161,7 +180,7 @@ A brief overview of your article."
         <form.AppField name="thumbnail">
           {(field) => (
             <FormImageUpload
-              field={field as FormField}
+              field={field as FormImageUploadField}
               initialPreview={article?.imageUrl}
               label="Image"
               name={field.name}
@@ -192,10 +211,10 @@ A brief overview of your article."
 
         <div>
           <form.Subscribe selector={(formState) => [formState.canSubmit, formState.isSubmitting]}>
-            {([canSubmit, isPending, isSubmitting]) => (
+            {([canSubmit, isSubmitting]) => (
               <FormSubmitButton
                 canSubmit={canSubmit ?? false}
-                isPending={isPending ?? false}
+                isPending={isPending}
                 isSubmitting={isSubmitting ?? false}
               />
             )}
