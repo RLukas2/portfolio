@@ -41,6 +41,7 @@
     "better-auth": "catalog:",
     "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
+    "katex": "^0.16.45",
     "lucide-react": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
