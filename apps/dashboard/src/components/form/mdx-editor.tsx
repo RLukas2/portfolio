@@ -3,7 +3,18 @@ import { Markdown } from '@xbrk/md';
 import { Spinner } from '@xbrk/ui/spinner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@xbrk/ui/tabs';
 import { Textarea } from '@xbrk/ui/textarea';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+
+function useDebouncedValue<T>(value: T, delay: number): T {
+  const [debounced, setDebounced] = useState(value);
+
+  useEffect(() => {
+    const id = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(id);
+  }, [value, delay]);
+
+  return debounced;
+}
 
 interface FormMDXEditorProps {
   className?: string;
@@ -18,6 +29,8 @@ interface FormMDXEditorProps {
 }
 
 export function FormMDXEditor({ field, label, placeholder, className }: Readonly<FormMDXEditorProps>) {
+  const debouncedValue = useDebouncedValue(field.state.value, 300);
+
   return (
     <div className={className}>
       <label
@@ -44,11 +57,11 @@ export function FormMDXEditor({ field, label, placeholder, className }: Readonly
         </TabsContent>
         <TabsContent className="mt-0" value="preview">
           <div className="min-h-[300px] overflow-y-auto rounded-md border border-input p-4">
-            {field.state.value ? (
+            {debouncedValue ? (
               <ClientOnly>
                 <Suspense fallback={<Spinner className="size-6" />}>
                   <article className="prose prose-slate dark:prose-invert !max-w-none">
-                    <Markdown source={field.state.value} />
+                    <Markdown preview source={debouncedValue} />
                   </article>
                 </Suspense>
               </ClientOnly>
