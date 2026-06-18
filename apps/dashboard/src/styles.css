@@ -22,8 +22,8 @@
   clip: rect(1px, 1px, 1px, 1px);
 }
 
-@source "../../../packages/ui/src/*.{ts,tsx}";
-@source "../../../packages/md/src/*.{ts,tsx}";
+@source "../../../packages/ui/src/**/*.{ts,tsx}";
+@source "../../../packages/md/src/**/*.{ts,tsx}";
 
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant light (&:where(.light, .light *));
