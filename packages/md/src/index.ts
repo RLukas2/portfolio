@@ -1,7 +1,8 @@
 export type { Components } from 'hast-util-to-jsx-runtime';
-export { Markdown } from './md';
-export { components } from './md-components';
-export type { TOCEntry } from './processor';
+export { components } from './components/default-components';
+export type { MarkdownProps } from './components/markdown';
+export { Markdown } from './components/markdown';
+export { RenderedMarkdown } from './components/rendered-markdown';
 export {
   clearProcessorCache,
   createProcessor,
@@ -9,4 +10,5 @@ export {
   markdownToHastJson,
   RENDERING_VERSION,
 } from './processor';
-export { RenderedMarkdown } from './renderer';
+export type { ProcessorOptions } from './processor/pipeline';
+export type { TOCEntry } from './processor/toc';
