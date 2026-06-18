@@ -1,4 +1,4 @@
-import ImageZoom from '@xbrk/ui/image-zoom';
+import ImageZoom from './image-zoom';
 import { LazyImage } from './lazy-image';
 
 export default function ZoomImage(props: Readonly<React.ComponentPropsWithoutRef<typeof LazyImage>>) {
@@ -9,7 +9,7 @@ export default function ZoomImage(props: Readonly<React.ComponentPropsWithoutRef
       <ImageZoom>
         <LazyImage alt={alt} className="mt-6 rounded-lg border" {...rest} />
       </ImageZoom>
-      {caption && <figcaption className="mt-4 text-center">{alt}</figcaption>}
+      {caption && <figcaption className="mt-4 text-center">{caption}</figcaption>}
     </>
   );
 }

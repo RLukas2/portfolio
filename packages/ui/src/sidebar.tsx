@@ -1,5 +1,4 @@
 import { Slot } from '@radix-ui/react-slot';
-import { cn } from '@xbrk/ui';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { PanelLeftIcon } from 'lucide-react';
 import {
@@ -15,6 +14,7 @@ import {
 import { Button } from './button';
 import { useIsMobile } from './hooks/use-mobile';
 import { Input } from './input';
+import { cn } from './lib/cn';
 import { Separator } from './separator';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from './sheet';
 import { Skeleton } from './skeleton';
@@ -565,12 +565,13 @@ function SidebarMenuBadge({ className, ...props }: ComponentProps<'div'>) {
 function SidebarMenuSkeleton({
   className,
   showIcon = false,
+  width: widthProp,
   ...props
 }: ComponentProps<'div'> & {
   showIcon?: boolean;
+  width?: string;
 }) {
-  // Random width between 50 to 90%.
-  const width = useMemo(() => `${Math.floor(Math.random() * 40) + 50}%`, []);
+  const width = widthProp ?? '80%';
 
   return (
     <div

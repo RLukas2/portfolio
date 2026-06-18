@@ -1,4 +1,5 @@
 import { Badge } from './badge';
+import { cn } from './lib/cn';
 
 interface TagListProps {
   className?: string;
@@ -16,7 +17,7 @@ export function TagList({ items, maxDisplay = 2, variant = 'secondary', size = '
   const textSizeClass = size === 'sm' ? 'text-[10px]' : 'text-xs';
 
   return (
-    <div className={`flex flex-wrap gap-1 ${className}`}>
+    <div className={cn('flex flex-wrap gap-1', className)}>
       {items.slice(0, maxDisplay).map((item) => (
         <Badge className={textSizeClass} key={item} variant={variant}>
           {item}

@@ -1,7 +1,7 @@
-import { cn } from '@xbrk/ui';
-import { type ComponentProps, useEffect, useRef, useState } from 'react';
+import { type ComponentProps, useCallback, useEffect, useRef, useState } from 'react';
 import CopyButton from './copy-button';
 import { getIconByLanguage } from './icon';
+import { cn } from './lib/cn';
 import { ScrollArea, ScrollBar } from './scroll-area';
 
 type CodeBlockProps = {
@@ -24,6 +24,18 @@ export default function CodeBlock({
   const Icon = getIconByLanguage(lang ?? '');
   const textInput = useRef<HTMLPreElement>(null);
   const [copyText, setCopyText] = useState('');
+
+  const preRef = useCallback(
+    (node: HTMLPreElement | null) => {
+      textInput.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
 
   useEffect(() => {
     if (textInput.current) {
@@ -52,7 +64,7 @@ export default function CodeBlock({
       )}
 
       <ScrollArea>
-        <pre className={cn('!bg-transparent p-4 text-[13px]', className)} ref={textInput} {...rest}>
+        <pre className={cn('!bg-transparent p-4 text-[13px]', className)} ref={preRef} {...rest}>
           {children}
         </pre>
         <ScrollBar orientation="horizontal" />

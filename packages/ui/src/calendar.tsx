@@ -1,8 +1,43 @@
-import { cn } from '@xbrk/ui';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { type ComponentProps, useEffect, useRef } from 'react';
 import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
 import { Button, buttonVariants } from './button';
+import { cn } from './lib/cn';
+
+function CalendarRoot({
+  className,
+  rootRef,
+  ...props
+}: ComponentProps<'div'> & { rootRef?: React.Ref<HTMLDivElement> }) {
+  return <div className={cn(className)} data-slot="calendar" ref={rootRef} {...props} />;
+}
+
+function CalendarChevron({
+  className,
+  orientation,
+  ...props
+}: {
+  className?: string;
+  orientation?: 'left' | 'right' | 'up' | 'down';
+}) {
+  if (orientation === 'left') {
+    return <ChevronLeftIcon className={cn('size-4', className)} {...props} />;
+  }
+
+  if (orientation === 'right') {
+    return <ChevronRightIcon className={cn('size-4', className)} {...props} />;
+  }
+
+  return <ChevronDownIcon className={cn('size-4', className)} {...props} />;
+}
+
+function CalendarWeekNumber({ children, ...props }: ComponentProps<'td'>) {
+  return (
+    <td {...props}>
+      <div className="flex size-(--cell-size) items-center justify-center text-center">{children}</div>
+    </td>
+  );
+}
 
 function Calendar({
   className,
@@ -91,29 +126,10 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        // biome-ignore lint/correctness/noNestedComponentDefinitions: valid component
-        Root: ({ className, rootRef, ...props }) => (
-          <div className={cn(className)} data-slot="calendar" ref={rootRef} {...props} />
-        ),
-        // biome-ignore lint/correctness/noNestedComponentDefinitions: valid component
-        Chevron: ({ className, orientation, ...props }) => {
-          if (orientation === 'left') {
-            return <ChevronLeftIcon className={cn('size-4', className)} {...props} />;
-          }
-
-          if (orientation === 'right') {
-            return <ChevronRightIcon className={cn('size-4', className)} {...props} />;
-          }
-
-          return <ChevronDownIcon className={cn('size-4', className)} {...props} />;
-        },
+        Root: CalendarRoot,
+        Chevron: CalendarChevron,
         DayButton: CalendarDayButton,
-        // biome-ignore lint/correctness/noNestedComponentDefinitions: valid component
-        WeekNumber: ({ children, ...props }) => (
-          <td {...props}>
-            <div className="flex size-(--cell-size) items-center justify-center text-center">{children}</div>
-          </td>
-        ),
+        WeekNumber: CalendarWeekNumber,
         ...components,
       }}
       formatters={{
