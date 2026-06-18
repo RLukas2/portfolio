@@ -35,11 +35,11 @@ export function DataTableColumnHeader<TData, TValue>({
   };
 
   const sortDirection = column.getIsSorted();
-  let sortDirectionLabel = '';
+  let nextSortLabel = '';
   if (sortDirection === 'desc') {
-    sortDirectionLabel = 'ascending';
+    nextSortLabel = 'ascending';
   } else if (sortDirection === 'asc') {
-    sortDirectionLabel = 'descending';
+    nextSortLabel = 'descending';
   }
 
   return (
@@ -47,7 +47,7 @@ export function DataTableColumnHeader<TData, TValue>({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            aria-label={`Sort ${title} column ${sortDirectionLabel}`}
+            aria-label={`Sort ${title} column ${nextSortLabel}`}
             className="-ml-3 h-8 data-[state=open]:bg-accent"
             size="sm"
             variant="ghost"

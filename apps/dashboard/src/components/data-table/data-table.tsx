@@ -82,6 +82,8 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
   });
 
+  const isConstrained = (size: number | undefined) => size !== undefined && size !== Number.MAX_SAFE_INTEGER;
+
   return (
     <div>
       <div className="py-4">
@@ -92,11 +94,18 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                ))}
+                {headerGroup.headers.map((header) => {
+                  const constrainedSize = header.column.columnDef.maxSize;
+                  const constrained = isConstrained(constrainedSize);
+                  return (
+                    <TableHead
+                      key={header.id}
+                      style={constrained ? { width: constrainedSize, maxWidth: constrainedSize } : undefined}
+                    >
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
             ))}
           </TableHeader>
@@ -108,9 +117,18 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                   key={row.id}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    const constrainedSize = cell.column.columnDef.maxSize;
+                    const constrained = isConstrained(constrainedSize);
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        style={constrained ? { width: constrainedSize, maxWidth: constrainedSize } : undefined}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (
@@ -127,7 +145,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="py-4">
-        <DataTablePagination pagination={pagination} table={table} />
+        <DataTablePagination table={table} />
       </div>
     </div>
   );
