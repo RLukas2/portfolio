@@ -72,7 +72,7 @@ function ServicesCreatePage() {
               form.handleSubmit();
             }}
           >
-            <ServicesForm form={form} service={undefined} />
+            <ServicesForm form={form} isPending={createServiceMutation.isPending} service={undefined} />
           </form>
         </form.AppForm>
       </div>

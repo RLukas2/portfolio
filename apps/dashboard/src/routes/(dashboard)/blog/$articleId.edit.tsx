@@ -5,7 +5,7 @@ import { useAppForm } from '@xbrk/ui/form';
 import { NotFound } from '@xbrk/ui/not-found';
 import { toast } from 'sonner';
 import { z } from 'zod/v4';
-import { ArticleForm } from '@/components/blog/form';
+import { ArticleForm, getArticleFormValues } from '@/components/blog/form';
 import { queryKeys } from '@/lib/query-keys';
 import { $getArticleById, $updateArticle } from '@/lib/server/blog';
 
@@ -23,7 +23,7 @@ export const Route = createFileRoute('/(dashboard)/blog/$articleId/edit')({
     meta: [{ title: `Edit Article: ${loaderData?.title} | Dashboard` }],
   }),
   errorComponent: ({ error }) => <ErrorComponent error={error} />,
-  notFoundComponent: () => <NotFound>Project not found</NotFound>,
+  notFoundComponent: () => <NotFound>Article not found</NotFound>,
 });
 
 function ArticlesEditPage() {
@@ -49,7 +49,7 @@ function ArticlesEditPage() {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
       toast.error(
-        `Failed to create article: ${
+        `Failed to update article: ${
           errorMessage.includes('validation')
             ? 'Please check your form inputs'
             : 'Server error. Please try again later.'
@@ -66,15 +66,7 @@ function ArticlesEditPage() {
   };
 
   const form = useAppForm({
-    defaultValues: {
-      title: article.data?.title ?? '',
-      slug: article.data?.slug ?? '',
-      description: article.data?.description ?? '',
-      content: article.data?.content ?? '',
-      thumbnail: '',
-      isDraft: article.data?.isDraft ?? false,
-      tags: article.data?.tags ?? [],
-    },
+    defaultValues: getArticleFormValues(article.data),
     validators: {
       onChange: ArticleBaseSchema,
     },
@@ -101,7 +93,7 @@ function ArticlesEditPage() {
               form.handleSubmit();
             }}
           >
-            <ArticleForm article={article.data} form={form} />
+            <ArticleForm article={article.data} form={form} isPending={updateArticleMutation.isPending} />
           </form>
         </form.AppForm>
       </div>

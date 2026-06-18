@@ -77,7 +77,7 @@ function ExperiencesCreatePage() {
               form.handleSubmit();
             }}
           >
-            <ExperiencesForm experience={undefined} form={form} />
+            <ExperiencesForm experience={undefined} form={form} isPending={createExperienceMutation.isPending} />
           </form>
         </form.AppForm>
       </div>

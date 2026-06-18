@@ -75,7 +75,7 @@ function ProjectsCreatePage() {
               form.handleSubmit();
             }}
           >
-            <ProjectsForm form={form} project={undefined} />
+            <ProjectsForm form={form} isPending={createProjectMutation.isPending} project={undefined} />
           </form>
         </form.AppForm>
       </div>

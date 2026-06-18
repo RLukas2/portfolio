@@ -100,7 +100,7 @@ function SnippetsEditPage() {
               form.handleSubmit();
             }}
           >
-            <SnippetsForm form={form} />
+            <SnippetsForm form={form} isPending={updateSnippetMutation.isPending} snippet={snippet.data} />
           </form>
         </form.AppForm>
       </div>

@@ -4,8 +4,7 @@ import { ArticleBaseSchema } from '@xbrk/db/api-schemas';
 import { useAppForm } from '@xbrk/ui/form';
 import { toast } from 'sonner';
 import { z } from 'zod/v4';
-import { ArticleForm } from '@/components/blog/form';
-import authClient from '@/lib/auth/client';
+import { ArticleForm, articleDefaultValues } from '@/components/blog/form';
 import { queryKeys } from '@/lib/query-keys';
 import { $createArticle } from '@/lib/server/blog';
 
@@ -19,10 +18,9 @@ export const Route = createFileRoute('/(dashboard)/blog/create')({
 function ArticlesCreatePage() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: session } = authClient.useSession();
 
   const createArticleMutation = useMutation({
-    mutationFn: (data: z.infer<typeof ArticleBaseSchema> & { authorId: string }) => $createArticle({ data }),
+    mutationFn: (data: z.infer<typeof ArticleBaseSchema>) => $createArticle({ data }),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: queryKeys.blog.all });
       toast.success('Article created successfully');
@@ -35,22 +33,11 @@ function ArticlesCreatePage() {
   });
 
   const handleFormSubmit = (data: z.infer<typeof ArticleBaseSchema>) => {
-    createArticleMutation.mutate({
-      ...data,
-      authorId: session?.user?.id ?? '',
-    });
+    createArticleMutation.mutate(data);
   };
 
   const form = useAppForm({
-    defaultValues: {
-      title: '',
-      slug: '',
-      description: '',
-      content: '',
-      thumbnail: '',
-      isDraft: false,
-      tags: [] as string[],
-    },
+    defaultValues: articleDefaultValues,
     validators: {
       onChange: ArticleBaseSchema,
     },
@@ -77,7 +64,7 @@ function ArticlesCreatePage() {
               form.handleSubmit();
             }}
           >
-            <ArticleForm article={undefined} form={form} />
+            <ArticleForm article={undefined} form={form} isPending={createArticleMutation.isPending} />
           </form>
         </form.AppForm>
       </div>

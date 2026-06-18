@@ -71,7 +71,7 @@ function SnippetsCreatePage() {
               form.handleSubmit();
             }}
           >
-            <SnippetsForm form={form} />
+            <SnippetsForm form={form} isPending={createSnippetMutation.isPending} snippet={undefined} />
           </form>
         </form.AppForm>
       </div>
