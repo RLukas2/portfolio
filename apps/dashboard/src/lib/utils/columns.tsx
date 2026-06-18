@@ -50,8 +50,8 @@ export function createCommonColumns<T extends BaseItemType>(
         options?.editBasePath ? (
           <Link
             className="font-medium text-primary hover:underline"
-            // @ts-expect-error - Dynamic route construction
-            to={`${options.editBasePath}/${row.original.id}/edit`}
+            // biome-ignore lint/suspicious/noExplicitAny: dynamic route path
+            to={`${options.editBasePath}/${row.original.id}/edit` as any}
           >
             {row.original.title}
           </Link>
