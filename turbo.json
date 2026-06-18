@@ -3,7 +3,18 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".output/**", "dist/**"]
+      "outputs": [".output/**", "dist/**"],
+      "inputs": [
+        "src/**",
+        "tsconfig.json",
+        "package.json",
+        "!dist/**",
+        "!.output/**",
+        "!.cache/**",
+        "!coverage/**",
+        "!node_modules/.vite/**",
+        "!routeTree.gen.ts"
+      ]
     },
     "dev": {
       "cache": false,
@@ -21,18 +32,28 @@
     "db:studio": {
       "cache": false
     },
-    "lint": {
-      "inputs": ["**/*.{ts,tsx,js,jsx,json,css}"]
+    "db:generate": {
+      "cache": false
     },
-    "format": {
-      "inputs": ["**/*.{ts,tsx,js,jsx,json,css,md}"]
+    "db:migrate": {
+      "cache": false
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"]
+      "dependsOn": ["^typecheck"],
+      "inputs": [
+        "src/**",
+        "tsconfig.json",
+        "!dist/**",
+        "!.output/**",
+        "!.cache/**",
+        "!coverage/**",
+        "!node_modules/.vite/**",
+        "!routeTree.gen.ts"
+      ]
     },
     "test": {
       "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
+      "outputs": []
     },
     "test:watch": {
       "cache": false,
