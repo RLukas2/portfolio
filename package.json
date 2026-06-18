@@ -39,7 +39,7 @@
     "pnpm": ">=10.0.0"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss}": [
       "pnpm exec biome check --write"
     ]
   },
