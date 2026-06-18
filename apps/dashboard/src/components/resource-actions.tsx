@@ -24,14 +24,14 @@ import { toast } from 'sonner';
 import { env } from '@/lib/env/client';
 
 interface ResourceActionsProps {
+  deleteMutationConfig: {
+    mutationFn: (id: string) => Promise<unknown>;
+    invalidateQuery: () => Promise<void>;
+  };
   editPath: string;
   id: string;
   resourceType: 'project' | 'experience' | 'snippet' | 'blog' | 'service';
   title: string;
-  trpcDeleteMutation: {
-    mutationFn: (id: string) => Promise<unknown>;
-    invalidateQuery: () => Promise<void>;
-  };
   viewPath?: string;
 }
 
@@ -41,15 +41,15 @@ export function ResourceActions({
   resourceType,
   viewPath,
   editPath,
-  trpcDeleteMutation,
+  deleteMutationConfig,
 }: Readonly<ResourceActionsProps>) {
   const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const deleteMutation = useMutation({
-    mutationFn: () => trpcDeleteMutation.mutationFn(id),
+    mutationFn: () => deleteMutationConfig.mutationFn(id),
     onSuccess: async () => {
-      await trpcDeleteMutation.invalidateQuery();
+      await deleteMutationConfig.invalidateQuery();
       toast.success(`${resourceType.charAt(0).toUpperCase() + resourceType.slice(1)} "${title}" deleted successfully`);
     },
     onError: (error) => {

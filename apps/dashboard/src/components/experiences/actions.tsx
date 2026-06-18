@@ -13,11 +13,7 @@ export function Actions({ id, title }: Readonly<DataTableRowActionsProps>) {
 
   return (
     <ResourceActions
-      editPath={`/experiences/${id}/edit`}
-      id={id}
-      resourceType="experience"
-      title={title}
-      trpcDeleteMutation={{
+      deleteMutationConfig={{
         mutationFn: (resourceId: string) => $deleteExperience({ data: resourceId }),
         invalidateQuery: async () => {
           await queryClient.invalidateQueries({
@@ -25,6 +21,10 @@ export function Actions({ id, title }: Readonly<DataTableRowActionsProps>) {
           });
         },
       }}
+      editPath={`/experiences/${id}/edit`}
+      id={id}
+      resourceType="experience"
+      title={title}
     />
   );
 }

@@ -14,11 +14,7 @@ export function Actions({ id, title, slug }: Readonly<DataTableRowActionsProps>)
 
   return (
     <ResourceActions
-      editPath={`/snippets/${id}/edit`}
-      id={id}
-      resourceType="snippet"
-      title={title}
-      trpcDeleteMutation={{
+      deleteMutationConfig={{
         mutationFn: (resourceId: string) => $deleteSnippet({ data: resourceId }),
         invalidateQuery: async () => {
           await queryClient.invalidateQueries({
@@ -26,6 +22,10 @@ export function Actions({ id, title, slug }: Readonly<DataTableRowActionsProps>)
           });
         },
       }}
+      editPath={`/snippets/${id}/edit`}
+      id={id}
+      resourceType="snippet"
+      title={title}
       viewPath={`/snippets/${slug}`}
     />
   );
