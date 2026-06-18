@@ -1,5 +1,5 @@
 import { createMiddleware } from '@tanstack/react-start';
-import { authMiddleware } from '@/lib/auth/middleware';
+import { adminMiddleware, authMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from './db';
 import { sentryMiddleware } from './sentry';
 
@@ -62,5 +62,5 @@ export const publicMiddleware = createMiddleware()
  * ```
  */
 export const protectedMiddleware = createMiddleware()
-  .middleware([sentryMiddleware, dbMiddleware, authMiddleware])
+  .middleware([sentryMiddleware, dbMiddleware, authMiddleware, adminMiddleware])
   .server(({ next }) => next());
