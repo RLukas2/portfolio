@@ -1,8 +1,8 @@
-import { cn } from '@xbrk/ui';
 import { cva } from 'class-variance-authority';
 import { FileIcon, FolderIcon, FolderOpenIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './collapsible';
+import { cn } from './lib/cn';
 
 type FilesProps = React.ComponentPropsWithoutRef<'div'>;
 type FileProps = {
@@ -32,7 +32,7 @@ export const File = (props: FileProps) => {
   const { name, className, ...rest } = props;
 
   return (
-    <div className={cn(item({ className }))} {...rest}>
+    <div className={cn(item(), className)} {...rest}>
       <FileIcon className="size-4" />
       {name}
     </div>

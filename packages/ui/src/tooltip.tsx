@@ -1,17 +1,13 @@
 import { Arrow, Content, Portal, Provider, Root, Trigger } from '@radix-ui/react-tooltip';
-import { cn } from '@xbrk/ui';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 function TooltipProvider({ delayDuration = 0, ...props }: Readonly<ComponentProps<typeof Provider>>) {
   return <Provider data-slot="tooltip-provider" delayDuration={delayDuration} {...props} />;
 }
 
 function Tooltip({ ...props }: Readonly<ComponentProps<typeof Root>>) {
-  return (
-    <TooltipProvider>
-      <Root data-slot="tooltip" {...props} />
-    </TooltipProvider>
-  );
+  return <Root data-slot="tooltip" {...props} />;
 }
 
 function TooltipTrigger({ ...props }: Readonly<ComponentProps<typeof Trigger>>) {
