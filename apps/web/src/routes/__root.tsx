@@ -54,6 +54,11 @@ export const Route = createRootRouteWithContext<{
       },
       {
         rel: 'stylesheet',
+        href: 'https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css',
+        type: 'text/css',
+      },
+      {
+        rel: 'stylesheet',
         href: printCss,
         media: 'print',
         type: 'text/css',
