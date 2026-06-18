@@ -9,7 +9,6 @@ export * as guestbookService from './guestbook/guestbook.service';
 // Error handling
 export type { ApiErrorResponse, ApiSuccessResponse } from './http/error-response';
 export { createSuccessResponse, handleApiError } from './http/response';
-export * as offeringService from './offerings/offerings.service';
 export * as offeringsService from './offerings/offerings.service';
 export * as projectsService from './projects/projects.service';
 export * as searchService from './search/search.service';
