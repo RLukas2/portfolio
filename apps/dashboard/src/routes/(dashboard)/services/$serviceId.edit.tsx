@@ -101,7 +101,7 @@ function ServicesEditPage() {
               form.handleSubmit();
             }}
           >
-            <ServicesForm form={form} service={service.data} />
+            <ServicesForm form={form} isPending={updateServiceMutation.isPending} service={service.data} />
           </form>
         </form.AppForm>
       </div>

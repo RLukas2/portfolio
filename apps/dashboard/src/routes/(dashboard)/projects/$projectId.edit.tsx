@@ -49,7 +49,7 @@ function ProjectsEditPage() {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
       toast.error(
-        `Failed to create project: ${
+        `Failed to update project: ${
           errorMessage.includes('validation')
             ? 'Please check your form inputs'
             : 'Server error. Please try again later.'
@@ -104,7 +104,7 @@ function ProjectsEditPage() {
               form.handleSubmit();
             }}
           >
-            <ProjectsForm form={form} project={project.data} />
+            <ProjectsForm form={form} isPending={updateProjectMutation.isPending} project={project.data} />
           </form>
         </form.AppForm>
       </div>

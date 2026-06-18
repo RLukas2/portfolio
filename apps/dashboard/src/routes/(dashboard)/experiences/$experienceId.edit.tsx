@@ -23,7 +23,7 @@ export const Route = createFileRoute('/(dashboard)/experiences/$experienceId/edi
     meta: [{ title: `Edit Experience: ${loaderData?.title} | Dashboard` }],
   }),
   errorComponent: ({ error }) => <ErrorComponent error={error} />,
-  notFoundComponent: () => <NotFound>Project not found</NotFound>,
+  notFoundComponent: () => <NotFound>Experience not found</NotFound>,
 });
 
 function ExperiencesEditPage() {
@@ -106,7 +106,7 @@ function ExperiencesEditPage() {
               form.handleSubmit();
             }}
           >
-            <ExperiencesForm experience={experience.data} form={form} />
+            <ExperiencesForm experience={experience.data} form={form} isPending={updateExperienceMutation.isPending} />
           </form>
         </form.AppForm>
       </div>
