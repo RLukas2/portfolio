@@ -40,7 +40,6 @@ export const Route = createRootRouteWithContext<{
     ],
     links: [{ rel: 'stylesheet', href: appCss, as: 'style', type: 'text/css' }],
   }),
-  staleTime: Number.POSITIVE_INFINITY,
   shellComponent: ({ children }) => {
     return (
       <ThemeProvider>

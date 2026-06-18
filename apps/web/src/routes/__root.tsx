@@ -126,7 +126,6 @@ export const Route = createRootRouteWithContext<{
       },
     ],
   }),
-  staleTime: Number.POSITIVE_INFINITY,
   shellComponent: ({ children }) => {
     return (
       <ThemeProvider>
