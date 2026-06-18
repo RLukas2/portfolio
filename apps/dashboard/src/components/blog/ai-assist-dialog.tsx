@@ -80,6 +80,14 @@ export function AIAssistDialog({
   const [open, setOpen] = useState(false);
   const [userPrompt, setUserPrompt] = useState('');
   const [selectedTitle, setSelectedTitle] = useState<string>('');
+  const generationPrompt =
+    userPrompt.trim() ||
+    context.topic ||
+    context.title ||
+    context.description ||
+    context.selectedText ||
+    context.currentContent ||
+    '';
 
   const chatOptions = useMemo(
     () =>
@@ -89,15 +97,20 @@ export function AIAssistDialog({
     [],
   );
 
-  const { messages, sendMessage, isLoading, stop, setMessages } = useChat({
-    ...chatOptions,
-    body: {
+  const chatBody = useMemo(
+    () => ({
       type,
       context: {
         ...context,
-        topic: userPrompt || context.topic,
+        topic: userPrompt.trim() || context.topic,
       },
-    },
+    }),
+    [type, context, userPrompt],
+  );
+
+  const { messages, sendMessage, isLoading, stop, setMessages } = useChat({
+    ...chatOptions,
+    body: chatBody,
     onError: (error) => {
       toast.error(`Failed to generate content: ${error.message}`);
     },
@@ -113,14 +126,17 @@ export function AIAssistDialog({
   }, [messages]);
 
   // Parse titles when completion changes and type is title
-  const titles =
-    type === 'title' && completion
-      ? completion
-          .split('\n')
-          .map((line) => line.trim())
-          .filter((line) => TITLE_PATTERN.test(line))
-          .map((line) => line.replace(TITLE_REPLACE_PATTERN, ''))
-      : [];
+  const titles = useMemo(
+    () =>
+      type === 'title' && completion
+        ? completion
+            .split('\n')
+            .map((line) => line.trim())
+            .filter((line) => TITLE_PATTERN.test(line))
+            .map((line) => line.replace(TITLE_REPLACE_PATTERN, ''))
+        : [],
+    [completion, type],
+  );
 
   // Auto-select first title when titles are generated
   useEffect(() => {
@@ -129,14 +145,24 @@ export function AIAssistDialog({
     }
   }, [titles, selectedTitle]);
 
+  const resetState = () => {
+    setUserPrompt('');
+    setMessages([]);
+    setSelectedTitle('');
+  };
+
   const handleGenerate = () => {
-    sendMessage(userPrompt || context.topic || '');
+    if (!generationPrompt) {
+      return;
+    }
+
+    sendMessage(generationPrompt);
   };
 
   const handleRegenerate = () => {
     setMessages([]);
     setSelectedTitle('');
-    sendMessage(userPrompt || context.topic || '');
+    sendMessage(generationPrompt);
   };
 
   const handleApply = () => {
@@ -144,9 +170,7 @@ export function AIAssistDialog({
     if (contentToApply) {
       onApply(contentToApply);
       setOpen(false);
-      setUserPrompt('');
-      setMessages([]);
-      setSelectedTitle('');
+      resetState();
     }
   };
 
@@ -155,21 +179,20 @@ export function AIAssistDialog({
       stop();
     }
     setOpen(false);
-    setUserPrompt('');
-    setMessages([]);
-    setSelectedTitle('');
+    resetState();
   };
 
-  // Reset completion when dialog closes
-  useEffect(() => {
-    if (!open) {
-      setMessages([]);
-      setSelectedTitle('');
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (nextOpen) {
+      setOpen(true);
+      return;
     }
-  }, [open, setMessages]);
+
+    handleClose();
+  };
 
   return (
-    <Dialog onOpenChange={setOpen} open={open}>
+    <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogTrigger asChild>
         <Button className={cn('gap-2', className)} size={buttonSize} type="button" variant={buttonVariant}>
           <SparklesIcon className="h-4 w-4" />
@@ -269,7 +292,7 @@ export function AIAssistDialog({
           {!completion && (
             <Button
               className="gap-2"
-              disabled={isLoading || !userPrompt.trim()}
+              disabled={isLoading || !generationPrompt}
               onClick={handleGenerate}
               type="button"
               variant="default"
