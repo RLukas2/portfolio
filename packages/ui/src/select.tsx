@@ -15,9 +15,9 @@ import {
   Value,
   Viewport,
 } from '@radix-ui/react-select';
-import { cn } from '@xbrk/ui';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 function Select({ ...props }: Readonly<ComponentProps<typeof Root>>) {
   return <Root data-slot="select" {...props} />;

@@ -1,4 +1,3 @@
-import { cn } from '@xbrk/ui';
 import { type ComponentProps, createContext, useContext, useId, useMemo } from 'react';
 import {
   type DefaultLegendContentProps,
@@ -8,6 +7,7 @@ import {
   Tooltip,
 } from 'recharts';
 import type { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent';
+import { cn } from './lib/cn';
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const;

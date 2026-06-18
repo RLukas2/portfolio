@@ -1,4 +1,4 @@
-import { cn } from '@xbrk/ui';
+import { cn } from './lib/cn';
 
 type ComponentPreviewProps = React.HTMLAttributes<HTMLDivElement>;
 

@@ -1,4 +1,3 @@
-import { cn } from '@xbrk/ui';
 import { FileCode, FileText, FolderOpen, TerminalIcon } from 'lucide-react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import {
@@ -14,6 +13,7 @@ import {
   siVercel,
 } from 'simple-icons';
 import Icon from './icon';
+import { cn } from './lib/cn';
 
 type CodeBlockProps = HTMLAttributes<HTMLElement> & {
   title?: string;

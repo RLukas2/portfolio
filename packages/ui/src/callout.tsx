@@ -1,5 +1,5 @@
-import { cn } from '@xbrk/ui';
 import { AlertCircle, AlertTriangle, CheckCircle2, Info, Skull } from 'lucide-react';
+import { cn } from './lib/cn';
 
 const calloutVariants = {
   default: {

@@ -1,6 +1,6 @@
 import { Anchor, Content, Portal, Root, Trigger } from '@radix-ui/react-popover';
-import { cn } from '@xbrk/ui';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 function Popover({ ...props }: Readonly<ComponentProps<typeof Root>>) {
   return <Root data-slot="popover" {...props} />;

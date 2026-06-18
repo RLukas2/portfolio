@@ -1,8 +1,8 @@
-import { cn } from '@xbrk/ui';
 import { type ComponentProps } from 'react';
 import type { SimpleIcon } from 'simple-icons';
 import { Button } from './button';
 import Icon from './icon';
+import { cn } from './lib/cn';
 
 interface SignInButtonProps extends ComponentProps<typeof Button> {
   icon: SimpleIcon;

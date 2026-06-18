@@ -1,6 +1,6 @@
-import { cn } from '@xbrk/ui';
 import { FileCode, Folder } from 'lucide-react';
 import { Fragment } from 'react';
+import { cn } from './lib/cn';
 
 interface Node {
   children?: Node[];

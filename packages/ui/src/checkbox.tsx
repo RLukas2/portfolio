@@ -1,7 +1,7 @@
 import { Indicator, Root } from '@radix-ui/react-checkbox';
-import { cn } from '@xbrk/ui';
 import { CheckIcon } from 'lucide-react';
 import { type ComponentProps } from 'react';
+import { cn } from './lib/cn';
 
 function Checkbox({ className, ...props }: ComponentProps<typeof Root>) {
   return (
