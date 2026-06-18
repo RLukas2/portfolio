@@ -1,7 +1,6 @@
 import { cn } from '@xbrk/ui';
-import { ScrollArea } from '@xbrk/ui/scroll-area';
 import { List } from 'lucide-react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import useActiveItem from '@/hooks/use-active-item';
 import useMounted from '@/hooks/use-mounted';
 import type { TOC } from '@/types/misc';
@@ -36,11 +35,14 @@ export default function TableOfContents({ toc, isMobile }: Readonly<TableOfConte
           <p className="font-medium text-sm">On This Page</p>
         </div>
       )}
-      <ScrollArea className="w-full">
-        <div className={isMobile ? 'max-h-[60vh] pr-4' : 'max-h-[calc(100vh-15rem)]'}>
+      <div
+        className={cn('w-full overflow-y-auto', isMobile ? 'max-h-[60vh]' : 'max-h-[calc(100vh-15rem)]')}
+        data-toc-scroll
+      >
+        <div className="pr-4">
           <Tree activeItem={activeHeading} tree={toc} />
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 }
@@ -54,28 +56,64 @@ const PADDING_LEFT = 12 as const;
 
 function Tree({ tree, activeItem }: TreeProps) {
   const minDepth = Math.min(...tree.map((item) => item.depth));
+  const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+
+  useEffect(() => {
+    if (!activeItem) {
+      return;
+    }
+
+    const activeElement = itemRefs.current[activeItem];
+    const viewport = activeElement?.closest('[data-toc-scroll]');
+    if (!(activeElement && viewport instanceof HTMLElement)) {
+      return;
+    }
+
+    const itemRect = activeElement.getBoundingClientRect();
+    const viewportRect = viewport.getBoundingClientRect();
+    const scrollPadding = 16;
+
+    if (itemRect.top < viewportRect.top + scrollPadding) {
+      viewport.scrollTo({
+        behavior: 'smooth',
+        top: viewport.scrollTop + itemRect.top - viewportRect.top - scrollPadding,
+      });
+    } else if (itemRect.bottom > viewportRect.bottom - scrollPadding) {
+      viewport.scrollTo({
+        behavior: 'smooth',
+        top: viewport.scrollTop + itemRect.bottom - viewportRect.bottom + scrollPadding,
+      });
+    }
+  }, [activeItem]);
 
   return tree?.length ? (
     <ul className="m-0 list-none space-y-1">
-      {tree.map((item) => (
-        <li key={item.url}>
-          <a
-            className={cn(
-              'block rounded-lg py-1.5 text-sm no-underline transition-all',
-              item.url.replace(HASH_REGEX, '') === activeItem
-                ? 'bg-primary/10 font-medium text-primary'
-                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-            )}
-            href={`#${item.url}`}
-            style={{
-              paddingLeft: `${(item.depth - minDepth + 1) * PADDING_LEFT}px`,
-              paddingRight: '12px',
-            }}
-          >
-            {item.title}
-          </a>
-        </li>
-      ))}
+      {tree.map((item) => {
+        const itemId = item.url.replace(HASH_REGEX, '');
+
+        return (
+          <li key={item.url}>
+            <a
+              className={cn(
+                'block rounded-lg py-1.5 text-sm no-underline transition-all',
+                itemId === activeItem
+                  ? 'bg-primary/10 font-medium text-primary'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+              )}
+              href={`#${item.url}`}
+              ref={(element) => {
+                itemRefs.current[itemId] = element;
+              }}
+              style={{
+                paddingLeft: `${(item.depth - minDepth + 1) * PADDING_LEFT}px`,
+                paddingRight: '12px',
+              }}
+            >
+              {item.title}
+            </a>
+          </li>
+        );
+      })}
     </ul>
   ) : null;
 }

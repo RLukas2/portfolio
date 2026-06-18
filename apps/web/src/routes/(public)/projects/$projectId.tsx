@@ -102,7 +102,7 @@ function RouteComponent() {
   const thumbnailUrl = imageUrl ?? `https://placehold.co/1200x630/darkgray/white/png?text=${encodeURIComponent(title)}`;
 
   return (
-    <article className="relative lg:gap-10 xl:grid xl:max-w-6xl xl:grid-cols-[1fr_280px] 2xl:max-w-7xl">
+    <article className="relative xl:max-w-6xl 2xl:max-w-7xl">
       <div className="w-full min-w-0">
         {/* Breadcrumb */}
         <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5 }}>
@@ -212,34 +212,31 @@ function RouteComponent() {
             <ZoomImage alt={title} className="w-full rounded-xl" height={630} src={thumbnailUrl} width={1200} />
           </div>
         </m.div>
+      </div>
 
-        {/* Project content */}
-        {contentRendering && (
-          <m.div
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-12"
-            initial={false}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
+      {contentRendering && (
+        <div className="relative mt-12 lg:gap-10 xl:grid xl:grid-cols-[1fr_280px]">
+          {/* Project content */}
+          <m.div animate={{ opacity: 1, y: 0 }} initial={false} transition={{ duration: 0.5, delay: 0.4 }}>
             <div className="prose prose-slate dark:prose-invert max-w-none! prose-headings:font-heading prose-a:text-violet-600 prose-headings:tracking-tight prose-a:no-underline hover:prose-a:text-violet-500 dark:prose-a:text-violet-400 dark:hover:prose-a:text-violet-300">
               <RenderedMarkdown rendering={contentRendering} />
             </div>
           </m.div>
-        )}
-      </div>
 
-      {/* Table of contents - sticky sidebar */}
-      {toc && toc.length > 0 && (
-        <m.div
-          animate={{ opacity: 1, x: 0 }}
-          className="hidden text-sm xl:block"
-          initial={false}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          <div className="sticky top-20 -mt-10 pt-10">
-            <TableOfContents toc={toc} />
-          </div>
-        </m.div>
+          {/* Table of contents - sticky sidebar */}
+          {toc && toc.length > 0 && (
+            <m.div
+              animate={{ opacity: 1, x: 0 }}
+              className="hidden text-sm xl:block"
+              initial={false}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <div className="sticky top-20">
+                <TableOfContents toc={toc} />
+              </div>
+            </m.div>
+          )}
+        </div>
       )}
     </article>
   );

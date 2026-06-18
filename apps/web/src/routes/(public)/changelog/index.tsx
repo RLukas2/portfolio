@@ -59,7 +59,7 @@ function RouteComponent() {
             initial={false}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <div className="sticky top-20 -mt-10 pt-10">
+            <div className="sticky top-20">
               <TableOfContents toc={toc} />
             </div>
           </m.div>
