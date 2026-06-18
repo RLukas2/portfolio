@@ -13,59 +13,49 @@ dotenv.config({
   path: path.resolve(import.meta.dirname, '../../.env'),
 });
 
+const isProductionBuild = Boolean(process.env.CI || process.env.VERCEL);
+const enableSentry = Boolean(process.env.SENTRY_AUTH_TOKEN && isProductionBuild);
+const enableDevtools = process.env.NODE_ENV !== 'production';
+
 const config = defineConfig({
   build: {
-    sourcemap: true,
+    sourcemap: enableSentry,
     target: 'es2022',
     rollupOptions: {
       external: [/\.wasm$/],
-      output: {
-        manualChunks(id) {
-          // Separate vendor chunks for better caching
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-            if (
-              id.includes('@tanstack/react-router') ||
-              id.includes('@tanstack/react-query') ||
-              id.includes('@tanstack/react-start')
-            ) {
-              return 'tanstack-vendor';
-            }
-            if (id.includes('framer-motion') || id.includes('lucide-react')) {
-              return 'ui-vendor';
-            }
-          }
-        },
-      },
     },
-    // Increase chunk size warning limit for vendor chunks
-    chunkSizeWarningLimit: 1000,
   },
   resolve: {
     tsconfigPaths: true,
   },
   plugins: [
     tailwindcss(),
-    devtools({
-      eventBusConfig: {
-        port: 1234,
-        debug: false,
-      },
-      enhancedLogs: {
-        enabled: true,
-      },
-    }),
-    sentryTanstackStart({
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-      telemetry: false,
-      sourcemaps: {
-        disable: false,
-      },
-    }),
+    ...(enableDevtools
+      ? [
+          devtools({
+            eventBusConfig: {
+              port: 1234,
+              debug: false,
+            },
+            enhancedLogs: {
+              enabled: true,
+            },
+          }),
+        ]
+      : []),
+    ...(enableSentry
+      ? [
+          sentryTanstackStart({
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+            org: process.env.SENTRY_ORG,
+            project: process.env.SENTRY_PROJECT,
+            telemetry: false,
+            sourcemaps: {
+              disable: false,
+            },
+          }),
+        ]
+      : []),
     tanstackStart({
       srcDirectory: './src',
       start: {
@@ -81,7 +71,7 @@ const config = defineConfig({
       },
     }),
     nitro({
-      compatibilityDate: 'latest',
+      compatibilityDate: '2026-04-06',
       preset: process.env.VERCEL ? 'vercel' : 'node',
     }),
     viteReact(),
