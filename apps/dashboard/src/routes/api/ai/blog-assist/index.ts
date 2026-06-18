@@ -50,6 +50,7 @@ const SHORT_CONTENT_PREVIEW_LENGTH = 300;
 // Token limits for AI responses
 const MAX_TOKENS_LONG = 2000;
 const MAX_TOKENS_SHORT = 500;
+const FALLBACK_TOPIC = 'the provided article context';
 
 /**
  * System prompts for each assistance type
@@ -77,33 +78,37 @@ const SYSTEM_PROMPTS: Record<AssistType, string> = {
  * @returns Formatted prompt string for the AI
  */
 function buildUserPrompt(type: AssistType, context: AssistContext): string {
+  const topic = context.topic || context.title || context.description || FALLBACK_TOPIC;
+
   switch (type) {
     case 'title':
-      return `Generate 5 blog post title ideas for: ${context.topic}`;
+      return `Generate 5 blog post title ideas for: ${topic}`;
     case 'description': {
       const contentContext = context.currentContent
         ? `\n\nContext from the article:\n${context.currentContent.slice(0, CONTENT_PREVIEW_LENGTH)}...`
         : '';
-      return `Write a compelling description for a blog post titled "${context.title}"${contentContext}`;
+      return `Write a compelling description for a blog post titled "${topic}"${contentContext}`;
     }
     case 'tags': {
       const contentPreview = context.currentContent
         ? `\nContent preview: ${context.currentContent.slice(0, SHORT_CONTENT_PREVIEW_LENGTH)}...`
         : '';
-      return `Suggest relevant tags for:\nTitle: ${context.title}\nDescription: ${context.description}${contentPreview}`;
+      return `Suggest relevant tags for:\nTitle: ${context.title || topic}\nDescription: ${
+        context.description || FALLBACK_TOPIC
+      }${contentPreview}`;
     }
     case 'content': {
       const titlePart = context.title ? `\nTitle: ${context.title}` : '';
       const descPart = context.description ? `\nDescription: ${context.description}` : '';
-      return `Write a complete blog post about: ${context.topic}${titlePart}${descPart}`;
+      return `Write a complete blog post about: ${topic}${titlePart}${descPart}`;
     }
     case 'outline': {
       const titlePart = context.title ? `\nTitle: ${context.title}` : '';
       const descPart = context.description ? `\nDescription: ${context.description}` : '';
-      return `Create a detailed outline for a blog post:\nTopic: ${context.topic}${titlePart}${descPart}`;
+      return `Create a detailed outline for a blog post:\nTopic: ${topic}${titlePart}${descPart}`;
     }
     case 'expand':
-      return `Expand this section with more detail:\n\n${context.selectedText}`;
+      return `Expand this section with more detail:\n\n${context.selectedText || context.currentContent || topic}`;
     default:
       return '';
   }

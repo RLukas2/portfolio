@@ -42,6 +42,9 @@ export const env = createEnv({
     // Canonical app URL — used for OAuth redirect URIs and canonical links.
     VITE_APP_URL: z.url().optional(),
 
+    // Canonical dashboard URL — used by auth and dashboard-local absolute URLs.
+    VITE_DASHBOARD_URL: z.url().optional(),
+
     // Sentry DSN for client-side error reporting.
     VITE_SENTRY_DSN: z.string().min(1).optional(),
   },

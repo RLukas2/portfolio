@@ -16,11 +16,16 @@ import { getBaseUrl } from '@/lib/utils';
  *
  * Configuration is loaded from environment variables defined in env/server.ts
  *
+ * The `productionUrl` is the canonical URL registered with OAuth providers.
+ * The `baseUrl` is the runtime URL (may differ in preview deployments).
+ *
  * @see {@link https://www.better-auth.com/docs Better Auth Documentation}
  */
+const productionUrl = env.VITE_APP_URL ?? getBaseUrl();
+
 export const auth = initAuth({
   baseUrl: getBaseUrl(),
-  productionUrl: getBaseUrl(),
+  productionUrl,
   secret: env.BETTER_AUTH_SECRET,
   githubClientId: env.GITHUB_CLIENT_ID,
   githubClientSecret: env.GITHUB_CLIENT_SECRET,

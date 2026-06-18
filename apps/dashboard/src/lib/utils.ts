@@ -1,7 +1,7 @@
 /**
  * Default port for local development
  */
-const DEFAULT_PORT = 3001 as const;
+const DEFAULT_PORT = 3002 as const;
 
 /**
  * Get Base URL

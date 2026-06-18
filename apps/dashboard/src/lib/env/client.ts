@@ -19,6 +19,9 @@ export const env = createEnv({
     // Canonical app URL — used for OAuth redirect URIs and canonical links.
     VITE_APP_URL: z.url().optional(),
 
+    // Canonical dashboard URL — used by auth and dashboard-local absolute URLs.
+    VITE_DASHBOARD_URL: z.url().optional(),
+
     // App title shown in the browser tab and meta tags.
     VITE_APP_TITLE: z.string().min(1).optional(),
 
