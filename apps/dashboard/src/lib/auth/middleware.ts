@@ -84,7 +84,7 @@ interface AuthContext {
 
 export const adminMiddleware = createMiddleware().server(({ next, context }) => {
   // Context type flows from upstream middlewares (authMiddleware provides user)
-  const { user } = context as AuthContext;
+  const { user } = context as unknown as AuthContext;
 
   if (!user) {
     setResponseStatus(401);
