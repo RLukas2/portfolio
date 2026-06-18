@@ -9,9 +9,13 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
+    "./react": {
+      "types": "./dist/components/index.d.ts",
+      "default": "./src/components/index.ts"
+    },
     "./processor": {
-      "types": "./dist/processor.d.ts",
-      "default": "./src/processor.ts"
+      "types": "./dist/processor/index.d.ts",
+      "default": "./src/processor/index.ts"
     }
   },
   "scripts": {

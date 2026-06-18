@@ -5,19 +5,17 @@ import { File, Files, Folder } from '@xbrk/ui/files';
 import type { Components } from 'hast-util-to-jsx-runtime';
 import {
   type AnchorHTMLAttributes,
-  type ComponentProps,
   type ComponentPropsWithoutRef,
   type HTMLAttributes,
   type ImgHTMLAttributes,
   lazy,
 } from 'react';
 
-/**
- * Custom React components for markdown elements.
- * These override the default HTML elements with styled versions.
- *
- * Type-safe using Components from hast-util-to-jsx-runtime.
- */
+const toImageDimension = (value: string | number | undefined) => {
+  const dimension = Number(value);
+  return Number.isFinite(dimension) ? dimension : undefined;
+};
+
 export const components: Components = {
   h1: ({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
     <h1 className={cn('mt-2 scroll-m-20 font-bold text-4xl tracking-tight', className)} {...props} />
@@ -66,16 +64,18 @@ export const components: Components = {
   ),
   img: ({ className, alt, src, width, height, ...props }: ImgHTMLAttributes<HTMLImageElement>) => (
     <Image
-      alt={alt}
+      alt={alt ?? ''}
       className={cn('rounded-md border', className)}
-      height={height as number}
+      height={toImageDimension(height) as number}
       layout="constrained"
-      src={src as string}
-      width={width as number}
+      src={src ?? ''}
+      width={toImageDimension(width) as number}
       {...props}
     />
   ),
-  hr: ({ ...props }) => <hr className="my-4 md:my-8" {...props} />,
+  hr: ({ className, ...props }: HTMLAttributes<HTMLHRElement>) => (
+    <hr className={cn('my-4 md:my-8', className)} {...props} />
+  ),
   table: ({ className, ...props }: HTMLAttributes<HTMLTableElement>) => (
     <div className="my-6 w-full overflow-y-auto">
       <table className={cn('w-full', className)} {...props} />
@@ -103,8 +103,10 @@ export const components: Components = {
   code: ({ className, ...props }: ComponentPropsWithoutRef<'code'>) => (
     <code className={cn('relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm', className)} {...props} />
   ),
-  steps: ({ ...props }) => <div className="steps mb-12 ml-8 border-l pl-8" {...props} />,
-  step: ({ className, ...props }: ComponentProps<'h3'>) => (
+  steps: ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
+    <div className={cn('steps mb-12 ml-8 border-l pl-8', className)} {...props} />
+  ),
+  step: ({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
     <h3 className={cn('step mt-8 scroll-m-20 font-semibold text-lg tracking-tight', className)} {...props} />
   ),
   Image: lazy(() => import('@xbrk/ui/zoom-image')),

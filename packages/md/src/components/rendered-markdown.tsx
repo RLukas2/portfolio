@@ -1,10 +1,9 @@
 import { cn } from '@xbrk/ui';
 import type { Root } from 'hast';
 import type { Components } from 'hast-util-to-jsx-runtime';
-import { toJsxRuntime } from 'hast-util-to-jsx-runtime';
 import { useMemo } from 'react';
-import { Fragment, jsx, jsxs } from 'react/jsx-runtime';
-import { components as defaultComponents } from './md-components';
+import { useMergedComponents } from '../hooks/use-merged-components';
+import { renderHast } from '../utils/render-hast';
 
 interface RenderedMarkdownProps {
   className?: string;
@@ -13,7 +12,7 @@ interface RenderedMarkdownProps {
 }
 
 export function RenderedMarkdown({ rendering, className, components }: Readonly<RenderedMarkdownProps>) {
-  const mergedComponents = useMemo(() => ({ ...defaultComponents, ...components }), [components]);
+  const mergedComponents = useMergedComponents(components);
 
   const content = useMemo(() => {
     if (!rendering) {
@@ -22,12 +21,7 @@ export function RenderedMarkdown({ rendering, className, components }: Readonly<
 
     try {
       const hast = JSON.parse(rendering) as Root;
-      return toJsxRuntime(hast, {
-        Fragment,
-        jsx,
-        jsxs,
-        components: mergedComponents,
-      });
+      return renderHast(hast, mergedComponents);
     } catch (error) {
       console.error('Rendered markdown error:', error);
       return <p>Error rendering content</p>;
