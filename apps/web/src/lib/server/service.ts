@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start';
-import { offeringService } from '@xbrk/api';
+import { offeringsService } from '@xbrk/api';
 import { z } from 'zod/v4';
 import { optionalAuthMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
@@ -7,7 +7,7 @@ import { dbMiddleware } from '@/lib/middleware/db';
 export const $getAllPublicServices = createServerFn({ method: 'GET' })
   .middleware([dbMiddleware])
   .handler(({ context }) => {
-    return offeringService.getAllPublic(context.db);
+    return offeringsService.getAllPublic(context.db);
   });
 
 export const $getServiceBySlug = createServerFn({ method: 'GET' })
@@ -15,5 +15,5 @@ export const $getServiceBySlug = createServerFn({ method: 'GET' })
   .inputValidator(z.object({ slug: z.string() }))
   .handler((ctx) => {
     const session = ctx.context.user ? { user: { role: ctx.context.user.role ?? '' } } : null;
-    return offeringService.getBySlug(ctx.context.db, ctx.data, session);
+    return offeringsService.getBySlug(ctx.context.db, ctx.data, session);
   });
