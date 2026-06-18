@@ -5,6 +5,7 @@ import { createRootRouteWithContext, HeadContent, Scripts } from '@tanstack/reac
 import { siteConfig } from '@xbrk/config';
 import { Toaster } from '@xbrk/ui/sonner';
 import { ThemeProvider, useTheme } from '@xbrk/ui/theme-provider';
+import { TooltipProvider } from '@xbrk/ui/tooltip';
 import { DevtoolsComponent } from '@/components/dev-tools';
 import { type AuthQueryResult, authQueryOptions } from '@/lib/auth/queries';
 import appCss from '@/styles.css?url';
@@ -58,11 +59,13 @@ function ShellComponent({ children }: { readonly children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
-        {children}
-        <Toaster resolvedTheme={resolvedTheme} />
+        <TooltipProvider>
+          {children}
+          <Toaster resolvedTheme={resolvedTheme} />
 
-        {import.meta.env.DEV && <DevtoolsComponent />}
-        <Scripts />
+          {import.meta.env.DEV && <DevtoolsComponent />}
+          <Scripts />
+        </TooltipProvider>
       </body>
     </html>
   );
