@@ -5,7 +5,7 @@ import { Input } from '@xbrk/ui/input';
 import { useState } from 'react';
 import { MAX_IMAGE_SIZE, VALID_IMAGE_TYPES } from '@/lib/constants';
 
-interface FormField {
+export interface FormImageUploadField {
   handleBlur?: () => void;
   handleChange: (value: string) => void;
   setErrorMap: (errorMap: ValidationErrorMap) => void;
@@ -13,7 +13,7 @@ interface FormField {
 
 interface FormImageUploadProps {
   className?: string;
-  field: FormField;
+  field: FormImageUploadField;
   initialPreview?: string | null;
   label: string;
   name: string;

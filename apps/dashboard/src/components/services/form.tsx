@@ -1,4 +1,4 @@
-import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
+import { formOptions } from '@tanstack/react-form';
 import { STACKS } from '@xbrk/config';
 import type { Service } from '@xbrk/db';
 import { withForm } from '@xbrk/ui/form';
@@ -7,6 +7,7 @@ import { generateSlug } from '@xbrk/utils';
 import {
   FormCheckbox,
   FormImageUpload,
+  type FormImageUploadField,
   FormInput,
   FormMDXEditor,
   FormMultiSelect,
@@ -27,23 +28,21 @@ export const serviceFormOpts = formOptions({
   },
 });
 
-interface FormField {
-  handleBlur: () => void;
-  handleChange: (value: string) => void;
-  setErrorMap: (errorMap: ValidationErrorMap) => void;
-}
-
 export const ServicesForm = withForm({
   ...serviceFormOpts,
   props: {
     service: undefined as Service | undefined,
+    isPending: false,
   },
-  render({ form, service }) {
+  render({ form, service, isPending }) {
     return (
       <>
         <form.AppField
           listeners={{
             onChange: ({ value }) => {
+              if (service) {
+                return;
+              }
               const slug = generateSlug(value);
               form.setFieldValue('slug', slug);
             },
@@ -85,7 +84,7 @@ Details about your service."
         <form.AppField name="thumbnail">
           {(field) => (
             <FormImageUpload
-              field={field as FormField}
+              field={field as FormImageUploadField}
               initialPreview={service?.imageUrl}
               label="Image"
               name={field.name}
@@ -116,10 +115,10 @@ Details about your service."
 
         <div>
           <form.Subscribe selector={(formState) => [formState.canSubmit, formState.isSubmitting]}>
-            {([canSubmit, isPending, isSubmitting]) => (
+            {([canSubmit, isSubmitting]) => (
               <FormSubmitButton
                 canSubmit={canSubmit ?? false}
-                isPending={isPending ?? false}
+                isPending={isPending}
                 isSubmitting={isSubmitting ?? false}
               />
             )}

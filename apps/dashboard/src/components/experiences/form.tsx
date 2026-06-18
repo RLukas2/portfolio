@@ -1,4 +1,4 @@
-import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
+import { formOptions } from '@tanstack/react-form';
 import type { Experience } from '@xbrk/db';
 import { ExperienceType as ExperienceEnum, type ExperienceTypeValue } from '@xbrk/db/api-schemas';
 import { withForm } from '@xbrk/ui/form';
@@ -6,6 +6,7 @@ import {
   FormCheckbox,
   FormDatePicker,
   FormImageUpload,
+  type FormImageUploadField,
   FormInput,
   FormSelect,
   FormSubmitButton,
@@ -27,18 +28,13 @@ export const experienceFormOpts = formOptions({
   },
 });
 
-interface FormField {
-  handleBlur: () => void;
-  handleChange: (value: string) => void;
-  setErrorMap: (errorMap: ValidationErrorMap) => void;
-}
-
 export const ExperiencesForm = withForm({
   ...experienceFormOpts,
   props: {
     experience: undefined as Experience | undefined,
+    isPending: false,
   },
-  render({ form, experience }) {
+  render({ form, experience, isPending }) {
     return (
       <>
         <form.AppField name="title">
@@ -62,7 +58,7 @@ export const ExperiencesForm = withForm({
         <form.AppField name="thumbnail">
           {(field) => (
             <FormImageUpload
-              field={field as FormField}
+              field={field as FormImageUploadField}
               initialPreview={experience?.imageUrl}
               label="Image"
               name={field.name}
@@ -124,10 +120,10 @@ export const ExperiencesForm = withForm({
 
         <div>
           <form.Subscribe selector={(formState) => [formState.canSubmit, formState.isSubmitting]}>
-            {([canSubmit, isPending, isSubmitting]) => (
+            {([canSubmit, isSubmitting]) => (
               <FormSubmitButton
                 canSubmit={canSubmit ?? false}
-                isPending={isPending ?? false}
+                isPending={isPending}
                 isSubmitting={isSubmitting ?? false}
               />
             )}

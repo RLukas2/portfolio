@@ -1,4 +1,4 @@
-import { formOptions, type ValidationErrorMap } from '@tanstack/react-form';
+import { formOptions } from '@tanstack/react-form';
 import { STACKS } from '@xbrk/config';
 import type { Project } from '@xbrk/db';
 import { withForm } from '@xbrk/ui/form';
@@ -7,6 +7,7 @@ import { generateSlug } from '@xbrk/utils';
 import {
   FormCheckbox,
   FormImageUpload,
+  type FormImageUploadField,
   FormInput,
   FormMDXEditor,
   FormMultiSelect,
@@ -30,23 +31,21 @@ export const projectFormOpts = formOptions({
   },
 });
 
-interface FormField {
-  handleBlur: () => void;
-  handleChange: (value: string) => void;
-  setErrorMap: (errorMap: ValidationErrorMap) => void;
-}
-
 export const ProjectsForm = withForm({
   ...projectFormOpts,
   props: {
     project: undefined as Project | undefined,
+    isPending: false,
   },
-  render({ form, project }) {
+  render({ form, project, isPending }) {
     return (
       <>
         <form.AppField
           listeners={{
             onChange: ({ value }) => {
+              if (project) {
+                return;
+              }
               const slug = generateSlug(value);
               form.setFieldValue('slug', slug);
             },
@@ -88,7 +87,7 @@ Details about how you implemented the project."
         <form.AppField name="thumbnail">
           {(field) => (
             <FormImageUpload
-              field={field as FormField}
+              field={field as FormImageUploadField}
               initialPreview={project?.imageUrl}
               label="Image"
               name={field.name}
@@ -152,10 +151,10 @@ Details about how you implemented the project."
 
         <div>
           <form.Subscribe selector={(formState) => [formState.canSubmit, formState.isSubmitting]}>
-            {([canSubmit, isPending, isSubmitting]) => (
+            {([canSubmit, isSubmitting]) => (
               <FormSubmitButton
                 canSubmit={canSubmit ?? false}
-                isPending={isPending ?? false}
+                isPending={isPending}
                 isSubmitting={isSubmitting ?? false}
               />
             )}

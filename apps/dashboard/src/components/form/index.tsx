@@ -1,6 +1,6 @@
 export { FormCheckbox } from './checkbox';
 export { FormDatePicker } from './date-picker';
-export { FormImageUpload } from './image-upload';
+export { FormImageUpload, type FormImageUploadField } from './image-upload';
 export { FormInput } from './input';
 export { FormMDXEditor } from './mdx-editor';
 export { FormMultiSelect } from './multi-select';
