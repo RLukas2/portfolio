@@ -4,6 +4,7 @@ import { ClientOnly, createRootRouteWithContext, HeadContent, Scripts } from '@t
 import { createIsomorphicFn } from '@tanstack/react-start';
 import { Toaster } from '@xbrk/ui/sonner';
 import { ThemeProvider, useTheme } from '@xbrk/ui/theme-provider';
+import { TooltipProvider } from '@xbrk/ui/tooltip';
 import posthog from 'posthog-js';
 import { CookieBanner } from '@/components/analytics/cookie-banner';
 import { DevtoolsComponent } from '@/components/dev-tools';
@@ -170,21 +171,23 @@ function ShellComponent({ children }: { children: React.ReactNode }) {
 
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <PostHogProvider client={posthog}>
-          <MotionProvider>
-            <RouteProgress />
+          <TooltipProvider>
+            <MotionProvider>
+              <RouteProgress />
 
-            {children}
+              {children}
 
-            <Toaster resolvedTheme={resolvedTheme} />
+              <Toaster resolvedTheme={resolvedTheme} />
 
-            {import.meta.env.DEV && <DevtoolsComponent />}
+              {import.meta.env.DEV && <DevtoolsComponent />}
 
-            <ClientOnly>
-              <CookieBanner />
-            </ClientOnly>
+              <ClientOnly>
+                <CookieBanner />
+              </ClientOnly>
 
-            <Scripts />
-          </MotionProvider>
+              <Scripts />
+            </MotionProvider>
+          </TooltipProvider>
         </PostHogProvider>
       </body>
     </html>

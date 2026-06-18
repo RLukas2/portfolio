@@ -1,5 +1,5 @@
 import { Badge } from '@xbrk/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@xbrk/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xbrk/ui/tooltip';
 import { BriefcaseIcon, CalendarIcon, MapPinIcon } from 'lucide-react';
 
 import Link from '@/components/shared/link';
@@ -92,30 +92,28 @@ const ExperienceEntry = ({ experience }: ExperienceEntryProps): React.ReactNode 
       </div>
 
       {techStacks.length > 0 && (
-        <TooltipProvider>
-          <div className="my-2 flex flex-row flex-wrap gap-1.5">
-            {techStacks.map((tech) => (
-              <Tooltip key={tech.name}>
-                <TooltipTrigger asChild>
-                  <div className="flex items-center justify-center rounded-lg border border-border p-2 transition-colors hover:bg-secondary">
-                    <svg
-                      className="h-4 w-4"
-                      fill="currentColor"
-                      role="img"
-                      style={{ color: tech.color }}
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <title>{tech.icon.title}</title>
-                      <path d={tech.icon.path} />
-                    </svg>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>{tech.name}</TooltipContent>
-              </Tooltip>
-            ))}
-          </div>
-        </TooltipProvider>
+        <div className="my-2 flex flex-row flex-wrap gap-1.5">
+          {techStacks.map((tech) => (
+            <Tooltip key={tech.name}>
+              <TooltipTrigger asChild>
+                <div className="flex items-center justify-center rounded-lg border border-border p-2 transition-colors hover:bg-secondary">
+                  <svg
+                    className="h-4 w-4"
+                    fill="currentColor"
+                    role="img"
+                    style={{ color: tech.color }}
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>{tech.icon.title}</title>
+                    <path d={tech.icon.path} />
+                  </svg>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>{tech.name}</TooltipContent>
+            </Tooltip>
+          ))}
+        </div>
       )}
 
       <TimelineEntryAccomplishments accomplishments={accomplishments} />
