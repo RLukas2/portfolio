@@ -8,5 +8,7 @@ export const blogColumns: ColumnDef<Article>[] = [
   {
     id: 'actions',
     cell: ({ row }) => <Actions id={row.original.id} slug={row.original.slug} title={row.original.title} />,
+    maxSize: 60,
+    size: 60,
   },
 ];

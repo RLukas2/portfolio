@@ -15,5 +15,7 @@ export const experienceColumns: ColumnDef<Experience>[] = [
   {
     id: 'actions',
     cell: ({ row }) => <Actions id={row.original.id} title={row.original.title} />,
+    maxSize: 60,
+    size: 60,
   },
 ];

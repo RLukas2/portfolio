@@ -42,6 +42,8 @@ export function createCommonColumns<T extends BaseItemType>(
       ),
       enableSorting: false,
       enableHiding: false,
+      maxSize: 40,
+      size: 40,
     },
     {
       accessorKey: 'title',
@@ -76,6 +78,8 @@ export function createCommonColumns<T extends BaseItemType>(
           disabled
         />
       ),
+      maxSize: 80,
+      size: 80,
     },
   ];
 }
@@ -97,5 +101,7 @@ export function createToggleColumn<T extends { title: string }>(
         />
       );
     },
+    maxSize: 80,
+    size: 80,
   };
 }
