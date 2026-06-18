@@ -62,17 +62,33 @@ export const components: Components = {
       {...props}
     />
   ),
-  img: ({ className, alt, src, width, height, ...props }: ImgHTMLAttributes<HTMLImageElement>) => (
-    <Image
-      alt={alt ?? ''}
-      className={cn('rounded-md border', className)}
-      height={toImageDimension(height)}
-      layout="constrained"
-      src={src ?? ''}
-      width={toImageDimension(width)}
-      {...props}
-    />
-  ),
+  img: ({ className, alt, src, width, height, ...props }: ImgHTMLAttributes<HTMLImageElement>) => {
+    const imgHeight = toImageDimension(height);
+    const imgWidth = toImageDimension(width);
+
+    if (imgWidth !== undefined && imgHeight !== undefined) {
+      return (
+        <Image
+          alt={alt ?? ''}
+          className={cn('rounded-md border', className)}
+          height={imgHeight}
+          layout="constrained"
+          src={src ?? ''}
+          width={imgWidth}
+        />
+      );
+    }
+
+    return (
+      <Image
+        {...props}
+        alt={alt ?? ''}
+        className={cn('rounded-md border', className)}
+        layout="fullWidth"
+        src={src ?? ''}
+      />
+    );
+  },
   hr: ({ className, ...props }: HTMLAttributes<HTMLHRElement>) => (
     <hr className={cn('my-4 md:my-8', className)} {...props} />
   ),
