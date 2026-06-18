@@ -19,7 +19,7 @@ export const articles = pgTable(
       .text()
       .references(() => user.id, { onDelete: 'cascade' })
       .notNull(),
-    createdAt: t.timestamp().defaultNow().notNull(),
+    createdAt: t.timestamp({ mode: 'date', withTimezone: true }).defaultNow().notNull(),
     updatedAt: t
       .timestamp({ mode: 'date', withTimezone: true })
       .defaultNow()
