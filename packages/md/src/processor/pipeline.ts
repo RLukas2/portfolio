@@ -68,9 +68,14 @@ function buildPreviewProcessor() {
       .use(remarkRehype, {
         // Policy: raw HTML in markdown is not supported.
       })
-      // Preview omits rehypeKatex, rehypeSlug, rehypeAutolinkHeadings, and rehypeShiki
-      // to keep processing fast for live editing. These are unnecessary in a preview.
       .use(rehypeSanitize, sanitizeSchema)
+      .use(rehypeKatex)
+      .use(rehypeSlug)
+      .use(rehypeAutolinkHeadings, {
+        behavior: 'wrap',
+        properties: { className: ['heading-link'] },
+      })
+      // Preview skips only Shiki, the most expensive step, while keeping layout-critical transforms.
       // biome-ignore lint/suspicious/noExplicitAny: Unified plugin API requires dynamic this context
       .use(function (this: any) {
         // biome-ignore lint/suspicious/noExplicitAny: Compiler function signature requires any for tree parameter
