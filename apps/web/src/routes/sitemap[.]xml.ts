@@ -1,6 +1,6 @@
 import { Readable } from 'node:stream';
 import { createFileRoute } from '@tanstack/react-router';
-import { articlesService, offeringService, projectsService, snippetsService } from '@xbrk/api';
+import { articlesService, offeringsService, projectsService, snippetsService } from '@xbrk/api';
 import { db } from '@xbrk/db/client';
 import { SitemapStream, streamToPromise } from 'sitemap';
 import { getBaseUrl } from '@/lib/utils';
@@ -19,7 +19,7 @@ async function generateSitemap(): Promise<string> {
     projectsService.getAllPublic(db),
     articlesService.getAllPublic(db),
     snippetsService.getAllPublic(db),
-    offeringService.getAllPublic(db),
+    offeringsService.getAllPublic(db),
   ]);
 
   const now = new Date().toISOString();
