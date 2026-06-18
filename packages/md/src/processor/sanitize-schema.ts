@@ -76,7 +76,7 @@ export function buildSanitizeSchema(): Options {
     mover: ['accent'],
     munder: ['accentunder'],
     munderover: ['accent', 'accentunder'],
-    section: ['dataFootnotes'],
+    section: ['data-footnotes'],
     sup: ['id'],
     mstyle: ['displaystyle', 'scriptlevel', 'mathcolor', 'mathbackground', 'mathsize', 'style'],
     mpadded: ['width', 'height', 'depth', 'voffset', 'lspace', 'rspace'],
