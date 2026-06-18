@@ -9,7 +9,7 @@
 @import "@fontsource/cal-sans";
 
 /* KaTeX styles for math rendering */
-@import "../../../packages/md/node_modules/katex/dist/katex.min.css";
+@import "katex/dist/katex.min.css";
 
 /* Fallback: ensure MathML (screen-reader-only) content stays visually hidden
    even if the KaTeX CSS fails to load */

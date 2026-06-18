@@ -221,6 +221,9 @@ importers:
       dotenv:
         specifier: ^17.3.1
         version: 17.4.0
+      katex:
+        specifier: ^0.16.45
+        version: 0.16.45
       lucide-react:
         specifier: 'catalog:'
         version: 1.7.0(react@19.2.4)
@@ -468,6 +471,9 @@ importers:
       framer-motion:
         specifier: ^12.38.0
         version: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      katex:
+        specifier: ^0.16.45
+        version: 0.16.45
       lucide-react:
         specifier: 'catalog:'
         version: 1.7.0(react@19.2.4)
