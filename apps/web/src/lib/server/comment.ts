@@ -4,9 +4,9 @@ import type { Comment } from '@xbrk/db';
 import { z } from 'zod/v4';
 import { authMiddleware, optionalAuthMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
-import type { CommentWithRelations } from '@/types/misc';
 
-type CommentRow = Omit<CommentWithRelations, 'comment'> & {
+type GetAllCommentsItem = Awaited<ReturnType<typeof commentsService.getAll>>[number];
+type CommentRow = Omit<GetAllCommentsItem, 'comment'> & {
   comment: Omit<Comment, 'content'> & { content: Record<string, object> };
 };
 

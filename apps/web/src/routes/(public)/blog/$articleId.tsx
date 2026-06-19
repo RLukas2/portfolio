@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
-import { NotFoundError } from '@xbrk/errors';
+import { ErrorCodes, isHttpError } from '@xbrk/errors';
 import { RenderedMarkdown } from '@xbrk/md';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 import { NotFound } from '@xbrk/ui/not-found';
@@ -42,7 +42,7 @@ export const Route = createFileRoute('/(public)/blog/$articleId')({
         updatedAt: data?.updatedAt,
       };
     } catch (error) {
-      if (error instanceof NotFoundError) {
+      if (isHttpError(error) && error.code === ErrorCodes.NOT_FOUND) {
         throw notFound();
       }
       throw error;

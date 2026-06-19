@@ -1,22 +1,14 @@
 import { createServerFn } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';
 import { articleEngagementService, articlesService } from '@xbrk/api';
-import type { Article, Comment, User } from '@xbrk/db';
+import type { Comment } from '@xbrk/db';
 import { z } from 'zod/v4';
 import { optionalAuthMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
-import type { TOC } from '@/types/misc';
 
+type GetArticleBySlugResult = Awaited<ReturnType<typeof articlesService.getBySlug>>;
 type ArticleComment = Omit<Comment, 'content'> & { content: Record<string, object> };
-
-interface ArticleDetail extends Article {
-  author: User | null;
-  comments: ArticleComment[];
-  likesCount: number;
-  relatedArticles: Article[];
-  toc: TOC[];
-  viewCount: number;
-}
+type ArticleDetail = Omit<GetArticleBySlugResult, 'comments'> & { comments: ArticleComment[] };
 
 /**
  * Server function to fetch all published blog articles.
