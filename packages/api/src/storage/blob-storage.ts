@@ -1,5 +1,3 @@
-// biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
-import * as Sentry from '@sentry/node';
 import { del, put } from '@vercel/blob';
 import { HttpError, InternalServerError, ValidationError } from '@xbrk/errors';
 import { generateSlug } from '@xbrk/utils';
@@ -40,7 +38,6 @@ export async function uploadImage(folder: string, image: string, slug: string): 
     if (_error instanceof HttpError) {
       throw _error;
     }
-    Sentry.captureException(_error);
     throw new InternalServerError('Failed to upload image', { cause: _error as Error });
   }
 }
@@ -61,7 +58,6 @@ export async function deleteFile(url: string): Promise<void> {
     if (_error instanceof HttpError) {
       throw _error;
     }
-    Sentry.captureException(_error);
     throw new InternalServerError('Failed to delete file', { cause: _error as Error });
   }
 }

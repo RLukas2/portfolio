@@ -1,41 +1,24 @@
-// biome-ignore lint/performance/noNamespaceImport: Sentry SDK requires namespace import
-import * as Sentry from '@sentry/node';
 import { HttpError, InternalServerError } from '@xbrk/errors';
 import type { ApiErrorResponse } from './error-response';
-
-const SAFE_HEADERS = new Set([
-  'content-type',
-  'content-length',
-  'accept',
-  'accept-language',
-  'user-agent',
-  'x-request-id',
-]);
 
 const isDev = process.env.NODE_ENV === 'development';
 
 const GENERIC_5XX_MESSAGE = 'An unexpected error occurred';
 
-function toAppError(error: unknown): { appError: HttpError; originalError: unknown } {
+function toAppError(error: unknown): HttpError {
   if (error instanceof HttpError) {
-    return { appError: error, originalError: error };
+    return error;
   }
 
   if (error instanceof Error) {
-    return {
-      appError: new InternalServerError(isDev ? error.message : GENERIC_5XX_MESSAGE),
-      originalError: error,
-    };
+    return new InternalServerError(isDev ? error.message : GENERIC_5XX_MESSAGE);
   }
 
-  return {
-    appError: new InternalServerError(GENERIC_5XX_MESSAGE),
-    originalError: error,
-  };
+  return new InternalServerError(GENERIC_5XX_MESSAGE);
 }
 
 export function handleApiError(error: unknown, request: Request, headers?: HeadersInit): Response {
-  const { appError, originalError } = toAppError(error);
+  const appError = toAppError(error);
   const is5xx = appError.statusCode >= 500;
 
   const clientMessage = !isDev && is5xx ? GENERIC_5XX_MESSAGE : appError.message;
@@ -55,25 +38,6 @@ export function handleApiError(error: unknown, request: Request, headers?: Heade
       metadata: clientMetadata,
     },
   };
-
-  if (is5xx) {
-    const safeHeaders: Record<string, string> = {};
-    for (const [key, value] of request.headers.entries()) {
-      if (SAFE_HEADERS.has(key.toLowerCase())) {
-        safeHeaders[key] = value;
-      }
-    }
-
-    Sentry.captureException(originalError, {
-      contexts: {
-        request: {
-          url: request.url,
-          method: request.method,
-          headers: safeHeaders,
-        },
-      },
-    });
-  }
 
   if (isDev) {
     console.error('[API Error]', {
