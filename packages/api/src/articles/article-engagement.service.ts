@@ -94,7 +94,7 @@ export async function isLiked(db: DbClient, input: { slug: string }, headers: He
   }
 }
 
-export async function view(db: DbClient, input: { slug: string }): Promise<void> {
+export async function view(db: DbClient, input: { slug: string }): Promise<{ viewCount: number }> {
   try {
     const query = db.query.articles
       .findFirst({
@@ -114,6 +114,15 @@ export async function view(db: DbClient, input: { slug: string }): Promise<void>
     await db.insert(articleViews).values({
       articleId: article.id,
     });
+
+    const [result] = await db
+      .select({
+        viewCount: sql<number>`COUNT(*)::int`,
+      })
+      .from(articleViews)
+      .where(eq(articleViews.articleId, article.id));
+
+    return { viewCount: result?.viewCount ?? 0 };
   } catch (error) {
     if (error instanceof NotFoundError) {
       throw error;

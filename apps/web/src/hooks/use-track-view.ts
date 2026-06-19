@@ -9,7 +9,7 @@ export function useTrackView(slug: string) {
 
   const viewMutation = useMutation({
     mutationFn: (data: { slug: string }) => $viewArticle({ data }),
-    onSuccess: () => {
+    onSuccess: ({ viewCount }) => {
       queryClient.setQueryData(queryKeys.blog.detail(slug), (prev: unknown) => {
         if (
           prev &&
@@ -17,7 +17,7 @@ export function useTrackView(slug: string) {
           'viewCount' in prev &&
           typeof (prev as Record<string, unknown>).viewCount === 'number'
         ) {
-          return { ...prev, viewCount: (prev as Record<string, number>).viewCount + 1 };
+          return { ...prev, viewCount };
         }
         return prev;
       });

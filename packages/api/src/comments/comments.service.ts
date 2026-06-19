@@ -6,6 +6,13 @@ import type { DbClient } from '../shared/db';
 import { reportError } from '../shared/errors';
 import type { JSONContentSchema } from './comment-content.schema';
 
+export interface CommentReactionResult {
+  commentId: string;
+  dislikesCount: number;
+  likesCount: number;
+  userReaction: typeof commentReactions.$inferSelect | null;
+}
+
 export async function create(
   db: DbClient,
   input: {
@@ -116,7 +123,11 @@ export async function remove(db: DbClient, input: { id: string }, userId: string
   }
 }
 
-export async function react(db: DbClient, input: { id: string; like: boolean }, userId: string): Promise<void> {
+export async function react(
+  db: DbClient,
+  input: { id: string; like: boolean },
+  userId: string,
+): Promise<CommentReactionResult> {
   try {
     const comment = await db.query.comments.findFirst({
       where: eq(comments.id, input.id),
@@ -133,9 +144,9 @@ export async function react(db: DbClient, input: { id: string; like: boolean }, 
     if (existingReaction) {
       if (existingReaction.like === input.like) {
         await db.delete(commentReactions).where(eq(commentReactions.id, existingReaction.id));
-        return;
+      } else {
+        await db.update(commentReactions).set({ like: input.like }).where(eq(commentReactions.id, existingReaction.id));
       }
-      await db.update(commentReactions).set({ like: input.like }).where(eq(commentReactions.id, existingReaction.id));
     } else {
       await db.insert(commentReactions).values({
         commentId: input.id,
@@ -143,6 +154,25 @@ export async function react(db: DbClient, input: { id: string; like: boolean }, 
         like: input.like,
       });
     }
+
+    const [counts] = await db
+      .select({
+        likesCount: sql<number>`COUNT(*) FILTER (WHERE ${commentReactions.like} = true)::int`,
+        dislikesCount: sql<number>`COUNT(*) FILTER (WHERE ${commentReactions.like} = false)::int`,
+      })
+      .from(commentReactions)
+      .where(eq(commentReactions.commentId, input.id));
+
+    const userReaction = await db.query.commentReactions.findFirst({
+      where: and(eq(commentReactions.commentId, input.id), eq(commentReactions.userId, userId)),
+    });
+
+    return {
+      commentId: input.id,
+      dislikesCount: counts?.dislikesCount ?? 0,
+      likesCount: counts?.likesCount ?? 0,
+      userReaction: userReaction ?? null,
+    };
   } catch (error) {
     if (error instanceof NotFoundError || error instanceof ForbiddenError) {
       throw error;
