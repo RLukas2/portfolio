@@ -1,10 +1,10 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@xbrk/ui/button';
 import React from 'react';
 
 import { toast } from 'sonner';
 import { useCommentContext } from '@/contexts/comment';
-import { authQueryOptions } from '@/lib/auth/queries';
+import { useCurrentUser } from '@/hooks/use-current-user';
 import { queryKeys } from '@/lib/query-keys';
 import { $createComment } from '@/lib/server';
 import CommentEditor, { useCommentEditor } from './comment-editor';
@@ -12,8 +12,7 @@ import CommentEditor, { useCommentEditor } from './comment-editor';
 export default function CommentReply() {
   const [editor, setEditor] = useCommentEditor();
   const { comment, setIsReplying } = useCommentContext();
-  const { data: currentUser } = useSuspenseQuery(authQueryOptions());
-  const isAuthenticated = Boolean(currentUser);
+  const { isAuthenticated } = useCurrentUser();
 
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({

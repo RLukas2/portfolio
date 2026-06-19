@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ClientOnly } from '@tanstack/react-router';
 import { Button } from '@xbrk/ui/button';
 import { SendIcon } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
+import { useCurrentUser } from '@/hooks/use-current-user';
 import { useSignInModal } from '@/hooks/use-sign-in-modal';
-import { authQueryOptions } from '@/lib/auth/queries';
 import { queryKeys } from '@/lib/query-keys';
 import { $createComment } from '@/lib/server';
 import CommentEditor, { useCommentEditor } from './comment-editor';
@@ -17,8 +17,7 @@ interface CommentFormProps {
 export default function CommentForm({ articleId }: Readonly<CommentFormProps>) {
   const [editor, setEditor] = useCommentEditor();
 
-  const { data: currentUser } = useSuspenseQuery(authQueryOptions());
-  const isAuthenticated = Boolean(currentUser);
+  const { isAuthenticated } = useCurrentUser();
 
   const { setOpen } = useSignInModal();
   const queryClient = useQueryClient();
