@@ -21,6 +21,7 @@ function getStoredThemeMode(): ThemeMode {
   if (!isBrowser) {
     return 'auto';
   }
+
   try {
     const stored = localStorage.getItem(themeKey);
     if (stored && THEME_MODES.has(stored as ThemeMode)) {
@@ -122,20 +123,22 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [themeMode, setThemeMode] = useState<ThemeMode>(getStoredThemeMode);
   const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(getResolvedThemeFromDOM);
 
+  // Sync resolved theme from DOM on mount (handles SSR -> client transition)
   useEffect(() => {
-    updateThemeClass(themeMode);
-    setResolvedTheme(themeMode === 'auto' ? getSystemTheme() : themeMode);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional hydration after SSR
+    setResolvedTheme(getResolvedThemeFromDOM());
+  }, []);
 
+  // Listen for system theme changes when in auto mode
+  useEffect(() => {
     if (themeMode !== 'auto') {
       return;
     }
-
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handler = () => {
       updateThemeClass('auto');
       setResolvedTheme(getSystemTheme());
     };
-
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, [themeMode]);

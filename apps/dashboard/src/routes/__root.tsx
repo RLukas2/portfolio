@@ -39,10 +39,15 @@ export const Route = createRootRouteWithContext<{
       },
     ],
     links: [
-      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css', type: 'text/css' },
+      {
+        rel: 'stylesheet',
+        href: 'https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css',
+        type: 'text/css',
+      },
       { rel: 'stylesheet', href: appCss, as: 'style', type: 'text/css' },
     ],
   }),
+  staleTime: Number.POSITIVE_INFINITY,
   shellComponent: ({ children }) => {
     return (
       <ThemeProvider>
