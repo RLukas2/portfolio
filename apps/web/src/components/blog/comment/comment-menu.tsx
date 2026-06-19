@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Comment } from '@xbrk/db';
 import { Button } from '@xbrk/ui/button';
 import {
@@ -14,7 +14,7 @@ import {
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@xbrk/ui/dropdown-menu';
 import { Loader2Icon, MoreVerticalIcon } from 'lucide-react';
 import { toast } from 'sonner';
-import { authQueryOptions } from '@/lib/auth/queries';
+import { useCurrentUser } from '@/hooks/use-current-user';
 import { queryKeys } from '@/lib/query-keys';
 import { $deleteComment } from '@/lib/server';
 
@@ -23,8 +23,7 @@ interface CommentMenuProps {
 }
 
 export default function CommentMenu({ comment }: Readonly<CommentMenuProps>) {
-  const { data: currentUser } = useSuspenseQuery(authQueryOptions());
-  const isAuthenticated = Boolean(currentUser);
+  const { user, isAuthenticated } = useCurrentUser();
   const { id, userId, articleId } = comment;
 
   const queryClient = useQueryClient();
@@ -52,7 +51,7 @@ export default function CommentMenu({ comment }: Readonly<CommentMenuProps>) {
             https://github.com/radix-ui/primitives/issues/1836
           */}
           <DialogTrigger asChild>
-            {isAuthenticated && (currentUser?.id === userId || currentUser?.role === 'admin') ? (
+            {isAuthenticated && (user?.id === userId || user?.role === 'admin') ? (
               <DropdownMenuItem
                 aria-disabled={isPending}
                 className="text-red-600 focus:text-red-500"
