@@ -9,8 +9,18 @@ export function useTrackView(slug: string) {
 
   const viewMutation = useMutation({
     mutationFn: (data: { slug: string }) => $viewArticle({ data }),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: queryKeys.blog.detail(slug) });
+    onSuccess: () => {
+      queryClient.setQueryData(queryKeys.blog.detail(slug), (prev: unknown) => {
+        if (
+          prev &&
+          typeof prev === 'object' &&
+          'viewCount' in prev &&
+          typeof (prev as Record<string, unknown>).viewCount === 'number'
+        ) {
+          return { ...prev, viewCount: (prev as Record<string, number>).viewCount + 1 };
+        }
+        return prev;
+      });
     },
     onError: (error) => {
       console.error(error);

@@ -37,6 +37,12 @@ export default function CommentMenu({ comment }: Readonly<CommentMenuProps>) {
       }),
   });
 
+  const canDelete = isAuthenticated && (user?.id === userId || user?.role === 'admin');
+
+  if (!canDelete) {
+    return null;
+  }
+
   return (
     <Dialog>
       <DropdownMenu>
@@ -51,15 +57,13 @@ export default function CommentMenu({ comment }: Readonly<CommentMenuProps>) {
             https://github.com/radix-ui/primitives/issues/1836
           */}
           <DialogTrigger asChild>
-            {isAuthenticated && (user?.id === userId || user?.role === 'admin') ? (
-              <DropdownMenuItem
-                aria-disabled={isPending}
-                className="text-red-600 focus:text-red-500"
-                disabled={isPending}
-              >
-                Delete
-              </DropdownMenuItem>
-            ) : null}
+            <DropdownMenuItem
+              aria-disabled={isPending}
+              className="text-red-600 focus:text-red-500"
+              disabled={isPending}
+            >
+              Delete
+            </DropdownMenuItem>
           </DialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
