@@ -14,6 +14,7 @@ const PAGE_SIZES = [10, 20, 30, 40, 50] as const;
 export function DataTablePagination<TData>({ table }: Readonly<DataTablePaginationProps<TData>>) {
   const { pageIndex, pageSize } = table.getState().pagination;
   const pageCount = table.getPageCount();
+  const pageLabel = pageCount === 0 ? 0 : pageIndex + 1;
 
   return (
     <div className="flex items-center justify-between px-2">
@@ -42,7 +43,7 @@ export function DataTablePagination<TData>({ table }: Readonly<DataTablePaginati
           </Select>
         </div>
         <div className="flex w-[100px] items-center justify-center font-medium text-sm">
-          Page {pageIndex + 1} of {pageCount}
+          Page {pageLabel} of {pageCount}
         </div>
         <div className="flex items-center space-x-2">
           <Button

@@ -49,7 +49,7 @@ function ServicesEditPage() {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
       toast.error(
-        `Failed to create service: ${
+        `Failed to update service: ${
           errorMessage.includes('validation')
             ? 'Please check your form inputs'
             : 'Server error. Please try again later.'
