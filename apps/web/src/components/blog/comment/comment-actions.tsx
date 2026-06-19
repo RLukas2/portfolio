@@ -19,7 +19,10 @@ export default function CommentActions() {
   });
 
   const handleCommentReaction = (like: boolean) => {
-    if (!(isAuthenticated || isLoading)) {
+    if (isLoading) {
+      return;
+    }
+    if (!isAuthenticated) {
       setOpen(true);
       return;
     }
@@ -27,7 +30,10 @@ export default function CommentActions() {
   };
 
   const handleReply = () => {
-    if (!(isAuthenticated || isLoading)) {
+    if (isLoading) {
+      return;
+    }
+    if (!isAuthenticated) {
       setOpen(true);
       return;
     }
@@ -36,12 +42,24 @@ export default function CommentActions() {
 
   return (
     <div className="flex gap-1">
-      <Button className="gap-1" onClick={() => handleCommentReaction(true)} size="sm" variant="secondary">
+      <Button
+        className="gap-1"
+        disabled={isLoading}
+        onClick={() => handleCommentReaction(true)}
+        size="sm"
+        variant="secondary"
+      >
         <ThumbsUpIcon className="size-4" />
         {comment.likesCount}
       </Button>
 
-      <Button className="gap-1" onClick={() => handleCommentReaction(false)} size="sm" variant="secondary">
+      <Button
+        className="gap-1"
+        disabled={isLoading}
+        onClick={() => handleCommentReaction(false)}
+        size="sm"
+        variant="secondary"
+      >
         <ThumbsDownIcon className="size-4" />
         {comment.dislikesCount}
       </Button>
@@ -49,6 +67,7 @@ export default function CommentActions() {
       {!comment.comment.parentId && (
         <Button
           className="font-medium text-muted-foreground text-xs"
+          disabled={isLoading}
           onClick={handleReply}
           size="sm"
           variant="secondary"
