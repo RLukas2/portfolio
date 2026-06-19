@@ -10,7 +10,12 @@ import { queryKeys } from '@/lib/query-keys';
 import { $reactToComment } from '@/lib/server';
 import type { CommentWithRelations } from '@/types/misc';
 
-type CommentReactionResult = Awaited<ReturnType<typeof $reactToComment>>;
+interface CommentReactionResult {
+  commentId: string;
+  dislikesCount: number;
+  likesCount: number;
+  userReaction: CommentWithRelations['userReaction'];
+}
 
 function patchCommentReaction(comments: CommentWithRelations[] | undefined, result: CommentReactionResult) {
   if (!comments) {
@@ -37,7 +42,8 @@ export default function CommentActions() {
   const userLiked = comment.userReaction?.like === true;
   const userDisliked = comment.userReaction?.like === false;
   const { mutate: reactMutation } = useMutation({
-    mutationFn: (data: { id: string; like: boolean }) => $reactToComment({ data }),
+    mutationFn: (data: { id: string; like: boolean }) =>
+      $reactToComment({ data }) as unknown as Promise<CommentReactionResult>,
     onSuccess: (result) => {
       queryClient.setQueryData(
         queryKeys.comment.byArticle(comment.comment.articleId),

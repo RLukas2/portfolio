@@ -7,7 +7,47 @@ updates:
       day: "monday"
     open-pull-requests-limit: 10
     groups:
-      dependencies:
+      tanstack:
+        patterns:
+          - "@tanstack/*"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      vite-build-tooling:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+          - "nitro"
+          - "@rolldown/*"
+          - "@tailwindcss/*"
+          - "tailwindcss"
+          - "typescript"
+          - "tsx"
+          - "dotenv"
+          - "dotenv-cli"
+          - "turbo"
+          - "shadcn"
+          - "ultracite"
+          - "sherif"
+      radix-ui:
+        patterns:
+          - "@radix-ui/*"
+      testing:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "happy-dom"
+          - "@testing-library/*"
+      sentry-observability:
+        patterns:
+          - "@sentry/*"
+          - "posthog-js"
+          - "@posthog/*"
+          - "web-vitals"
+      misc:
         patterns:
           - "*"
     labels:

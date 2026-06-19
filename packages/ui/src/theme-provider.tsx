@@ -123,10 +123,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(getResolvedThemeFromDOM);
 
   useEffect(() => {
-    setResolvedTheme(getResolvedThemeFromDOM());
-  }, []);
+    updateThemeClass(themeMode);
+    setResolvedTheme(themeMode === 'auto' ? getSystemTheme() : themeMode);
 
-  useEffect(() => {
     if (themeMode !== 'auto') {
       return;
     }
@@ -154,11 +153,14 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   };
 
   return (
-    <ThemeContext.Provider value={{ themeMode, resolvedTheme, setTheme, toggleMode }}>
-      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Static boot script prevents theme flash before hydration. */}
-      <script dangerouslySetInnerHTML={{ __html: themeDetectorScript }} />
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={{ themeMode, resolvedTheme, setTheme, toggleMode }}>{children}</ThemeContext.Provider>
+  );
+}
+
+export function ThemeScript() {
+  return (
+    // biome-ignore lint/security/noDangerouslySetInnerHtml: Static boot script prevents theme flash before hydration.
+    <script dangerouslySetInnerHTML={{ __html: themeDetectorScript }} />
   );
 }
 
@@ -172,11 +174,6 @@ export function useTheme() {
 
 export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
-  const [currentTheme, setCurrentTheme] = useState<ResolvedTheme>(resolvedTheme);
-
-  useEffect(() => {
-    setCurrentTheme(resolvedTheme);
-  }, [resolvedTheme]);
 
   const handleThemeChange = (theme: ThemeMode) => {
     setTheme(theme);
@@ -186,7 +183,7 @@ export function ThemeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          aria-label={`Current theme: ${currentTheme}. Click to change theme`}
+          aria-label={`Current theme: ${resolvedTheme}. Click to change theme`}
           className="h-8 w-8 cursor-pointer px-0"
           size="sm"
           variant="ghost"

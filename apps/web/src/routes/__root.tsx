@@ -3,7 +3,7 @@ import { type QueryClient } from '@tanstack/react-query';
 import { ClientOnly, createRootRouteWithContext, HeadContent, Scripts } from '@tanstack/react-router';
 import { createIsomorphicFn } from '@tanstack/react-start';
 import { Toaster } from '@xbrk/ui/sonner';
-import { ThemeProvider, useTheme } from '@xbrk/ui/theme-provider';
+import { ThemeProvider, ThemeScript, useTheme } from '@xbrk/ui/theme-provider';
 import { TooltipProvider } from '@xbrk/ui/tooltip';
 import posthog from 'posthog-js';
 import { CookieBanner } from '@/components/analytics/cookie-banner';
@@ -131,7 +131,6 @@ export const Route = createRootRouteWithContext<{
       },
     ],
   }),
-  staleTime: Number.POSITIVE_INFINITY,
   shellComponent: ({ children }) => {
     return (
       <ThemeProvider>
@@ -171,6 +170,7 @@ function ShellComponent({ children }: { children: React.ReactNode }) {
   return (
     <html className="scroll-smooth" lang="en" suppressHydrationWarning>
       <head>
+        <ThemeScript />
         <HeadContent />
       </head>
 

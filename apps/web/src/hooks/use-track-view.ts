@@ -8,7 +8,7 @@ export function useTrackView(slug: string) {
   const hasViewedRef = useRef(false);
 
   const viewMutation = useMutation({
-    mutationFn: (data: { slug: string }) => $viewArticle({ data }),
+    mutationFn: (data: { slug: string }) => $viewArticle({ data }) as unknown as Promise<{ viewCount: number }>,
     onSuccess: ({ viewCount }) => {
       queryClient.setQueryData(queryKeys.blog.detail(slug), (prev: unknown) => {
         if (

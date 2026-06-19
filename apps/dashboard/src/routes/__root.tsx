@@ -4,7 +4,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import { createRootRouteWithContext, HeadContent, Scripts } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
 import { Toaster } from '@xbrk/ui/sonner';
-import { ThemeProvider, useTheme } from '@xbrk/ui/theme-provider';
+import { ThemeProvider, ThemeScript, useTheme } from '@xbrk/ui/theme-provider';
 import { TooltipProvider } from '@xbrk/ui/tooltip';
 import { DevtoolsComponent } from '@/components/dev-tools';
 import { type AuthQueryResult, authQueryOptions } from '@/lib/auth/queries';
@@ -43,7 +43,6 @@ export const Route = createRootRouteWithContext<{
       { rel: 'stylesheet', href: appCss, as: 'style', type: 'text/css' },
     ],
   }),
-  staleTime: Number.POSITIVE_INFINITY,
   shellComponent: ({ children }) => {
     return (
       <ThemeProvider>
@@ -59,6 +58,7 @@ function ShellComponent({ children }: { readonly children: React.ReactNode }) {
     // suppress since we're updating the "dark" class in a custom script below
     <html className="scroll-smooth" lang="en" suppressHydrationWarning>
       <head>
+        <ThemeScript />
         <HeadContent />
       </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">

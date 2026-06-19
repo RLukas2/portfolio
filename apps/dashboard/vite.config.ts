@@ -81,9 +81,13 @@ const config = defineConfig({
   ],
   optimizeDeps: {
     entries: ['src/**/*.{ts,tsx}'],
+    include: ['react', 'react-dom', '@tanstack/react-router', '@tanstack/react-query'],
   },
   ssr: {
     noExternal: [],
+  },
+  server: {
+    allowedHosts: process.env.ALLOWED_HOSTS?.split(',') || [],
   },
 });
 
