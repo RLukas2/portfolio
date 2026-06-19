@@ -8,6 +8,26 @@ import { useCurrentUser } from '@/hooks/use-current-user';
 import { useSignInModal } from '@/hooks/use-sign-in-modal';
 import { queryKeys } from '@/lib/query-keys';
 import { $reactToComment } from '@/lib/server';
+import type { CommentWithRelations } from '@/types/misc';
+
+type CommentReactionResult = Awaited<ReturnType<typeof $reactToComment>>;
+
+function patchCommentReaction(comments: CommentWithRelations[] | undefined, result: CommentReactionResult) {
+  if (!comments) {
+    return comments;
+  }
+
+  return comments.map((item) =>
+    item.comment.id === result.commentId
+      ? {
+          ...item,
+          dislikesCount: result.dislikesCount,
+          likesCount: result.likesCount,
+          userReaction: result.userReaction,
+        }
+      : item,
+  );
+}
 
 export default function CommentActions() {
   const { isAuthenticated, isLoading } = useCurrentUser();
@@ -18,13 +38,21 @@ export default function CommentActions() {
   const userDisliked = comment.userReaction?.like === false;
   const { mutate: reactMutation } = useMutation({
     mutationFn: (data: { id: string; like: boolean }) => $reactToComment({ data }),
+    onSuccess: (result) => {
+      queryClient.setQueryData(
+        queryKeys.comment.byArticle(comment.comment.articleId),
+        (comments: CommentWithRelations[] | undefined) => patchCommentReaction(comments, result),
+      );
+
+      if (comment.comment.parentId) {
+        queryClient.setQueryData(
+          queryKeys.comment.byArticleAndParent(comment.comment.articleId, comment.comment.parentId),
+          (comments: CommentWithRelations[] | undefined) => patchCommentReaction(comments, result),
+        );
+      }
+    },
     onError: (_error) => {
       toast.error('Failed to react to comment');
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.comment.byArticle(comment.comment.articleId),
-      });
     },
   });
 
