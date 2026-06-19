@@ -131,6 +131,10 @@ export async function react(db: DbClient, input: { id: string; like: boolean }, 
     });
 
     if (existingReaction) {
+      if (existingReaction.like === input.like) {
+        await db.delete(commentReactions).where(eq(commentReactions.id, existingReaction.id));
+        return;
+      }
       await db.update(commentReactions).set({ like: input.like }).where(eq(commentReactions.id, existingReaction.id));
     } else {
       await db.insert(commentReactions).values({
