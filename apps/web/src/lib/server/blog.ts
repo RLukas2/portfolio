@@ -1,9 +1,22 @@
 import { createServerFn } from '@tanstack/react-start';
 import { getRequest } from '@tanstack/react-start/server';
 import { articleEngagementService, articlesService } from '@xbrk/api';
+import type { Article, Comment, User } from '@xbrk/db';
 import { z } from 'zod/v4';
 import { optionalAuthMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
+import type { TOC } from '@/types/misc';
+
+type ArticleComment = Omit<Comment, 'content'> & { content: Record<string, object> };
+
+interface ArticleDetail extends Article {
+  author: User | null;
+  comments: ArticleComment[];
+  likesCount: number;
+  relatedArticles: Article[];
+  toc: TOC[];
+  viewCount: number;
+}
 
 /**
  * Server function to fetch all published blog articles.
@@ -25,13 +38,10 @@ export const $getAllPublicArticles = createServerFn({ method: 'GET' })
 export const $getArticleBySlug = createServerFn({ method: 'GET' })
   .middleware([dbMiddleware, optionalAuthMiddleware])
   .inputValidator(z.object({ slug: z.string() }))
-  .handler(
-    // biome-ignore lint/suspicious/noExplicitAny: Drizzle relation types trigger serialization false positive
-    (ctx): Promise<any> => {
-      const session = ctx.context.user ? { user: { role: ctx.context.user.role ?? '' } } : null;
-      return articlesService.getBySlug(ctx.context.db, ctx.data, session);
-    },
-  );
+  .handler((ctx): Promise<ArticleDetail> => {
+    const session = ctx.context.user ? { user: { role: ctx.context.user.role ?? '' } } : null;
+    return articlesService.getBySlug(ctx.context.db, ctx.data, session) as Promise<ArticleDetail>;
+  });
 
 /**
  * Server function to like/unlike a blog article.

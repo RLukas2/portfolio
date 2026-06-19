@@ -100,7 +100,7 @@ function Tree({ tree, activeItem }: TreeProps) {
                   ? 'bg-primary/10 font-medium text-primary'
                   : 'text-muted-foreground hover:bg-muted hover:text-foreground',
               )}
-              href={`#${item.url}`}
+              href={`#${itemId}`}
               ref={(element) => {
                 itemRefs.current[itemId] = element;
               }}
