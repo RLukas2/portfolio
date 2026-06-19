@@ -17,7 +17,7 @@ interface CommentFormProps {
 export default function CommentForm({ articleId }: Readonly<CommentFormProps>) {
   const [editor, setEditor] = useCommentEditor();
 
-  const { isAuthenticated } = useCurrentUser();
+  const { isAuthenticated, isLoading } = useCurrentUser();
 
   const { setOpen } = useSignInModal();
   const queryClient = useQueryClient();
@@ -41,7 +41,7 @@ export default function CommentForm({ articleId }: Readonly<CommentFormProps>) {
     },
   });
 
-  const disabled = !isAuthenticated || isPending;
+  const disabled = isLoading || !isAuthenticated || isPending;
 
   const handlePostComment = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -77,7 +77,7 @@ export default function CommentForm({ articleId }: Readonly<CommentFormProps>) {
         </Button>
 
         <ClientOnly>
-          {isAuthenticated ? null : (
+          {isLoading || isAuthenticated ? null : (
             <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/5 backdrop-blur-[0.8px]">
               <Button onClick={() => setOpen(true)} type="button">
                 Please sign in to comment

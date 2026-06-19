@@ -7,5 +7,6 @@ export function useCurrentUser() {
     user: user ?? null,
     isAuthenticated: Boolean(user),
     isLoading,
+    isResolved: !isLoading,
   };
 }

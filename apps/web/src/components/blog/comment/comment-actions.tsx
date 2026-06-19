@@ -8,7 +8,7 @@ import { useSignInModal } from '@/hooks/use-sign-in-modal';
 import { $reactToComment } from '@/lib/server';
 
 export default function CommentActions() {
-  const { isAuthenticated } = useCurrentUser();
+  const { isAuthenticated, isLoading } = useCurrentUser();
   const { setOpen } = useSignInModal();
   const { comment, setIsReplying } = useCommentContext();
   const { mutate: reactMutation } = useMutation({
@@ -19,7 +19,7 @@ export default function CommentActions() {
   });
 
   const handleCommentReaction = (like: boolean) => {
-    if (!isAuthenticated) {
+    if (!(isAuthenticated || isLoading)) {
       setOpen(true);
       return;
     }
@@ -27,7 +27,7 @@ export default function CommentActions() {
   };
 
   const handleReply = () => {
-    if (!isAuthenticated) {
+    if (!(isAuthenticated || isLoading)) {
       setOpen(true);
       return;
     }
