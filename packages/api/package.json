@@ -17,6 +17,8 @@
     "build": "tsc",
     "clean": "git clean -xdf .cache dist node_modules",
     "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "backfill:rendering": "dotenv -e ../../.env -- pnpm exec tsx scripts/backfill-rendering.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -36,6 +38,7 @@
     "@types/hast": "^3.0.4",
     "@xbrk/tsconfig": "workspace:*",
     "tsx": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
