@@ -20,12 +20,29 @@ const LikeButton = ({ article }: LikeButtonProps) => {
 
   const likeMutation = useMutation({
     mutationFn: (data: { slug: string }) => $likeArticle({ data }),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: queryKeys.blog.all });
+    onMutate: async ({ slug }) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.blog.isLiked(slug) });
+      await queryClient.cancelQueries({ queryKey: queryKeys.blog.detail(slug) });
+
+      const previousLiked = queryClient.getQueryData<boolean>(queryKeys.blog.isLiked(slug));
+      const newLiked = previousLiked === undefined ? true : !previousLiked;
+      queryClient.setQueryData(queryKeys.blog.isLiked(slug), newLiked);
+
+      const previousDetail = queryClient.getQueryData(queryKeys.blog.detail(slug));
+      return { previousLiked, previousDetail };
     },
-    onError: (error) => {
+    onError: (_error, { slug }, context) => {
+      if (context?.previousLiked !== undefined) {
+        queryClient.setQueryData(queryKeys.blog.isLiked(slug), context.previousLiked);
+      }
+      if (context?.previousDetail) {
+        queryClient.setQueryData(queryKeys.blog.detail(slug), context.previousDetail);
+      }
       toast.error('Failed to like article');
-      console.error(error);
+    },
+    onSettled: async (_data, _error, { slug }) => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.blog.isLiked(slug) });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.blog.detail(slug) });
     },
   });
 

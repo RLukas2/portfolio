@@ -1,20 +1,30 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { cn } from '@xbrk/ui';
 import { Button } from '@xbrk/ui/button';
 import { ThumbsDownIcon, ThumbsUpIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { useCommentContext } from '@/contexts/comment';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { useSignInModal } from '@/hooks/use-sign-in-modal';
+import { queryKeys } from '@/lib/query-keys';
 import { $reactToComment } from '@/lib/server';
 
 export default function CommentActions() {
   const { isAuthenticated, isLoading } = useCurrentUser();
   const { setOpen } = useSignInModal();
   const { comment, setIsReplying } = useCommentContext();
+  const queryClient = useQueryClient();
+  const userLiked = comment.userReaction?.like === true;
+  const userDisliked = comment.userReaction?.like === false;
   const { mutate: reactMutation } = useMutation({
     mutationFn: (data: { id: string; like: boolean }) => $reactToComment({ data }),
     onError: (_error) => {
       toast.error('Failed to react to comment');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.comment.byArticle(comment.comment.articleId),
+      });
     },
   });
 
@@ -43,24 +53,32 @@ export default function CommentActions() {
   return (
     <div className="flex gap-1">
       <Button
-        className="gap-1"
+        className={cn(
+          'gap-1',
+          userLiked &&
+            'border-rose-300/50 bg-rose-50/80 text-rose-500 shadow-sm dark:border-rose-800/50 dark:bg-rose-950/50 dark:text-rose-400',
+        )}
         disabled={isLoading}
         onClick={() => handleCommentReaction(true)}
         size="sm"
         variant="secondary"
       >
-        <ThumbsUpIcon className="size-4" />
+        <ThumbsUpIcon className={cn('size-4', userLiked && 'fill-current')} />
         {comment.likesCount}
       </Button>
 
       <Button
-        className="gap-1"
+        className={cn(
+          'gap-1',
+          userDisliked &&
+            'border-sky-300/50 bg-sky-50/80 text-sky-500 shadow-sm dark:border-sky-800/50 dark:bg-sky-950/50 dark:text-sky-400',
+        )}
         disabled={isLoading}
         onClick={() => handleCommentReaction(false)}
         size="sm"
         variant="secondary"
       >
-        <ThumbsDownIcon className="size-4" />
+        <ThumbsDownIcon className={cn('size-4', userDisliked && 'fill-current')} />
         {comment.dislikesCount}
       </Button>
 

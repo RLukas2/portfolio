@@ -1,27 +1,24 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, ErrorComponent, notFound } from '@tanstack/react-router';
 import { siteConfig } from '@xbrk/config';
 import { ErrorCodes, isHttpError } from '@xbrk/errors';
 import { RenderedMarkdown } from '@xbrk/md';
-import { LazyImage } from '@xbrk/ui/lazy-image';
 import { NotFound } from '@xbrk/ui/not-found';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@xbrk/ui/sheet';
-import { calculateReadingTime, formatDate } from '@xbrk/utils';
 import { m } from 'framer-motion';
-import { Calendar, Clock, Eye, Heart, List, MessageCircle, Tag } from 'lucide-react';
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense } from 'react';
 import SignInModal from '@/components/auth/sign-in-modal';
-import ArticleCard from '@/components/blog/article-card';
 import ArticleComment from '@/components/blog/article-comment';
-import ArticleAuthor from '@/components/blog/author';
-import LikeButton from '@/components/blog/like-button';
+import ArticleHero from '@/components/blog/article-hero';
+import ArticleMobileToc from '@/components/blog/article-mobile-toc';
+import ArticleRelated from '@/components/blog/article-related';
+import ArticleTagsShare from '@/components/blog/article-tags-share';
 import TableOfContents from '@/components/blog/toc';
 import BreadcrumbNavigation from '@/components/shared/breadcrumb-navigation';
-import SocialShare from '@/components/shared/social-share';
 import { ArticleContentSkeleton } from '@/components/skeletons/article-content-skeleton';
+import { useTrackView } from '@/hooks/use-track-view';
 import { queryKeys } from '@/lib/query-keys';
 import { seo } from '@/lib/seo';
-import { $getArticleBySlug, $viewArticle } from '@/lib/server';
+import { $getArticleBySlug } from '@/lib/server';
 import { generateStructuredDataGraph, getBlogPostSchemas } from '@/lib/structured-data';
 import { getBaseUrl } from '@/lib/utils';
 
@@ -98,43 +95,11 @@ function RouteComponent() {
     queryFn: () => $getArticleBySlug({ data: { slug: articleId } }),
   });
 
-  const queryClient = useQueryClient();
-  const viewMutation = useMutation({
-    mutationFn: (data: { slug: string }) => $viewArticle({ data }),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: queryKeys.blog.all });
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
-
-  const hasViewedRef = useRef(false);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: view once per mount
-  useEffect(() => {
-    if (!articleId) {
-      return;
-    }
-    if (hasViewedRef.current) {
-      return;
-    }
-    hasViewedRef.current = true;
-
-    // Session guard to avoid duplicate increments across navigation's in the same tab
-    const sessionKey = `viewed:${articleId}`;
-    if (sessionStorage.getItem(sessionKey)) {
-      return;
-    }
-    sessionStorage.setItem(sessionKey, '1');
-
-    viewMutation.mutate({ slug: articleId });
-  }, [articleId]);
+  useTrackView(articleId);
 
   if (!article) {
     return null;
   }
-
-  const readingTime = calculateReadingTime(article.content ?? '');
 
   return (
     <>
@@ -151,92 +116,8 @@ function RouteComponent() {
             initial={false}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            {/* Background glow effect */}
-            <div className="pointer-events-none absolute -top-20 left-1/2 -z-10 h-64 w-full max-w-2xl -translate-x-1/2">
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 70%)',
-                }}
-              />
-            </div>
-
-            {/* Title and like button */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <h1 className="mt-2 font-heading text-3xl leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-                {article.title}
-              </h1>
-              <div className="sm:mt-3 sm:shrink-0">
-                <LikeButton article={article} />
-              </div>
-            </div>
-
-            {/* Modern metrics bar */}
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              {article.createdAt && (
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
-                  <Calendar className="size-3.5" />
-                  <time dateTime={article.createdAt.toISOString()}>{formatDate(article.createdAt)}</time>
-                </div>
-              )}
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
-                <Clock className="size-3.5" />
-                <span>{readingTime} min read</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
-                <Eye className="size-3.5" />
-                <span>{article.viewCount.toLocaleString()} views</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-rose-200/50 bg-rose-50/50 px-3 py-1.5 text-rose-600 text-xs backdrop-blur-sm dark:border-rose-800/50 dark:bg-rose-950/30 dark:text-rose-400">
-                <Heart className="size-3.5" />
-                <span>{article.likesCount} likes</span>
-              </div>
-              {article.comments && article.comments.length > 0 && (
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-muted/50 px-3 py-1.5 text-muted-foreground text-xs backdrop-blur-sm">
-                  <MessageCircle className="size-3.5" />
-                  <span>{article.comments.length} comments</span>
-                </div>
-              )}
-            </div>
-
-            {/* Author section with enhanced styling */}
-            <m.div
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-6"
-              initial={false}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <ArticleAuthor article={article} />
-            </m.div>
+            <ArticleHero article={article} />
           </m.div>
-
-          {/* Featured image with glow effect */}
-          {article.imageUrl && (
-            <m.div
-              animate={{ opacity: 1, scale: 1 }}
-              className="relative my-8 sm:my-10"
-              initial={false}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              {/* Glow effect behind image */}
-              <div className="absolute -inset-2 rounded-3xl bg-linear-to-br from-violet-500/10 via-fuchsia-500/5 to-cyan-500/10 blur-xl" />
-
-              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-white/5 to-white/2 p-1.5 shadow-2xl">
-                <LazyImage
-                  alt={article.title}
-                  className="w-full"
-                  fill
-                  height={500}
-                  imageClassName="rounded-xl object-cover"
-                  priority={true}
-                  sizes="(max-width: 832px) 100vw, (max-width: 1280px) 75vw, 832px"
-                  src={article.imageUrl}
-                  width={832}
-                />
-              </div>
-            </m.div>
-          )}
         </div>
 
         <div className="relative mt-8 lg:gap-10 xl:grid xl:grid-cols-[1fr_280px]">
@@ -273,25 +154,7 @@ function RouteComponent() {
           initial={false}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            {article.tags && article.tags.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2">
-                <Tag className="size-4 text-muted-foreground" />
-                {article.tags.map((tag: string) => (
-                  <span
-                    className="inline-flex items-center rounded-full bg-linear-to-r from-violet-500/10 to-fuchsia-500/10 px-3 py-1 font-medium text-foreground text-xs transition-colors hover:from-violet-500/20 hover:to-fuchsia-500/20"
-                    key={tag}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-            <SocialShare
-              text={`${article.title} via ${siteConfig.author.handle}`}
-              url={`${siteConfig.url}/blog/${articleId}`}
-            />
-          </div>
+          <ArticleTagsShare slug={articleId} tags={article.tags} title={article.title} />
         </m.div>
 
         {/* Comments section */}
@@ -312,44 +175,12 @@ function RouteComponent() {
             initial={false}
             transition={{ duration: 0.5, delay: 0.7 }}
           >
-            <h2 className="mb-6 font-bold font-heading text-2xl tracking-tight">Related Posts</h2>
-            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-              {article.relatedArticles.map((relatedArticle) => (
-                <ArticleCard
-                  article={{
-                    ...relatedArticle,
-                    viewCount: 0,
-                    likesCount: 0,
-                  }}
-                  key={relatedArticle.slug}
-                />
-              ))}
-            </div>
+            <ArticleRelated relatedArticles={article.relatedArticles} />
           </m.div>
         )}
 
         {/* Mobile Floating ToC Button */}
-        {article.toc && (
-          <div className="fixed right-6 bottom-6 z-40 xl:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <button
-                  aria-label="Table of Contents"
-                  className="flex size-14 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xl transition-transform hover:scale-105 active:scale-95"
-                  type="button"
-                >
-                  <List className="size-6" />
-                </button>
-              </SheetTrigger>
-              <SheetContent className="max-h-[85vh] rounded-t-2xl pb-8" side="bottom">
-                <SheetHeader className="pt-2 pb-4">
-                  <SheetTitle className="text-left text-lg">Table of Contents</SheetTitle>
-                </SheetHeader>
-                <TableOfContents isMobile toc={article.toc} />
-              </SheetContent>
-            </Sheet>
-          </div>
-        )}
+        <ArticleMobileToc toc={article.toc} />
       </article>
       <SignInModal />
     </>
