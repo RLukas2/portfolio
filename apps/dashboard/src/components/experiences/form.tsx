@@ -47,7 +47,7 @@ export const ExperiencesForm = withForm({
 
         <form.AppField name="description">
           {(field) => (
-            <FormTextarea field={field} label="Description" placeholder="A brief description of your project" />
+            <FormTextarea field={field} label="Description" placeholder="A brief description of your experience" />
           )}
         </form.AppField>
 
@@ -110,7 +110,7 @@ export const ExperiencesForm = withForm({
           <form.AppField name="isDraft">
             {(field) => (
               <FormCheckbox
-                description="This project won't be visible to visitors"
+                description="This experience won't be visible to visitors"
                 field={field}
                 label="Save as Draft"
               />
