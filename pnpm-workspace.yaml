@@ -49,13 +49,13 @@ catalog:
 
   # Types
   "@types/node": "^25.5.0"
-  "@types/react": "^19.2.14"
+  "@types/react": "^19.2.17"
   "@types/react-dom": "^19.2.3"
   "autoprefixer": "^10.4.27"
   "better-auth": "1.5.5"
   "lucide-react": "^1.7.0"
-  "react": "^19.2.4"
-  "react-dom": "^19.2.4"
+  "react": "^19.2.7"
+  "react-dom": "^19.2.7"
   "simple-icons": "^13.21.0"
 
   # Tailwind CSS + UI
