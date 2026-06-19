@@ -1,8 +1,14 @@
 import { createServerFn } from '@tanstack/react-start';
 import { commentsService } from '@xbrk/api';
+import type { Comment } from '@xbrk/db';
 import { z } from 'zod/v4';
 import { authMiddleware, optionalAuthMiddleware } from '@/lib/auth/middleware';
 import { dbMiddleware } from '@/lib/middleware/db';
+import type { CommentWithRelations } from '@/types/misc';
+
+type CommentRow = Omit<CommentWithRelations, 'comment'> & {
+  comment: Omit<Comment, 'content'> & { content: Record<string, object> };
+};
 
 /**
  * Server function to create a new comment on an article.
@@ -43,12 +49,9 @@ export const $getAllComments = createServerFn({ method: 'GET' })
       sort: z.enum(['asc', 'desc']).optional(),
     }),
   )
-  .handler(
-    // biome-ignore lint/suspicious/noExplicitAny: Drizzle relation types trigger serialization false positive
-    (ctx): Promise<any> => {
-      return commentsService.getAll(ctx.context.db, ctx.data, ctx.context.user?.id);
-    },
-  );
+  .handler((ctx): Promise<CommentRow[]> => {
+    return commentsService.getAll(ctx.context.db, ctx.data, ctx.context.user?.id) as Promise<CommentRow[]>;
+  });
 
 /**
  * Server function to delete a comment.

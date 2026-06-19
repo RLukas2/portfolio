@@ -3,7 +3,7 @@ import Icon from '@xbrk/ui/icon';
 import { LazyImage } from '@xbrk/ui/lazy-image';
 
 interface ArticleAuthorProps {
-  article: Article & { author: User };
+  article: Article & { author: User | null };
 }
 
 const ArticleAuthor = ({ article }: ArticleAuthorProps) => {

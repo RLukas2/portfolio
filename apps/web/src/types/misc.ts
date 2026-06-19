@@ -1,5 +1,6 @@
-import type { Comment, CommentReaction, User } from '@xbrk/db';
 import type { SimpleIcon } from 'simple-icons';
+
+export type { CommentWithRelations } from './comment';
 
 export interface TOC {
   depth: number;
@@ -31,13 +32,4 @@ export interface UseData {
   icon: SimpleIcon;
   link: string;
   name: string;
-}
-
-export interface CommentWithRelations {
-  comment: Comment;
-  dislikesCount: number;
-  likesCount: number;
-  repliesCount: number;
-  user: User | null;
-  userReaction: CommentReaction | null;
 }
