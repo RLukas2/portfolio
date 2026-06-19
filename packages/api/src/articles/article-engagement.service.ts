@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import { articleLikes, articles, articleViews } from '@xbrk/db/schema';
 import { InternalServerError, NotFoundError } from '@xbrk/errors';
 import { and, eq, sql } from 'drizzle-orm';
@@ -6,16 +5,18 @@ import { env } from '../../env';
 import type { DbClient } from '../shared/db';
 import { reportError } from '../shared/errors';
 
-function hashIpAddress(headers: Headers): string {
+async function hashIpAddress(headers: Headers): Promise<string> {
   const ipAddress =
     headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     headers.get('x-real-ip') ||
     headers.get('cf-connecting-ip') ||
     '0.0.0.0';
 
-  return createHash('sha512')
-    .update(ipAddress + env.IP_ADDRESS_SALT, 'utf8')
-    .digest('hex');
+  const encoder = new TextEncoder();
+  const data = encoder.encode(ipAddress + env.IP_ADDRESS_SALT);
+  const hashBuffer = await crypto.subtle.digest('SHA-512', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 export async function like(
@@ -40,7 +41,7 @@ export async function like(
       throw new NotFoundError('Article is not public');
     }
 
-    const currentUserId = hashIpAddress(headers);
+    const currentUserId = await hashIpAddress(headers);
 
     await db.transaction(async (tx) => {
       const existingLike = await tx.query.articleLikes.findFirst({
@@ -81,7 +82,7 @@ export async function isLiked(db: DbClient, input: { slug: string }, headers: He
       return false;
     }
 
-    const currentUserId = hashIpAddress(headers);
+    const currentUserId = await hashIpAddress(headers);
 
     const existingLike = await db.query.articleLikes.findFirst({
       where: and(eq(articleLikes.articleId, article.id), eq(articleLikes.visitorId, currentUserId)),
