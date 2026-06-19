@@ -35,17 +35,17 @@ catalog:
 
   # Tanstack (latest)
   "@tanstack/devtools-a11y": latest
-  "@tanstack/devtools-vite": ^0.6.0
-  "@tanstack/react-devtools": ^0.10.1
-  "@tanstack/react-form": "^1.28.6"
+  "@tanstack/devtools-vite": ^0.7.2
+  "@tanstack/react-devtools": ^0.10.7
+  "@tanstack/react-form": "^1.33.0"
   "@tanstack/react-form-devtools": latest
   "@tanstack/react-form-start": latest
-  "@tanstack/react-query": "^5.96.1"
-  "@tanstack/react-query-devtools": ^5.96.1
-  "@tanstack/react-router": "^1.168.10"
-  "@tanstack/react-router-devtools": "^1.166.11"
-  "@tanstack/react-router-ssr-query": ^1.166.10
-  "@tanstack/react-start": "^1.167.16"
+  "@tanstack/react-query": "^5.101.0"
+  "@tanstack/react-query-devtools": ^5.101.0
+  "@tanstack/react-router": "^1.170.16"
+  "@tanstack/react-router-devtools": "^1.167.0"
+  "@tanstack/react-router-ssr-query": ^1.167.1
+  "@tanstack/react-start": "^1.168.26"
 
   # Types
   "@types/node": "^25.5.0"
