@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "catalog:",
-    "@vercel/blob": "^2.3.2",
+    "@vercel/blob": "^2.4.1",
     "@xbrk/auth": "workspace:*",
     "@xbrk/db": "workspace:*",
     "@xbrk/errors": "workspace:*",
