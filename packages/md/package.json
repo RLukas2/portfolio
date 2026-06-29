@@ -25,12 +25,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@shikijs/rehype": "^4.0.2",
-    "@shikijs/transformers": "^4.0.2",
+    "@shikijs/rehype": "^4.3.0",
+    "@shikijs/transformers": "^4.3.0",
     "@unpic/react": "^1.0.2",
     "@xbrk/ui": "workspace:*",
     "hast-util-to-jsx-runtime": "^2.3.2",
-    "katex": "^0.16.45",
+    "katex": "^0.17.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-katex": "^7.0.1",
     "rehype-sanitize": "^6.0.0",
