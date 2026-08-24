@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "catalog:",
-    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/typography": "^0.5.20",
     "autoprefixer": "catalog:",
     "postcss": "^8.5.8",
     "tailwindcss": "catalog:"
